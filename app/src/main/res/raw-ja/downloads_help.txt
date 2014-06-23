@@ -1,0 +1,5 @@
+このリストに含まれる辞書は直接ダウンロードしてインストールが行えます。
+辞書ファイルのライセンスはそれぞれの作者が定めたものに従います。
+
+現在入手可能な PDIC ファイルのリストを下記 URLから参照できます。
+https://docs.google.com/spreadsheets/d/1c3F29JlbZBkHipypM4MrEvojk_XsR40Ro98jrH_-eX4/edit?usp=sharing

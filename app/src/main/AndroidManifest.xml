@@ -1,0 +1,108 @@
+<!--
+  ~ Copyright (C) 2014 wak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.github.wakhub.monodict">
+
+    <!-- TODO: Support more small SDK version -->
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <application
+        android:name="com.github.wakhub.monodict.MonodictApp_"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        ">
+        <activity
+            android:name="com.github.wakhub.monodict.activity.MainActivity_"
+            android:configChanges="keyboardHidden|orientation"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.github.wakhub.monodict.adice.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.github.wakhub.monodict.activity.FlashcardActivity_"
+            android:icon="@drawable/ic_flashcard"
+            android:label="@string/title_activity_flashcard"
+            android:parentActivityName="com.github.wakhub.monodict.activity.MainActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.BrowserActivity_"
+            android:icon="@drawable/ic_browser"
+            android:label="@string/title_activity_browser"
+            android:parentActivityName="com.github.wakhub.monodict.activity.MainActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.BrowserBookmarksActivity_"
+            android:icon="@drawable/ic_action_favorite"
+            android:label="@string/title_activity_browser_bookmarks"
+            android:parentActivityName="com.github.wakhub.monodict.activity.BrowserActivity_" />
+        <!-- Settings -->
+        <activity
+            android:name="com.github.wakhub.monodict.activity.settings.SettingsActivity_"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.github.wakhub.monodict.activity.MainActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_"
+            android:icon="@drawable/ic_settings"
+            android:label="@string/title_activity_dictionary_manager"
+            android:parentActivityName="com.github.wakhub.monodict.activity.settings.SettingsActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.settings.DownloadsActivity_"
+            android:icon="@drawable/ic_action_download"
+            android:label="@string/title_activity_downloads"
+            android:parentActivityName="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.settings.FileSelectorActivity_"
+            android:icon="@drawable/ic_action_collection"
+            android:label="@string/title_activity_file_selector" />
+        <service android:name=".search.DictionaryService" />
+    </application>
+
+</manifest>

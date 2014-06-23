@@ -1,0 +1,125 @@
+<!--
+  ~ Copyright (C) 2014 wak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Common -->
+
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+        <item name="android:buttonStyle">@style/AppTheme.Button</item>
+        <item name="android:buttonStyleSmall">@style/AppTheme.ButtonSmall</item>
+        <item name="android:imageButtonStyle">@style/AppTheme.ImageButtonStyle</item>
+        <item name="android:listViewStyle">@style/AppTheme.ListView</item>
+    </style>
+
+    <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="@android:style/Widget.Button">
+        <item name="android:textSize">18dp</item>
+        <item name="android:padding">@dimen/space_well</item>
+    </style>
+
+    <style name="AppTheme.ButtonSmall" parent="@android:style/Widget.Button.Small">
+        <item name="android:textSize">12dp</item>
+        <item name="android:padding">@dimen/space_well</item>
+    </style>
+
+    <style name="AppTheme.ImageButtonStyle" parent="@android:style/Widget.ImageButton">
+        <item name="android:padding">@dimen/space_well</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">48dp</item>
+    </style>
+
+    <style name="AppTheme.ListView" parent="@android:style/Widget.ListView">
+        <item name="android:divider">@color/border</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:paddingLeft">@dimen/space_relax</item>
+        <item name="android:paddingRight">@dimen/space_relax</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+    </style>
+
+    <!-- Utils -->
+
+    <style name="AppTheme.DisplayText">
+        <item name="android:padding">@dimen/space_well</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="AppTheme.DictionaryNameText">
+        <item name="android:padding">@dimen/space_well</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+
+    <!-- MainActivity -->
+
+    <style name="AppTheme.Main"></style>
+
+    <style name="AppTheme.Main.ListView" parent="@android:style/Widget.ListView">
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/transparent</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="AppTheme.Main.Nav">
+        <item name="android:background">@drawable/solid_background</item>
+    </style>
+
+    <style name="AppTheme.Main.Nav.ImageButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:padding">@dimen/space_relax</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_width">42dp</item>
+    </style>
+
+    <!-- FlashcardActivity -->
+
+    <style name="AppTheme.Flashcard.ImageButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">48dp</item>
+    </style>
+
+    <style name="AppTheme.Flashcard.PlainTextButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="AppTheme.Flashcard.CardDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:imageButtonStyle">@style/AppTheme.ImageButtonStyle</item>
+    </style>
+    <style name="AppTheme.Flashcard.ListView" parent="@android:style/Widget.ListView">
+        <item name="android:paddingLeft">@dimen/space_relax</item>
+        <item name="android:paddingRight">@dimen/space_relax</item>
+        <item name="android:divider">@color/transparent</item>
+        <item name="android:dividerHeight">5dp</item>
+    </style>
+</resources>

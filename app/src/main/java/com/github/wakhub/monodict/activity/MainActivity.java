@@ -1,0 +1,474 @@
+/**
+ * Copyright (C) 2014 wak
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.github.wakhub.monodict.activity;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+
+import com.github.wakhub.monodict.MonodictApp;
+import com.github.wakhub.monodict.R;
+import com.github.wakhub.monodict.activity.bean.ActivityHelper;
+import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
+import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
+import com.github.wakhub.monodict.activity.bean.SpeechHelper;
+import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
+import com.github.wakhub.monodict.db.Card;
+import com.github.wakhub.monodict.dice.DiceFactory;
+import com.github.wakhub.monodict.preferences.MainActivityState;
+import com.github.wakhub.monodict.preferences.Preferences_;
+import com.github.wakhub.monodict.search.DictionaryService;
+import com.github.wakhub.monodict.search.DictionaryServiceConnection;
+import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
+import com.github.wakhub.monodict.ui.DicItemListView;
+import com.github.wakhub.monodict.ui.DictionarySearchView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.App;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.DimensionRes;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+@EActivity(R.layout.activity_main)
+@OptionsMenu({R.menu.main})
+public class MainActivity extends Activity implements
+        DicItemListView.Callback,
+        DicContextDialogBuilder.OnContextActionListener,
+        DictionaryService.Listener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    //private static final int REQUEST_CODE = 10000;
+
+    @App
+    MonodictApp app;
+
+    @Pref
+    Preferences_ preferences;
+
+    @ViewById
+    DicItemListView dicItemListView;
+
+    @ViewById
+    TableLayout nav;
+
+    @SystemService
+    ClipboardManager clipboardManager;
+
+    @SystemService
+    SearchManager searchManager;
+
+    @SystemService
+    InputMethodManager inputMethodManager;
+
+    @Bean
+    ActivityHelper activityHelper;
+
+    @Bean
+    CommonActivityTrait commonActivityTrait;
+
+    @Bean
+    DatabaseHelper databaseHelper;
+
+    @Bean
+    MainActivityState state;
+
+    @Bean
+    SpeechHelper speechHelper;
+
+    @DimensionRes
+    float spaceRelax;
+
+    @DimensionRes
+    float spaceWell;
+
+    private DictionarySearchView searchView = null;
+
+    private ProgressDialog progressDialog;
+
+    private int delay = 0;
+
+    private DicItemListView.ResultAdapter resultAdapter;
+
+    private ArrayList<DicItemListView.Data> resultData;
+
+    private CharSequence lastClipboard = null;
+
+    private DictionaryServiceConnection dictionaryServiceConnection;
+
+    /**
+     * Called when the activity is first created.
+     */
+    @AfterViews
+    public void afterViews() {
+        Log.d(TAG, "state: " + state.toString());
+
+        Resources resources = getResources();
+
+        setTitle(String.format("%s %s", resources.getString(R.string.app_name), app.getPackageInfo().versionName));
+
+        commonActivityTrait.initActivity();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(getResources().getString(R.string.message_loading_dictionaries));
+        progressDialog.show();
+
+        dicItemListView.setCallback(this);
+        resultData = new ArrayList<DicItemListView.Data>();
+        resultAdapter = new DicItemListView.ResultAdapter(
+                this,
+                R.layout.list_item_dic,
+                R.id.dic_item_list_view,
+                resultData);
+        dicItemListView.setAdapter(resultAdapter);
+
+        resultAdapter.notifyDataSetChanged();
+    }
+
+    void initQuery() {
+        Intent intent = getIntent();
+        String query = null;
+
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(Intent.ACTION_SEARCH)) {
+                    query = intent.getExtras().getString(SearchManager.QUERY);
+                }
+                if (action.equals(Intent.ACTION_SEND)) {
+                    query = intent.getExtras().getString(Intent.EXTRA_TEXT);
+                }
+            }
+        }
+
+        if (query == null && preferences.clipboardSearch().get()) {
+            ClipData clipData = clipboardManager.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() > 0) {
+                String clipText = clipData.getItemAt(0).getText().toString();
+                if (lastClipboard == null || !clipText.equals(lastClipboard)) {
+                    query = clipText;
+                    lastClipboard = clipText;
+                }
+            }
+        }
+        if (query != null) {
+            query = query.trim();
+            searchView.setQuery(query, true);
+            searchView.setSelected(true);
+        } else {
+            String lastSearchQuery = state.getLastSearchQuery();
+            if (lastSearchQuery == null || lastSearchQuery.isEmpty()) {
+                return;
+            }
+            searchView.setQuery(lastSearchQuery, true);
+        }
+    }
+
+    @Background
+    void search(String text, int timer) {
+        dictionaryServiceConnection.search(text);
+    }
+
+    @OnActivityResult(SpeechHelper.REQUEST_CODE)
+    void onActivityResultSpeechHelper(int resultCode, Intent data) {
+        speechHelper.onActivityResult(resultCode, data);
+    }
+
+    @Click(R.id.flashcard_button)
+    void onClickFlashcardButton() {
+        FlashcardActivity_.intent(this).start();
+    }
+
+    @Click(R.id.browser_button)
+    void onClickBrowserButton() {
+        BrowserActivity_.intent(this).start();
+    }
+
+    @Click(R.id.settings_button)
+    void onClickSettingsButton() {
+        SettingsActivity_.intent(this).start();
+    }
+
+    @UiThread
+    void setNavVisibility(boolean visible) {
+        if (visible) {
+            if (inputMethodManager != null && getCurrentFocus() != null) {
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+            nav.setVisibility(View.VISIBLE);
+        } else {
+            nav.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        searchView = new DictionarySearchView(this, new DictionarySearchView.Listener() {
+            @Override
+            public void onSearchViewFocusChange(boolean b) {
+                setNavVisibility(!b);
+            }
+
+            @Override
+            public void onSearchViewQueryTextSubmit(String query) {
+                search(query, delay);
+            }
+
+            @Override
+            public void onSearchViewQueryTextChange(String s) {
+                String text = DiceFactory.convert(s);
+                String lastSearchQuery = state.getLastSearchQuery();
+                if (text.length() > 0 && !lastSearchQuery.equals(text)) {
+                    int timer = delay;
+                    if (lastSearchQuery.length() > 0 &&
+                            lastSearchQuery.charAt(lastSearchQuery.length() - 1) != text.charAt(text.length() - 1)) {
+                        timer = 10;
+                    }
+                    search(text, timer);
+                }
+            }
+        });
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        RelativeLayout wrapSearchView = new RelativeLayout(this);
+        wrapSearchView.addView(searchView);
+        actionBar.setCustomView(wrapSearchView);
+
+        Configuration configuration = getResources().getConfiguration();
+
+        int screenSize = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+        if (screenSize == Configuration.SCREENLAYOUT_SIZE_SMALL
+                || screenSize == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
+        initQuery();
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+            return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (dictionaryServiceConnection == null) {
+            dictionaryServiceConnection = new DictionaryServiceConnection(this);
+        }
+
+        bindService(
+                new Intent(this, DictionaryService.class),
+                dictionaryServiceConnection,
+                Context.BIND_AUTO_CREATE);
+
+        dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
+
+        nav.requestLayout();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(dictionaryServiceConnection);
+    }
+
+    @Override
+    protected void onDestroy() {
+        speechHelper.finish();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDicviewItemClicked(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        switch (data.getMode()) {
+            case DicItemListView.Data.MORE:
+                break;
+            case DicItemListView.Data.WORD: {
+                new DicContextDialogBuilder(this, data)
+                        .setContextActionListener(this)
+                        .show();
+            }
+            break;
+            case DicItemListView.Data.NONE:
+            case DicItemListView.Data.NORESULT:
+                break;
+        }
+    }
+
+    @Override
+    public boolean onDicviewItemLongClicked(int position) {
+        return false;
+    }
+
+    @Override
+    public void onDicviewItemClickAddToFlashcardButton(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        addFlashcard(data);
+    }
+
+    @Override
+    public void onDicviewItemClickSpeechButton(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        speechHelper.speech(data.Index.toString());
+    }
+
+    void addFlashcard(DicItemListView.Data data) {
+        Card card;
+        try {
+            card = databaseHelper.getCardByDisplay(data.Index.toString());
+            if (card != null) {
+                activityHelper.showToast(getResources().getString(R.string.message_item_already_registered, card.getDisplay()));
+                return;
+            }
+            card = databaseHelper.createCard(data);
+        } catch (SQLException e) {
+            activityHelper.showError(e);
+            return;
+        }
+        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+    }
+
+    @Override
+    public void onContextActionShare(DicItemListView.Data data) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, data.toSummaryString());
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            activityHelper.showError(e);
+        }
+    }
+
+    @Override
+    public void onContextActionCopyWord(DicItemListView.Data data) {
+        Log.d(TAG, "onContextActionCopyWord");
+        clipboardManager.setPrimaryClip(ClipData.newPlainText("index", data.Index));
+    }
+
+    @Override
+    public void onContextActionCopyAll(DicItemListView.Data data) {
+        Log.d(TAG, "onContextActionCopyAll");
+        clipboardManager.setPrimaryClip(ClipData.newPlainText("all", data.toSummaryString()));
+    }
+
+    private static void removeDirectory(File path) {
+        File[] files = path.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    removeDirectory(file);
+                }
+                file.delete();
+            }
+        }
+    }
+
+    @Override
+    @UiThread
+    public void onDictionaryServiceInitialized() {
+        progressDialog.dismiss();
+
+        if (app.isVersionUp()) {
+            removeDirectory(getCacheDir());
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(R.string.title_welcome)
+                    .setMessage(activityHelper.getStringFromRaw(R.raw.welcome))
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton(R.string.action_download_now, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            SettingsActivity_.intent(MainActivity.this)
+                                    .extraOpenDownloads(true)
+                                    .start();
+                        }
+                    })
+                    .show();
+        }
+        initQuery();
+    }
+
+    @Override
+    public void onDictionaryServiceUpdateDictionaries() {
+        progressDialog.dismiss();
+        dictionaryServiceConnection.search(searchView.getQuery().toString());
+    }
+
+    @Override
+    @UiThread
+    public void onDictionaryServiceResult(String query, ArrayList<DicItemListView.Data> result) {
+        resultData.clear();
+        resultData.addAll(result);
+        resultAdapter.notifyDataSetChanged();
+        if (!speechHelper.isProcessing()) {
+            dicItemListView.setSelection(0);
+        }
+
+        if (result.size() < 1) {
+            return;
+        }
+        state.setLastSearchQuery(query);
+    }
+}

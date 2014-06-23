@@ -1,0 +1,124 @@
+<!--
+  ~ Copyright (C) 2014 wak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/header_background"
+        android:paddingBottom="@dimen/space_well"
+        android:paddingLeft="@dimen/space_relax"
+        android:paddingRight="@dimen/space_relax"
+        android:paddingTop="@dimen/space_well"
+        android:shadowColor="@color/light_gray"
+        android:shadowDx="-1"
+        android:shadowDy="-1"
+        android:shadowRadius="1"
+        android:text="New Text"
+        android:textColor="#333333"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed" />
+
+    <LinearLayout
+        android:id="@id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/space_relax"
+        android:paddingRight="@dimen/space_relax"
+        android:paddingTop="@dimen/space_relax">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/ListIndex"
+                style="@style/AppTheme.DisplayText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/add_to_flashcard_button"
+                android:layout_weight="1"
+                android:text="Index"
+                android:layout_alignParentTop="true"></TextView>
+
+            <ImageButton
+                android:id="@+id/add_to_flashcard_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/space_well"
+                android:layout_toLeftOf="@+id/speech_button"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_action_add_to_queue" />
+
+            <ImageButton
+                android:id="@+id/speech_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/space_relax"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/space_relax"
+                android:src="@drawable/ic_action_volume_on" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/ListPhone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone"></TextView>
+
+        <TextView
+            android:id="@+id/ListTrans"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Trans"></TextView>
+
+        <TextView
+            android:id="@+id/ListSample"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="ListSample"
+            android:textStyle="italic"></TextView>
+
+        <Button
+            android:id="@+id/ListMoreButton"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/space_relax"
+            android:visibility="gone"></Button>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_super_relax" />
+        <View
+            android:layerType="software"
+            android:id="@+id/hr"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/dotted_border" />
+    </LinearLayout>
+
+</LinearLayout>

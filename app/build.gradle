@@ -1,0 +1,92 @@
+apply plugin: 'android'
+apply plugin: 'android-apt'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.0.3'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 19
+        versionCode 5
+        versionName '1.0.0'
+
+        testPackageName 'com.github.wakhub.monodict.test'
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        testHandleProfiling true
+        testFunctionalTest true
+
+        ndk {
+            moduleName 'monodict'
+        }
+    }
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+
+File signingPropertiesFile = rootProject.file('credentials/release.keystore.properties')
+if (signingPropertiesFile.exists()) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(signingPropertiesFile))
+    android.signingConfigs.release.storeFile = file(props.storeFile)
+    android.signingConfigs.release.storePassword = props.storePassword
+    android.signingConfigs.release.keyAlias = props.keyAlias
+    android.signingConfigs.release.keyPassword = props.keyPassword
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    apt 'org.androidannotations:androidannotations:3.0.1'
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3'
+    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
+    compile 'com.google.code.gson:gson:2.2.4@jar'
+    compile 'com.j256.ormlite:ormlite-core:4.47@jar'
+    compile 'com.j256.ormlite:ormlite-android:4.47@jar'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.android.support:support-v13:19.+'
+}
+
+sourceSets {
+    testLocal {
+        java.srcDir file('src/androidTest/java')
+        resources.srcDir file('src/androidTest/resources')
+    }
+}
+
+android.applicationVariants.all { variant ->
+    aptOutput = file("${project.buildDir}/source/apt/${variant.dirName}")
+    println "****************************"
+    println "variant: ${variant.name}"
+    println "manifest:  ${variant.processResources.manifestFile}"
+    println "aptOutput:  ${aptOutput}"
+    println "****************************"
+
+    variant.javaCompile.doFirst {
+        println "*** compile doFirst ${variant.name}"
+        aptOutput.mkdirs()
+        variant.javaCompile.options.compilerArgs += [
+                '-processorpath', configurations.apt.getAsPath(),
+                '-AandroidManifestFile=' + variant.processResources.manifestFile,
+                '-s', aptOutput
+        ]
+    }
+}

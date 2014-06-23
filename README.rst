@@ -1,0 +1,55 @@
+============
+README
+============
+
+.. image:: https://googledrive.com/host/0B7-yqP_4DkNZTjY5QmlZUTR4a2M
+
+*monodict* is a faster offline PDIC dictionary with flashcard application.
+The application has been developed based on
+the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
+
+Google Play Store
+    https://play.google.com/apps/testing/com.github.wakhub.monodict
+Screenshots
+    https://drive.google.com/folderview?id=0B7-yqP_4DkNZM1NIcWxhOWthMDQ&usp=sharing
+
+
+Setup monodict Project
+========================
+
+Requirements
+
+- `Android Studio <https://developer.android.com/sdk/installing/studio.html>`_
+- `Fabric <http://www.fabfile.org/>`_
+- `Requests <http://docs.python-requests.org/en/latest/>`_
+
+Command::
+
+    $ pip install fabric requests
+    $ fab init
+
+Then check sdk.dir and ndk.dir in your local.properties
+
+
+LICENSE
+=======
+
+::
+
+    Copyright 2014 wak
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+
+See also: app/src/main/res/raw/legal.txt
+

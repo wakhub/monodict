@@ -1,0 +1,50 @@
+<!--
+  ~ Copyright (C) 2014 wak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/title_settings_search">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="clipboardSearch"
+            android:title="@string/title_settings_clipboard_search" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fastScroll"
+            android:title="@string/title_settings_fast_scroll" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/title_settings_language">
+        <ListPreference
+            android:defaultValue="English"
+            android:dialogTitle="@string/title_settings_speech_language"
+            android:entries="@array/speech_locales"
+            android:entryValues="@array/speech_locales"
+            android:key="speechLocale"
+            android:title="@string/title_settings_speech_language" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
+        <Preference android:key="dictionaryManager" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/title_settings_app_information">
+        <Preference
+            android:key="about"
+            android:icon="@drawable/icon"
+            android:title="@string/title_settings_about" />
+        <Preference
+            android:key="legal"
+            android:title="@string/title_settings_legal" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

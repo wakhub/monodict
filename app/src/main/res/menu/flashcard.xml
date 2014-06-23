@@ -1,0 +1,44 @@
+<!--
+  ~ Copyright (C) 2014 wak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_shuffle"
+        android:icon="@drawable/ic_action_shuffle"
+        android:showAsAction="always"
+        android:title="Shuffle" />
+    <item
+        android:id="@+id/action_order_alphabetically"
+        android:showAsAction="always"
+        android:title="A-Z" />
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_add_new_card" />
+    <item
+        android:id="@+id/action_delete_all"
+        android:icon="@drawable/ic_action_discard"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_delete_all" />
+    <item
+        android:id="@+id/action_import"
+        android:showAsAction="collapseActionView"
+        android:title="Import" />
+    <item
+        android:id="@+id/action_export"
+        android:showAsAction="collapseActionView"
+        android:title="Export" />
+</menu>
