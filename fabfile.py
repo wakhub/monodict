@@ -139,17 +139,6 @@ def generate_keystore(keystore):
 
 
 @task
-def key_info(env='debug'):
-    """ key_info:{env='debug'} """
-    keystore = ''
-    if env == 'debug':
-        keystore = DEBUG_KEYSTORE
-    if env == 'release':
-        keystore = RELEASE_KEYSTORE
-    local('keytool -list -v -keystore {}'.format(keystore))
-
-
-@task
 def diff_strings():
     """ Show diff of values/strings.xml and values-ja/strings.xml """
     tree = ElementTree()
@@ -202,7 +191,7 @@ def _clean_gradle_caches():
 
     for pattern in patterns:
         local("find ~/.gradle/caches/"
-              " -iname \'*.jar\' -exec zip -d '{}' '' + pattern + '' \\;")
+              " -iname \'*.jar\' -exec zip -d '{}' '" + pattern + "' \\;")
 
 
 def _download(url, dest):
