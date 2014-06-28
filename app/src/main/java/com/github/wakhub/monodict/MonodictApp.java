@@ -20,7 +20,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.github.wakhub.monodict.preferences.Preferences_;
 
@@ -58,9 +57,6 @@ public class MonodictApp extends Application {
     public boolean isVersionUp() {
         PackageInfo packageInfo = getPackageInfo();
         int lastVersionCode = preferences.lastVersionCode().get();
-        Log.d(TAG, String.format("packageInfo.versionCode=%d, lastVersionCode=%d",
-                packageInfo.versionCode,
-                lastVersionCode));
         if (packageInfo.versionCode == lastVersionCode) {
             return false;
         }

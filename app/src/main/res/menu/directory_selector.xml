@@ -13,13 +13,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.wakhub.monodict.activity.FileSelectorActivity">
-    <item
-        android:id="@+id/action_help"
-        android:icon="@drawable/ic_action_help"
-        android:title="@string/title_help"
+    tools:context="com.github.wakhub.monodict.activity.DirectorySelectorActivity" >
+    <item android:id="@+id/action_ok"
+        android:title="@android:string/ok"
+        android:icon="@drawable/ic_action_accept"
         android:showAsAction="always" />
 </menu>
-

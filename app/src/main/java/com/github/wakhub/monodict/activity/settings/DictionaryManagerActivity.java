@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,8 +61,8 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
 
     private static final String TAG = DictionaryManagerActivity.class.getSimpleName();
 
-    private static final int REQUEST_CODE_DOWNLOAD_DICTIONARY = 10600;
-    private static final int REQUEST_CODE_ADD_DICTIONARY = 10601;
+    private static final int REQUEST_CODE_DOWNLOAD_DICTIONARY = 10110;
+    private static final int REQUEST_CODE_ADD_DICTIONARY = 10111;
 
     @Extra
     boolean extraOpenDownloads = false;
@@ -112,10 +113,12 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
         if (resultCode != RESULT_OK || data == null) {
             return;
         }
-        final String path = data.getExtras().getString(FileSelectorActivity.RESULT_INTENT_PATH);
+        Bundle extras = data.getExtras();
+        String path = extras.getString(DictionaryFileSelectorActivity.RESULT_INTENT_PATH);
+        String filename = extras.getString(DictionaryFileSelectorActivity.RESULT_INTENT_FILENAME);
         if (path != null) {
             showProgressDialog();
-            addDictionary(path);
+            addDictionary(path + "/" + filename);
         }
     }
 
@@ -177,9 +180,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
 
     @OptionsItem(R.id.action_add_dictionary)
     void onActionAddDictionary() {
-        FileSelectorActivity_.intent(this)
-                .extraExtensions(new String[]{".dic"})
-                .startForResult(REQUEST_CODE_ADD_DICTIONARY);
+        DictionaryFileSelectorActivity_.intent(this).startForResult(REQUEST_CODE_ADD_DICTIONARY);
     }
 
     @OptionsItem(R.id.action_download_dictionary)

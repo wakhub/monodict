@@ -21,6 +21,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +40,7 @@ import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
 import com.github.wakhub.monodict.ui.CardDialog;
+import com.github.wakhub.monodict.utils.DateTimeHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
@@ -52,11 +55,17 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +79,8 @@ public class FlashcardActivity extends ListActivity
 
     private static final String TAG = FlashcardActivity.class.getSimpleName();
 
-    //private static final int REQUEST_CODE = 10100;
+    private static final int REQUEST_CODE_SELECT_DIRECTORY_TO_EXPORT = 10010;
+    private static final int REQUEST_CODE_SELECT_FILE_TO_IMPORT = 10011;
 
     private static final String JSON_KEY_CARDS = "cards";
 
@@ -161,7 +171,6 @@ public class FlashcardActivity extends ListActivity
             activityHelper.showError(e);
             return;
         }
-        reloadTabs();
         if (cardList != null) {
             onLoadContents(cardList);
         }
@@ -171,49 +180,62 @@ public class FlashcardActivity extends ListActivity
     void onLoadContents(List<Card> cardList) {
         listAdapter.clear();
         listAdapter.addAll(cardList);
+        reloadTabs();
     }
 
-    @OptionsItem(R.id.action_import)
-    void onActionImport() {
-        activityHelper
-                .buildInputDialog(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        EditText text = (EditText) ((Dialog) dialogInterface).findViewById(android.R.id.text1);
-                        importCardsFromJson(text.getText().toString());
-                    }
-                })
-                .setTitle("Import from JSON")
-                .setMessage("Input json data").show();
-    }
-
-    @Background
-    void importCardsFromJson(String json) {
-        JsonArray cards;
-        try {
-            JsonElement jsonElement = new JsonParser().parse(json);
-            JsonObject object = jsonElement.getAsJsonObject();
-            cards = object.getAsJsonArray(JSON_KEY_CARDS);
-        } catch (JsonIOException e) {
-            activityHelper.showError(e);
+    @OnActivityResult(REQUEST_CODE_SELECT_DIRECTORY_TO_EXPORT)
+    void onActivityResultSelectDirectoryToExport(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
             return;
         }
+        String path = data.getExtras().getString(DirectorySelectorActivity.RESULT_INTENT_PATH);
+        Calendar now = Calendar.getInstance();
 
-        for (JsonElement element : cards) {
-            JsonObject cardData = element.getAsJsonObject();
-            Card card = new Card(cardData);
-            try {
-                databaseHelper.createCard(card);
-            } catch (SQLException e) {
-                activityHelper.showError(e);
-            }
+        String defaultPath = String.format("%s/monodict-%s.json",
+                path,
+                new DateTimeHelper().getCurrentDateTimeString());
+        activityHelper
+                .buildInputDialog(defaultPath, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        TextView textView = (TextView) ((Dialog) dialogInterface).findViewById(android.R.id.text1);
+                        String outputPath = textView.getText().toString();
+                        exportCardsTo(outputPath);
+                    }
+                })
+                .setTitle("Export flashcard data")
+                .show();
+    }
+
+    @OnActivityResult(REQUEST_CODE_SELECT_FILE_TO_IMPORT)
+    void onActivityResultSelectFileToImport(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
         }
-        reloadTabs();
+        Bundle extras = data.getExtras();
+        String path = extras.getString(FileSelectorActivity.RESULT_INTENT_PATH);
+        String filename = extras.getString(FileSelectorActivity.RESULT_INTENT_FILENAME);
+        importCardsFrom(path + "/" + filename);
     }
 
     @OnActivityResult(SpeechHelper.REQUEST_CODE)
     void onActivityResultSpeechHelper(int resultCode, Intent data) {
         speechHelper.onActivityResult(resultCode, data);
+    }
+
+    @OptionsItem(R.id.action_shuffle)
+    void onActionShuffle() {
+        Log.d(TAG, "onActionShuffle");
+        state.refreshRandomSeed();
+        state.setOrder(FlashcardActivityState.ORDER_SHUFFLE);
+        loadContents();
+    }
+
+    @OptionsItem(R.id.action_order_alphabetically)
+    void onActionOrderAlphabetically() {
+        Log.d(TAG, "onActionOrderAlphabetically");
+        state.setOrder(FlashcardActivityState.ORDER_ALPHABETICALLY);
+        loadContents();
     }
 
     @OptionsItem(R.id.action_add)
@@ -283,23 +305,59 @@ public class FlashcardActivity extends ListActivity
 
     }
 
-    @OptionsItem(R.id.action_shuffle)
-    void onActionShuffle() {
-        Log.d(TAG, "onActionShuffle");
-        state.refreshRandomSeed();
-        state.setOrder(FlashcardActivityState.ORDER_SHUFFLE);
-        loadContents();
-    }
-
-    @OptionsItem(R.id.action_order_alphabetically)
-    void onActionOrderAlphabetically() {
-        Log.d(TAG, "onActionOrderAlphabetically");
-        state.setOrder(FlashcardActivityState.ORDER_ALPHABETICALLY);
-        loadContents();
+    @OptionsItem(R.id.action_import)
+    void onActionImport() {
+        FileSelectorActivity_.intent(this)
+                .extraTitle(getResources().getString(R.string.action_import))
+                .extraExtensions(new String[]{".json"})
+                .startForResult(REQUEST_CODE_SELECT_FILE_TO_IMPORT);
     }
 
     @OptionsItem(R.id.action_export)
     void onActionExport() {
+        DirectorySelectorActivity_.intent(this)
+                .startForResult(REQUEST_CODE_SELECT_DIRECTORY_TO_EXPORT);
+    }
+
+    @Background
+    void importCardsFrom(String jsonPath) {
+        String json;
+        try {
+            FileInputStream inputStream = new FileInputStream(jsonPath);
+            json = TextUtils.join("", IOUtils.readLines(inputStream));
+        } catch (FileNotFoundException e) {
+            activityHelper.showError(e);
+            return;
+        } catch (IOException e) {
+            activityHelper.showError(e);
+            return;
+        }
+        JsonArray cards;
+        try {
+            JsonElement jsonElement = new JsonParser().parse(json);
+            JsonObject object = jsonElement.getAsJsonObject();
+            cards = object.getAsJsonArray(JSON_KEY_CARDS);
+        } catch (JsonIOException e) {
+            activityHelper.showError(e);
+            return;
+        }
+
+        for (JsonElement element : cards) {
+            JsonObject cardData = element.getAsJsonObject();
+            Card card = new Card(cardData);
+            try {
+                databaseHelper.createCard(card);
+            } catch (SQLException e) {
+                activityHelper.showError(e);
+                return;
+            }
+        }
+        activityHelper.showToast(R.string.message_success);
+        loadContents();
+    }
+
+    @Background
+    void exportCardsTo(String path) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
@@ -320,6 +378,7 @@ public class FlashcardActivity extends ListActivity
             activityHelper.showError(e);
             return;
         }
+
         try {
             jsonObject.put(JSON_KEY_CARDS, jsonArray);
         } catch (JSONException e) {
@@ -327,9 +386,17 @@ public class FlashcardActivity extends ListActivity
             return;
         }
 
-        EditText text = new EditText(this);
-        text.setText(jsonObject.toString());
-        new AlertDialog.Builder(this).setView(text).setNegativeButton(android.R.string.ok, null).show();
+        try {
+            FileOutputStream outputStream = new FileOutputStream(path);
+            IOUtils.write(jsonObject.toString(), outputStream);
+        } catch (FileNotFoundException e) {
+            activityHelper.showError(e);
+            return;
+        } catch (IOException e) {
+            activityHelper.showError(e);
+            return;
+        }
+        activityHelper.showToast(R.string.message_success);
     }
 
     @Override

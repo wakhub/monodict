@@ -37,7 +37,7 @@ public class SettingsActivity extends Activity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
-    //private static final int REQUEST_CODE = 10400;
+    //private static final int REQUEST_CODE = 10100;
 
     @Extra
     boolean extraOpenDownloads = false;

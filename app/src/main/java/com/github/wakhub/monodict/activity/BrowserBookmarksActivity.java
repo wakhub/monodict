@@ -47,7 +47,7 @@ import java.util.List;
 @OptionsMenu({R.menu.browser_bookmarks})
 public class BrowserBookmarksActivity extends ListActivity {
 
-    //private static final int REQUEST_CODE = 10300;
+    //private static final int REQUEST_CODE = 10030;
 
     public static final String EXTRA_URL = "url";
 

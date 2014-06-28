@@ -74,10 +74,11 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
-    private static final int REQUEST_CODE_BOOKMARKS = 10400;
+    private static final int REQUEST_CODE_BOOKMARKS = 10020;
     private static final int TRANSLATE_PANEL_DURATION = 150;
     private static final String JAVASCRIPT_CALLBACK_SEARCH = "search";
     private static final String JAVASCRIPT_CALLBACK_SPEECH = "speech";
+    private static final String[] PROTOCOLS = new String[]{"http://", "https://", "ftp://", "file://"};
 
     @Extra
     String extraUrlOrKeywords = "";
@@ -160,10 +161,12 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         if (url == null || url.isEmpty()) {
             return;
         }
-        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file:///")) {
-            Log.d(TAG, "loadUrl: " + url.toString());
-            webView.loadUrl(url);
-            return;
+        for (String protocol : PROTOCOLS) {
+            if (url.startsWith(protocol)) {
+                Log.d(TAG, "loadUrl: " + url.toString());
+                webView.loadUrl(url);
+                return;
+            }
         }
         webView.loadUrl(getResources().getString(R.string.url_google_search, url));
     }

@@ -79,7 +79,7 @@ public class DownloadsActivity extends ListActivity {
     final public static String RESULT_INTENT_FILENAME = "filename";
     final public static String RESULT_INTENT_PATH = "path";
 
-    private static final int REQUEST_CODE_DOWNLOAD = 10500;
+    private static final int REQUEST_CODE_DOWNLOAD = 10120;
 
     @Bean
     CommonActivityTrait commonActivityTrait;

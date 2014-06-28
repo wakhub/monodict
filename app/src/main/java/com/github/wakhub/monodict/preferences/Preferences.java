@@ -67,5 +67,15 @@ public interface Preferences {
     @DefaultString("{}")
     String browserActivityState();
 
+    /** @see com.github.wakhub.monodict.preferences.DirectorySelectorActivityState */
+    @DefaultString("{}")
+    String directorySelectorActivityState();
+
+    @DefaultString("{}")
+    String fileSelectorActivityState();
+
+    @DefaultString("{}")
+    String dictionaryFileSelectorActivityState();
+
     // Activity state }
 }

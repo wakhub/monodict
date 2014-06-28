@@ -96,7 +96,7 @@ public class ActivityHelper {
 
     public void showError(Exception e) {
         Log.d("ERROR", e.toString());
-        showToast(e.toString());
+        showToastLong(e.toString());
     }
 
     /**

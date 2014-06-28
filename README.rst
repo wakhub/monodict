@@ -35,7 +35,6 @@ TODO
 ==========
 
 - Integration with alc web search
-- Improvement for flashcard import/export
 - Add some functions into FlashcardActivity
 - Local file explorer in BrowserActivity
 - Eijiro syntax support

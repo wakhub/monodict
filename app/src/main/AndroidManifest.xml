@@ -82,6 +82,14 @@
             android:icon="@drawable/ic_action_favorite"
             android:label="@string/title_activity_browser_bookmarks"
             android:parentActivityName="com.github.wakhub.monodict.activity.BrowserActivity_" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.FileSelectorActivity_"
+            android:icon="@drawable/ic_action_collection"
+            android:label="@string/blank_text" />
+        <activity
+            android:name="com.github.wakhub.monodict.activity.DirectorySelectorActivity_"
+            android:icon="@drawable/ic_action_collection"
+            android:label="@string/title_activity_directory_selector" />
         <!-- Settings -->
         <activity
             android:name="com.github.wakhub.monodict.activity.settings.SettingsActivity_"
@@ -94,14 +102,16 @@
             android:label="@string/title_activity_dictionary_manager"
             android:parentActivityName="com.github.wakhub.monodict.activity.settings.SettingsActivity_" />
         <activity
+            android:name="com.github.wakhub.monodict.activity.settings.DictionaryFileSelectorActivity_"
+            android:icon="@drawable/ic_action_collection"
+            android:label="@string/action_add_dictionary"
+            android:parentActivityName="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_" />
+        <activity
             android:name="com.github.wakhub.monodict.activity.settings.DownloadsActivity_"
             android:icon="@drawable/ic_action_download"
             android:label="@string/title_activity_downloads"
             android:parentActivityName="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_" />
-        <activity
-            android:name="com.github.wakhub.monodict.activity.settings.FileSelectorActivity_"
-            android:icon="@drawable/ic_action_collection"
-            android:label="@string/title_activity_file_selector" />
+
         <service android:name=".search.DictionaryService" />
     </application>
 

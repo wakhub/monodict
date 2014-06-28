@@ -31,6 +31,8 @@
 <string name="app_name">monodict</string>
 <string name="blank_text">---</string>
 <string name="hello_world">Hello world!</string>
+<string name="message_success">Success</string>
+<string name="message_failure">Failure</string>
 <string name="message_confirm_delete">Are you sure you want to delete?</string>
 <string name="message_creating_index">Now creating index…</string>
 <string name="message_download_failed">Download FAILED!</string>
@@ -50,6 +52,7 @@
 <string name="title_activity_browser">Browser</string>
 <string name="title_activity_browser_bookmarks">Bookmarks</string>
 <string name="title_activity_dictionary_manager">Dictionary Manager</string>
+<string name="title_activity_directory_selector">Select Directory</string>
 <string name="title_activity_downloads">Downloads</string>
 <string name="title_activity_file_selector">Select PDIC file</string>
 <string name="title_activity_flashcard">Flashcard</string>

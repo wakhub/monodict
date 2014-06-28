@@ -52,6 +52,7 @@ public class DictionarySearchView extends SearchView {
 
         Resources resources = getResources();
 
+        // http://www.techrepublic.com/blog/software-engineer/pro-tip-customize-the-android-search-view-widget/
         searchPlate = findViewById(resources.getIdentifier("android:id/search_plate", null, null));
         textView = (TextView) findViewById(resources.getIdentifier("android:id/search_src_text", null, null));
 
@@ -71,7 +72,6 @@ public class DictionarySearchView extends SearchView {
         setIconifiedByDefault(false);
         setQueryHint(resources.getString(R.string.title_keyword));
 
-        // http://www.techrepublic.com/blog/software-engineer/pro-tip-customize-the-android-search-view-widget/
         searchPlate.setBackgroundResource(R.drawable.search_view_background);
 
 
