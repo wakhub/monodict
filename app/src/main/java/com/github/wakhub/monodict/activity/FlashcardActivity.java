@@ -40,7 +40,7 @@ import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
 import com.github.wakhub.monodict.ui.CardDialog;
-import com.github.wakhub.monodict.utils.DateTimeHelper;
+import com.github.wakhub.monodict.utils.DateTimeUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
@@ -191,9 +191,10 @@ public class FlashcardActivity extends ListActivity
         String path = data.getExtras().getString(DirectorySelectorActivity.RESULT_INTENT_PATH);
         Calendar now = Calendar.getInstance();
 
-        String defaultPath = String.format("%s/monodict-%s.json",
+        String defaultPath = String.format("%s/%s-%s.json",
                 path,
-                new DateTimeHelper().getCurrentDateTimeString());
+                getResources().getString(R.string.app_name),
+                DateTimeUtils.getInstance().getCurrentDateTimeString());
         activityHelper
                 .buildInputDialog(defaultPath, new DialogInterface.OnClickListener() {
                     @Override
@@ -203,7 +204,7 @@ public class FlashcardActivity extends ListActivity
                         exportCardsTo(outputPath);
                     }
                 })
-                .setTitle("Export flashcard data")
+                .setTitle(R.string.action_export)
                 .show();
     }
 
@@ -290,12 +291,7 @@ public class FlashcardActivity extends ListActivity
                 .buildConfirmDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            databaseHelper.deleteAllCards();
-                        } catch (SQLException e) {
-                            activityHelper.showError(e);
-                        }
-                        loadContents();
+                        deleteAllCards();
                     }
                 })
                 .setTitle(R.string.action_delete_all)
@@ -320,16 +316,33 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Background
+    void deleteAllCards() {
+        activityHelper.showProgressDialog(R.string.message_in_processing);
+        try {
+            databaseHelper.deleteAllCards();
+        } catch (SQLException e) {
+            activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
+            return;
+        }
+        activityHelper.hideProgressDialog();
+        loadContents();
+    }
+
+    @Background
     void importCardsFrom(String jsonPath) {
+        activityHelper.showProgressDialog(R.string.message_in_processing);
         String json;
         try {
             FileInputStream inputStream = new FileInputStream(jsonPath);
             json = TextUtils.join("", IOUtils.readLines(inputStream));
         } catch (FileNotFoundException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         } catch (IOException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
         JsonArray cards;
@@ -339,6 +352,7 @@ public class FlashcardActivity extends ListActivity
             cards = object.getAsJsonArray(JSON_KEY_CARDS);
         } catch (JsonIOException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
 
@@ -349,15 +363,18 @@ public class FlashcardActivity extends ListActivity
                 databaseHelper.createCard(card);
             } catch (SQLException e) {
                 activityHelper.showError(e);
+                activityHelper.hideProgressDialog();
                 return;
             }
         }
+        activityHelper.hideProgressDialog();
         activityHelper.showToast(R.string.message_success);
         loadContents();
     }
 
     @Background
     void exportCardsTo(String path) {
+        activityHelper.showProgressDialog(R.string.message_in_processing);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
@@ -371,11 +388,13 @@ public class FlashcardActivity extends ListActivity
                     jsonArray.put(cardData);
                 } catch (JSONException e) {
                     activityHelper.showError(e);
+                    activityHelper.hideProgressDialog();
                     return;
                 }
             }
         } catch (SQLException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
 
@@ -383,6 +402,7 @@ public class FlashcardActivity extends ListActivity
             jsonObject.put(JSON_KEY_CARDS, jsonArray);
         } catch (JSONException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
 
@@ -391,11 +411,14 @@ public class FlashcardActivity extends ListActivity
             IOUtils.write(jsonObject.toString(), outputStream);
         } catch (FileNotFoundException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         } catch (IOException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
+        activityHelper.hideProgressDialog();
         activityHelper.showToast(R.string.message_success);
     }
 

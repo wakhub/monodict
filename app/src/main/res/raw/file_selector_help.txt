@@ -1,4 +1,4 @@
-The extension of the file has to be ".dic" .
+An extension of the file has to be ".dic" .
 
 You can find additional PDIC files in below URL.
 https://docs.google.com/spreadsheets/d/1c3F29JlbZBkHipypM4MrEvojk_XsR40Ro98jrH_-eX4/edit?usp=sharing

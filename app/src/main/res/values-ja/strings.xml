@@ -20,9 +20,13 @@
 <string name="action_import">インポート</string>
 <string name="action_keep">保留</string>
 <string name="action_more">もっと見る</string>
+<string name="action_open_local_file">ローカルファイルを開く</string>
 <string name="action_order_alphabetically">アルファベット順で並べる</string>
 <string name="action_rename">名前を変更する</string>
 <string name="action_search">検索</string>
+<string name="action_search_by_alc_co_jp">alc.co.jp で検索</string>
+<string name="action_search_by_dictionary_com">dictionary.com で検索</string>
+<string name="action_search_by_google_com">google.com で検索</string>
 <string name="action_share">共有</string>
 <string name="action_shuffle">ランダムに並べる</string>
 <string name="action_speech">発音 (英語のみ)</string>
@@ -31,6 +35,7 @@
 <string name="message_creating_index">インデックスを作成しています…</string>
 <string name="message_download_failed">ダウンロード失敗</string>
 <string name="message_download_succeed">ダウンロード成功</string>
+<string name="message_failure">失敗</string>
 <string name="message_in_processing">処理を行っています…</string>
 <string name="message_item_added">%s を追加しました</string>
 <string name="message_item_added_to">%2$s に %1$s を追加しました</string>
@@ -41,12 +46,14 @@
 <string name="message_language_settings_notice">言語設定はリスタート後に有効になります</string>
 <string name="message_loading_dictionaries">辞書を読み込んでいます…</string>
 <string name="message_no_result">結果がありません</string>
+<string name="message_success">成功</string>
 <string name="message_unable_to_access">アクセスできません</string>
+<string name="message_url_placeholder">URL 又はキーワード</string>
 <string name="title_activity_browser">ブラウザ</string>
 <string name="title_activity_browser_bookmarks">ブックマーク</string>
 <string name="title_activity_dictionary_manager">辞書管理</string>
+<string name="title_activity_directory_selector">ディレクトリを選択</string>
 <string name="title_activity_downloads">ダウンロード</string>
-<string name="title_activity_file_selector">PDIC 辞書を選択</string>
 <string name="title_activity_flashcard">単語帳</string>
 <string name="title_activity_main">検索</string>
 <string name="title_activity_settings">設定</string>
@@ -64,9 +71,12 @@
 <string name="title_settings_about">このアプリについて</string>
 <string name="title_settings_app_information">アプリケーション情報</string>
 <string name="title_settings_clipboard_search">クリップボード検索</string>
+<string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">高速スクロール</string>
 <string name="title_settings_language">言語設定</string>
+<string name="title_settings_legal">免責事項</string>
 <string name="title_settings_search">検索</string>
+<string name="title_settings_speech_language">音声の言語</string>
 <string name="title_settings_version">バージョン</string>
 <string name="title_welcome">monodict へようこそ!</string>
 </resources>

@@ -58,12 +58,12 @@ def prepare_for_release():
     _sort_string_xml(os.path.join(APP_ROOT_DIR, 'src/main/res/values-ja/strings.xml'))
     _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/icons.svg'))
     local('rm -rf %s' % os.path.join(APP_ROOT_DIR, 'build'))
-    validation()
+    validation(False)
 
 
 @task
-def validation():
-    """ Validate JSON and XML in project """
+def validation(verbose=False):
+    """ validation:{verbose=False} """
     print('Validating files...')
     fails = []
     for root, dirs, files in os.walk(os.path.join(APP_ROOT_DIR, 'src')):
@@ -72,7 +72,7 @@ def validation():
             result = 'OK'
             run_validation = False
             try:
-                run_validation = _validates_file(fullpath, True)
+                run_validation = _validates_file(fullpath, verbose)
             except Exception as e:
                 fails.append((fullpath, e))
     if not fails:
@@ -139,8 +139,8 @@ def generate_keystore(keystore):
 
 
 @task
-def diff_strings():
-    """ Show diff of values/strings.xml and values-ja/strings.xml """
+def diff_strings(matches_only=False):
+    """ diff_strings:{matches_only=False} """
     tree = ElementTree()
 
     strings = tree.parse(os.path.join(APP_ROOT_DIR, 'src/main/res/values/strings.xml'))
@@ -160,7 +160,7 @@ def diff_strings():
             print(template.format(red(string.attrib['name']),
                                   string.text,
                                   yellow('----')))
-        else:
+        elif not matches_only:
             print(template.format(string.attrib['name'],
                                   string.text,
                                   match.text))

@@ -17,7 +17,6 @@ package com.github.wakhub.monodict.activity.settings;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,8 +79,6 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
 
     private ListAdapter listAdapter;
 
-    private ProgressDialog progressDialog;
-
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity();
@@ -117,7 +114,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
         String path = extras.getString(DictionaryFileSelectorActivity.RESULT_INTENT_PATH);
         String filename = extras.getString(DictionaryFileSelectorActivity.RESULT_INTENT_FILENAME);
         if (path != null) {
-            showProgressDialog();
+            activityHelper.showProgressDialog(R.string.message_creating_index);
             addDictionary(path + "/" + filename);
         }
     }
@@ -129,30 +126,9 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
         }
         final String path = data.getExtras().getString(DownloadsActivity.RESULT_INTENT_PATH);
         if (path != null) {
-            showProgressDialog();
+            activityHelper.showProgressDialog(R.string.message_creating_index);
             addDictionary(path);
         }
-    }
-
-    @UiThread
-    void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage(getResources().getString(R.string.message_creating_index));
-        }
-        progressDialog.show();
-    }
-
-    @UiThread
-    void hideProgressDialog() {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.dismiss();
-        progressDialog = null;
     }
 
     private void addDictionary(final String path) {
@@ -160,7 +136,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
         final IdicInfo dicInfo = dice.open(path);
         if (dicInfo == null) {
             activityHelper.showToastLong(getResources().getString(R.string.message_item_loading_failed, path));
-            hideProgressDialog();
+            activityHelper.hideProgressDialog();
             return;
         }
 
@@ -175,7 +151,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
             dice.close(dicInfo);
             activityHelper.showToastLong(getResources().getString(R.string.message_item_loading_failed, path));
         }
-        hideProgressDialog();
+        activityHelper.hideProgressDialog();
     }
 
     @OptionsItem(R.id.action_add_dictionary)
@@ -213,10 +189,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
 
     @Override
     protected void onDestroy() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        activityHelper.clear();
         super.onDestroy();
     }
 

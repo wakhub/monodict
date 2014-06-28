@@ -13,20 +13,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity">
+    tools:context="com.github.wakhub.monodict.activity.MainActivity_">
 
     <item
-        android:id="@+id/action_download_dictionary"
-        android:icon="@drawable/ic_action_download"
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
         android:showAsAction="always"
-        android:title="@string/title_activity_downloads" />
-
-    <item
-        android:id="@+id/action_add_dictionary"
-        android:icon="@drawable/ic_action_collection"
-        android:showAsAction="always"
-        android:title="@string/action_add_dictionary" />
+        android:title="@string/action_search" />
 
 </menu>

@@ -68,15 +68,23 @@ public class FileSelectorActivity extends AbsFileManagerActivity {
             super.onListItemClick(position);
             return;
         }
-
-        for (String ext : extraExtensions) {
-            if (ext.endsWith(ext)) {
-                Intent intent = getIntent();
-                intent.putExtra(RESULT_INTENT_PATH, currentFullPath);
-                intent.putExtra(RESULT_INTENT_FILENAME, path);
-                setResult(RESULT_OK, intent);
-                finish();
+        String returnPath = null;
+        if (extraExtensions == null) {
+            returnPath = path;
+        } else {
+            for (String ext : extraExtensions) {
+                if (path.endsWith(ext)) {
+                    returnPath = path;
+                }
             }
         }
+        if (returnPath == null) {
+            return;
+        }
+        Intent intent = getIntent();
+        intent.putExtra(RESULT_INTENT_PATH, currentFullPath);
+        intent.putExtra(RESULT_INTENT_FILENAME, returnPath);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

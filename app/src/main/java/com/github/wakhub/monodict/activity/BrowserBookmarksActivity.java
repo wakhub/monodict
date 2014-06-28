@@ -70,9 +70,9 @@ public class BrowserBookmarksActivity extends ListActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 Bookmark bookmark = getItem(position);
-                TextView text1 = (TextView)view.findViewById(android.R.id.text1);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                 text1.setText(bookmark.getTitle());
-                TextView text2 = (TextView)view.findViewById(android.R.id.text2);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
                 text2.setText(bookmark.getUrl());
                 return view;
             }
@@ -111,18 +111,21 @@ public class BrowserBookmarksActivity extends ListActivity {
     @ItemLongClick(android.R.id.list)
     void onListItemLongClick(int position) {
         final Bookmark bookmark = listAdapter.getItem(position);
-        activityHelper.buildConfirmDialog(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                try {
-                    databaseHelper.deleteBookmark(bookmark);
-                } catch (SQLException e) {
-                    activityHelper.showError(e);
-                    return;
-                }
-                activityHelper.showToast(getResources().getString(R.string.message_item_removed, bookmark.getTitle()));
-                loadBookmarks();
-            }
-        }).setTitle(R.string.action_delete).setMessage(R.string.message_confirm_delete).show();
+        activityHelper
+                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            databaseHelper.deleteBookmark(bookmark);
+                        } catch (SQLException e) {
+                            activityHelper.showError(e);
+                            return;
+                        }
+                        activityHelper.showToast(getResources().getString(R.string.message_item_removed, bookmark.getTitle()));
+                        loadBookmarks();
+                    }
+                })
+                .setTitle(R.string.action_delete)
+                .setMessage(R.string.message_confirm_delete).show();
     }
 }

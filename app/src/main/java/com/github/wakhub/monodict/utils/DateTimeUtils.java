@@ -22,9 +22,18 @@ import java.util.Calendar;
 /**
  * Created by wak on 6/26/14.
  */
-public class DateTimeHelper {
+public class DateTimeUtils {
 
-    private static final SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    private static DateTimeUtils instance;
+
+    private final SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    public static DateTimeUtils getInstance() {
+        if (instance == null) {
+            instance = new DateTimeUtils();
+        }
+        return instance;
+    }
 
     public Calendar now() {
         return Calendar.getInstance();

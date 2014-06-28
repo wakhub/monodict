@@ -34,15 +34,12 @@ Then check sdk.dir and ndk.dir in your local.properties
 TODO
 ==========
 
-- Integration with alc web search
 - Add some functions into FlashcardActivity
-- Local file explorer in BrowserActivity
 - Eijiro syntax support
 - Font settings
 - Tweak speech function
 - etc
-  - N2TTS
-    https://play.google.com/store/apps/details?id=jp.kddilabs.n2tts&hl=en
+
   - kakashi
     http://kakasi.namazu.org/index.html.ja
   - migemo

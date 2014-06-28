@@ -58,7 +58,8 @@
                 android:layout_toLeftOf="@+id/add_to_flashcard_button"
                 android:layout_weight="1"
                 android:text="Index"
-                android:layout_alignParentTop="true"></TextView>
+                android:layout_alignParentTop="true"
+                android:textIsSelectable="true"></TextView>
 
             <ImageButton
                 android:id="@+id/add_to_flashcard_button"
@@ -89,20 +90,23 @@
             android:id="@+id/ListPhone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Phone"></TextView>
+            android:text="Phone"
+            android:textIsSelectable="true"></TextView>
 
         <TextView
             android:id="@+id/ListTrans"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Trans"></TextView>
+            android:text="Trans"
+            android:textIsSelectable="true"></TextView>
 
         <TextView
             android:id="@+id/ListSample"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="ListSample"
-            android:textStyle="italic"></TextView>
+            android:textStyle="italic"
+            android:textIsSelectable="true"></TextView>
 
         <Button
             android:id="@+id/ListMoreButton"

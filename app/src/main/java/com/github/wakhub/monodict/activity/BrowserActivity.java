@@ -20,6 +20,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -31,6 +32,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -75,7 +77,9 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
     private static final int REQUEST_CODE_BOOKMARKS = 10020;
+    private static final int REQUEST_CODE_OPEN_LOCAL_FILE = 10021;
     private static final int TRANSLATE_PANEL_DURATION = 150;
+    private static final String ENCODING = "utf-8";
     private static final String JAVASCRIPT_CALLBACK_SEARCH = "search";
     private static final String JAVASCRIPT_CALLBACK_SPEECH = "speech";
     private static final String[] PROTOCOLS = new String[]{"http://", "https://", "ftp://", "file://"};
@@ -147,8 +151,11 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         });
 
         webView.setWebViewClient(new BrowserWebViewClient());
-        webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new BrowserJavaScriptInterface(), BrowserJavaScriptInterface.NAME);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDefaultTextEncodingName(ENCODING);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
         if (extraUrlOrKeywords.isEmpty()) {
             loadUrl(state.getLastUrl());
@@ -168,7 +175,7 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
                 return;
             }
         }
-        webView.loadUrl(getResources().getString(R.string.url_google_search, url));
+        webView.loadUrl(getResources().getString(R.string.url_google_com_search, url));
     }
 
     @UiThread
@@ -193,6 +200,17 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
 
         String url = data.getExtras().getString(BrowserBookmarksActivity.EXTRA_URL);
         webView.loadUrl(url);
+    }
+
+    @OnActivityResult(REQUEST_CODE_OPEN_LOCAL_FILE)
+    void onActivityResultOpenLocalFile(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        Bundle extras = data.getExtras();
+        String path = extras.getString(FileSelectorActivity.RESULT_INTENT_PATH);
+        String filename = extras.getString(FileSelectorActivity.RESULT_INTENT_FILENAME);
+        loadUrl(String.format("file://%s/%s", path, filename));
     }
 
     @OnActivityResult(SpeechHelper.REQUEST_CODE)
@@ -268,7 +286,10 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         Log.d(TAG, "onActionAddToBookmarks");
         Bookmark bookmark;
 
-        String title = webView.getTitle();
+        String title = getTitle().toString();
+        if (title == null) {
+            title = "";
+        }
 
         CharSequence descriptionCharSequence = webView.getContentDescription();
         String description = "";
@@ -289,6 +310,12 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
     void onActionShowBookmarks() {
         Log.d(TAG, "onActionShowBookmarks");
         BrowserBookmarksActivity_.intent(this).startForResult(REQUEST_CODE_BOOKMARKS);
+    }
+
+    @OptionsItem(R.id.action_open_local_file)
+    void onActionOpenLocalFile() {
+        Log.d(TAG, "onActionOpenLocalFile");
+        FileSelectorActivity_.intent(this).startForResult(REQUEST_CODE_OPEN_LOCAL_FILE);
     }
 
     private void startGettingSelectionInBrowser(String callback) {
@@ -449,7 +476,13 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         @Override
         public void onPageFinished(WebView view, String url) {
             progressBar.setVisibility(View.GONE);
-            setTitle(webView.getTitle());
+            if (url.startsWith("file://")) {
+                String[] split = url.split("/");
+                String filename = split[split.length - 1];
+                setTitle(filename);
+            } else {
+                setTitle(webView.getTitle());
+            }
             reloadViews();
             super.onPageFinished(view, url);
         }

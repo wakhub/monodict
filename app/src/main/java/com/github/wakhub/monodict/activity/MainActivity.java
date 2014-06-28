@@ -18,7 +18,6 @@ package com.github.wakhub.monodict.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
@@ -29,6 +28,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +52,7 @@ import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
+import com.github.wakhub.monodict.ui.MainContextDialogBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.App;
@@ -126,8 +127,6 @@ public class MainActivity extends Activity implements
 
     private DictionarySearchView searchView = null;
 
-    private ProgressDialog progressDialog;
-
     private int delay = 0;
 
     private DicItemListView.ResultAdapter resultAdapter;
@@ -151,11 +150,7 @@ public class MainActivity extends Activity implements
 
         commonActivityTrait.initActivity();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage(getResources().getString(R.string.message_loading_dictionaries));
-        progressDialog.show();
+        activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
 
         dicItemListView.setCallback(this);
         resultData = new ArrayList<DicItemListView.Data>();
@@ -335,6 +330,15 @@ public class MainActivity extends Activity implements
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            new MainContextDialogBuilder(this, searchView.getQuery().toString()).show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onDicviewItemClicked(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         switch (data.getMode()) {
@@ -367,6 +371,11 @@ public class MainActivity extends Activity implements
     public void onDicviewItemClickSpeechButton(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         speechHelper.speech(data.Index.toString());
+    }
+
+    @Override
+    public void onDicviewItemActionModeSearch(String selectedText) {
+        searchView.setQuery(selectedText, true);
     }
 
     void addFlashcard(DicItemListView.Data data) {
@@ -424,7 +433,7 @@ public class MainActivity extends Activity implements
     @Override
     @UiThread
     public void onDictionaryServiceInitialized() {
-        progressDialog.dismiss();
+        activityHelper.hideProgressDialog();
 
         if (app.isVersionUp()) {
             removeDirectory(getCacheDir());
@@ -452,7 +461,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDictionaryServiceUpdateDictionaries() {
-        progressDialog.dismiss();
+        activityHelper.hideProgressDialog();
         dictionaryServiceConnection.search(searchView.getQuery().toString());
     }
 

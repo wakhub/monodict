@@ -17,9 +17,9 @@ package com.github.wakhub.monodict.activity.bean;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.util.Linkify;
@@ -60,6 +60,8 @@ public class ActivityHelper {
     @DimensionRes
     float spaceWell;
 
+    private ProgressDialog progressDialog = null;
+
     /**
      * http://stackoverflow.com/questions/6547969/android-refresh-current-activity
      */
@@ -79,7 +81,7 @@ public class ActivityHelper {
     @UiThread
     public void showToast(String message) {
         Toast toast = Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
     }
 
@@ -90,7 +92,7 @@ public class ActivityHelper {
     @UiThread
     public void showToastLong(String message) {
         Toast toast = Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
     }
 
@@ -142,6 +144,34 @@ public class ActivityHelper {
     }
 
     /**
+     * Show ProgressDialog
+     */
+    @UiThread
+    public void showProgressDialog(String message) {
+        if (progressDialog != null) {
+            return;
+        }
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(message);
+        progressDialog.show();
+    }
+
+    public void showProgressDialog(int resId) {
+        showProgressDialog(activity.getResources().getString(resId));
+    }
+
+    @UiThread
+    public void hideProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+    /**
      * Show progressBar
      *
      * @see #hideProgressBar
@@ -170,6 +200,7 @@ public class ActivityHelper {
     public Spanned getHtmlFromRaw(int resId) {
         return Html.fromHtml(getStringFromRaw(resId));
     }
+
     public String getStringFromRaw(int resId) {
         InputStream stream = activity.getResources().openRawResource(resId);
         String text = "";
@@ -181,16 +212,10 @@ public class ActivityHelper {
         return text;
     }
 
-    // TODO: Open BrowserActivity ?
-    public void searchByGoogleCom(String word) {
-        Uri uri = Uri.parse(activity.getResources().getString(R.string.url_google_search, word));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        activity.startActivity(intent);
-    }
-
-    public void searchByAlc(String word) {
-        Uri uri = Uri.parse(activity.getResources().getString(R.string.url_alc_search, word));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        activity.startActivity(intent);
+    public void clear() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }
