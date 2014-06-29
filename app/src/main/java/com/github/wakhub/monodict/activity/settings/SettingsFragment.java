@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
@@ -47,7 +46,6 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private static final String PREFERENCES_NAME = "Preferences";
-    private static final String KEY_SPEECH_LOCALE = "speechLocale";
     private static final String KEY_DICTIONARY_MANAGER = "dictionaryManager";
     private static final String KEY_ABOUT = "about";
     private static final String KEY_LEGAL = "legal";
@@ -85,18 +83,6 @@ public class SettingsFragment extends PreferenceFragment {
         dictionaries.reload();
 
         Preference prefItem;
-
-        setSpeechLanguageLabel(preferences.speechLocale().get());
-        prefItem = findPreference(KEY_SPEECH_LOCALE);
-        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                Log.d(TAG, "Change speech language: " + o);
-                setSpeechLanguageLabel((String) o);
-                activityHelper.showToastLong(R.string.message_language_settings_notice);
-                return true;
-            }
-        });
 
         prefItem = findPreference(KEY_ABOUT);
         PackageInfo packageInfo = app.getPackageInfo();
@@ -138,14 +124,5 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
-    }
-
-    void setSpeechLanguageLabel(String locale) {
-        String[] speechLocales = getResources().getStringArray(R.array.speech_locales);
-        for (String speechLocale : speechLocales) {
-            if (locale.toUpperCase().equals(speechLocale.toUpperCase())) {
-                findPreference(KEY_SPEECH_LOCALE).setSummary(locale);
-            }
-        }
     }
 }

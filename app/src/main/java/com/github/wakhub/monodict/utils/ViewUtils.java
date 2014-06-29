@@ -37,10 +37,13 @@ public class ViewUtils {
         View currentView = rootView;
         for (int i = 0; i < 100; i++) {
             ViewParent parentView = currentView.getParent();
+            if (parentView == null) {
+                return null;
+            }
             if (findClass.isInstance(parentView)) {
                 return parentView;
             }
-            currentView = (View)parentView;
+            currentView = (View) parentView;
         }
 
         return null;

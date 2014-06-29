@@ -14,4 +14,16 @@
   ~ limitations under the License.
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_search_by_google_com"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_search_by_google_com" />
+    <item
+        android:id="@+id/action_search_by_dictionary_com"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_search_by_dictionary_com" />
+    <item
+        android:id="@+id/action_search_by_alc_co_jp"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_search_by_alc_co_jp" />
 </menu>

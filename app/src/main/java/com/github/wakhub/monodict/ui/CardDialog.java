@@ -39,11 +39,15 @@ public class CardDialog extends Dialog {
 
     private final TextView displayText;
 
+    private final ImageButton speechButton;
+
+    private final ImageButton actionButton;
+
     private final TextView translateText;
 
-    private final TextView dictionaryText;
+    private final TextView noteText;
 
-    private final ImageButton deleteButton;
+    private final TextView dictionaryText;
 
     private final ImageButton backButton;
 
@@ -54,6 +58,10 @@ public class CardDialog extends Dialog {
     private final Card card;
 
     private OnCardDialogListener listener;
+
+    private CardContextDialogBuilder.OnContextActionListener contextActionListener;
+
+    private Context contextActionContext;
 
     private final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
         @Override
@@ -71,11 +79,11 @@ public class CardDialog extends Dialog {
     };
 
     public interface OnCardDialogListener {
+        boolean onCardDialogClickSpeechButton(Card card);
+
         boolean onCardDialogClickBackButton(Card card);
 
         boolean onCardDialogClickForwardButton(Card card);
-
-        boolean onCardDialogClickDeleteButton(Card card);
     }
 
     public CardDialog(Context context, final Card card) {
@@ -87,9 +95,12 @@ public class CardDialog extends Dialog {
 
         innerContentView = findViewById(R.id.dialog_content);
         displayText = (TextView) findViewById(R.id.display_text);
-        dictionaryText = (TextView) findViewById(R.id.dictionary_text);
         translateText = (TextView) findViewById(R.id.translate_text);
-        deleteButton = (ImageButton) findViewById(R.id.delete_button);
+        noteText = (TextView) findViewById(R.id.note_text);
+        dictionaryText = (TextView) findViewById(R.id.dictionary_text);
+        speechButton = (ImageButton) findViewById(R.id.speech_button);
+        actionButton = (ImageButton) findViewById(R.id.action_button);
+
         backButton = (ImageButton) findViewById(R.id.back_button);
         forwardButton = (ImageButton) findViewById(R.id.forward_button);
         keepButton = (Button) findViewById(R.id.keep_button);
@@ -100,6 +111,30 @@ public class CardDialog extends Dialog {
     private void initViews() {
         displayText.setText(card.getDisplay());
 
+        speechButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onCardDialogClickSpeechButton(card);
+            }
+        });
+
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CardContextDialogBuilder(contextActionContext, CardDialog.this, card)
+                        .setContextActionListener(contextActionListener)
+                        .show();
+            }
+        });
+
+        translateText.setText(card.getTranslate());
+        translateText.setMovementMethod(ScrollingMovementMethod.getInstance());
+
+        noteText.setText(card.getNote());
+        if (noteText.getText() == null || noteText.getText().toString().isEmpty()) {
+            noteText.setVisibility(View.GONE);
+        }
+
         String dictionary = card.getDictionary();
         if (dictionary == null || dictionary.isEmpty()) {
             dictionaryText.setVisibility(View.GONE);
@@ -107,18 +142,6 @@ public class CardDialog extends Dialog {
             dictionaryText.setVisibility(View.VISIBLE);
             dictionaryText.setText(card.getDictionary());
         }
-
-        translateText.setText(card.getTranslate());
-        translateText.setMovementMethod(ScrollingMovementMethod.getInstance());
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener.onCardDialogClickDeleteButton(getCard())) {
-                    dismiss();
-                }
-            }
-        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +177,14 @@ public class CardDialog extends Dialog {
 
     public void setListener(OnCardDialogListener listener) {
         this.listener = listener;
+    }
+
+    public void setContextActionListener(CardContextDialogBuilder.OnContextActionListener contextActionListener) {
+        this.contextActionListener = contextActionListener;
+    }
+
+    public void setContextActionContext(Context contextActionContext) {
+        this.contextActionContext = contextActionContext;
     }
 
     public Card getCard() {

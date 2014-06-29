@@ -25,26 +25,16 @@
             android:key="fastScroll"
             android:title="@string/title_settings_fast_scroll" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/title_settings_language">
-        <ListPreference
-            android:defaultValue="English"
-            android:dialogTitle="@string/title_settings_speech_language"
-            android:entries="@array/speech_locales"
-            android:entryValues="@array/speech_locales"
-            android:key="speechLocale"
-            android:title="@string/title_settings_speech_language" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
         <Preference android:key="dictionaryManager" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_app_information">
         <Preference
-            android:key="about"
             android:icon="@drawable/icon"
+            android:key="about"
             android:title="@string/title_settings_about" />
         <Preference
             android:key="legal"
             android:title="@string/title_settings_legal" />
-
     </PreferenceCategory>
 </PreferenceScreen>

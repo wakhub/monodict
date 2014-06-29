@@ -14,7 +14,6 @@
 package com.github.wakhub.monodict.activity;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
@@ -22,14 +21,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
@@ -39,7 +37,9 @@ import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
+import com.github.wakhub.monodict.ui.CardContextDialogBuilder;
 import com.github.wakhub.monodict.ui.CardDialog;
+import com.github.wakhub.monodict.ui.CardEditDialog;
 import com.github.wakhub.monodict.utils.DateTimeUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -75,7 +75,10 @@ import java.util.Map;
 @EActivity(R.layout.activity_flashcard)
 @OptionsMenu({R.menu.flashcard})
 public class FlashcardActivity extends ListActivity
-        implements ActionBar.TabListener, CardDialog.OnCardDialogListener {
+        implements ActionBar.TabListener,
+        CardDialog.OnCardDialogListener,
+        CardEditDialog.Listener,
+        CardContextDialogBuilder.OnContextActionListener {
 
     private static final String TAG = FlashcardActivity.class.getSimpleName();
 
@@ -159,6 +162,7 @@ public class FlashcardActivity extends ListActivity
     @Background
     void loadContents() {
         Log.d(TAG, "loadContents: box=" + state.getBox());
+        activityHelper.showProgressDialog(R.string.message_in_processing);
 
         List<Card> cardList;
         try {
@@ -169,10 +173,13 @@ public class FlashcardActivity extends ListActivity
             }
         } catch (SQLException e) {
             activityHelper.showError(e);
+            activityHelper.hideProgressDialog();
             return;
         }
         if (cardList != null) {
             onLoadContents(cardList);
+        } else {
+            activityHelper.hideProgressDialog();
         }
     }
 
@@ -181,6 +188,14 @@ public class FlashcardActivity extends ListActivity
         listAdapter.clear();
         listAdapter.addAll(cardList);
         reloadTabs();
+        activityHelper.hideProgressDialog();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getListView().setSelection(0);
+            }
+        }, 100);
     }
 
     @OnActivityResult(REQUEST_CODE_SELECT_DIRECTORY_TO_EXPORT)
@@ -219,9 +234,14 @@ public class FlashcardActivity extends ListActivity
         importCardsFrom(path + "/" + filename);
     }
 
-    @OnActivityResult(SpeechHelper.REQUEST_CODE)
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
     void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(resultCode, data);
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
+    }
+
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
+    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
     }
 
     @OptionsItem(R.id.action_shuffle)
@@ -241,48 +261,9 @@ public class FlashcardActivity extends ListActivity
 
     @OptionsItem(R.id.action_add)
     void onActionAdd() {
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        final EditText displayText = new EditText(this);
-        displayText.setHint(Card.Column.DISPLAY);
-        linearLayout.addView(displayText);
-        final EditText translateText = new EditText(this);
-        translateText.setHint(Card.Column.TRANSLATE);
-        linearLayout.addView(translateText);
-
-        // TODO: Create class
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.action_add_new_card)
-                .setIcon(R.drawable.ic_action_new)
-                .setView(linearLayout)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String display = displayText.getText().toString().trim();
-                        String translate = translateText.getText().toString().trim();
-                        if (display.isEmpty()) {
-                            return;
-                        }
-
-                        Card card;
-                        try {
-                            card = databaseHelper.getCardByDisplay(display);
-                            if (card != null) {
-                                activityHelper.showToast(getResources().getString(R.string.message_item_already_registered, card.getDisplay()));
-                                return;
-                            }
-                            card = databaseHelper.createCard(display, translate, "");
-                        } catch (SQLException e) {
-                            activityHelper.showError(e);
-                            return;
-                        }
-                        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
-                        loadContents();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
-        displayText.requestFocus();
+        CardEditDialog dialog = new CardEditDialog(this, null);
+        dialog.setListener(this);
+        dialog.show();
     }
 
     @OptionsItem(R.id.action_delete_all)
@@ -374,6 +355,7 @@ public class FlashcardActivity extends ListActivity
 
     @Background
     void exportCardsTo(String path) {
+        // TODO: This code might use many memory
         activityHelper.showProgressDialog(R.string.message_in_processing);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -457,6 +439,12 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Override
+    public boolean onCardDialogClickSpeechButton(Card card) {
+        speechHelper.speech(card.getDisplay());
+        return true;
+    }
+
+    @Override
     public boolean onCardDialogClickBackButton(Card card) {
         if (state.getBox() - 1 < 1) {
             return false;
@@ -488,12 +476,41 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Override
-    public boolean onCardDialogClickDeleteButton(Card card) {
+    public void onContextActionSearch(Card card) {
+        activityHelper.searchOnMainActivity(card.getDisplay());
+    }
+
+    @Override
+    public void onContextActionMoveIntoInbox(Card card) {
+        if (card.getBox() == 1) {
+            return;
+        }
+        try {
+            card.setBox(1);
+            databaseHelper.updateCard(card);
+            listAdapter.remove(card);
+            reloadTabs();
+        } catch (SQLException e) {
+            activityHelper.showError(e);
+            return;
+        }
+    }
+
+    @Override
+    public void onContextActionEdit(Card card) {
+        CardEditDialog dialog = new CardEditDialog(this, card);
+        dialog.setListener(this);
+        dialog.show();
+    }
+
+    @Override
+    public void onContextActionDelete(Card card) {
+        // TODO: confirm dialog
         try {
             databaseHelper.deleteCard(card);
         } catch (SQLException e) {
             activityHelper.showError(e);
-            return false;
+            return;
         }
         for (int i = 0; i < listAdapter.getCount(); i++) {
             Card cardInList = listAdapter.getItem(i);
@@ -502,7 +519,35 @@ public class FlashcardActivity extends ListActivity
             }
         }
         reloadTabs();
-        return true;
+    }
+
+    @Override
+    public void onCardEditDialogSave(CardEditDialog dialog, Card card) {
+        if (card.getId() != null) {
+            try {
+                databaseHelper.updateCard(card);
+            } catch (SQLException e) {
+                activityHelper.showError(e);
+                return;
+            }
+            activityHelper.showToast(R.string.message_modified);
+        } else {
+            try {
+                Card duplicated = databaseHelper.getCardByDisplay(card.getDisplay());
+                if (duplicated != null) {
+                    activityHelper.onDuplicatedCardFound(duplicated);
+                    return;
+                }
+                databaseHelper.createCard(card);
+            } catch (SQLException e) {
+                activityHelper.showError(e);
+                return;
+            }
+            activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+        }
+
+        dialog.dismiss();
+        loadContents();
     }
 
     private class ListAdapter extends ArrayAdapter<Card> {
@@ -545,6 +590,8 @@ public class FlashcardActivity extends ListActivity
                 public void onClick(View view) {
                     CardDialog dialog = new CardDialog(getContext(), card);
                     dialog.setListener(FlashcardActivity.this);
+                    dialog.setContextActionContext(FlashcardActivity.this);
+                    dialog.setContextActionListener(FlashcardActivity.this);
                     dialog.show();
                 }
             });

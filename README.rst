@@ -34,17 +34,8 @@ Then check sdk.dir and ndk.dir in your local.properties
 TODO
 ==========
 
-- Add some functions into FlashcardActivity
 - Eijiro syntax support
 - Font settings
-- Tweak speech function
-- etc
-
-  - kakashi
-    http://kakasi.namazu.org/index.html.ja
-  - migemo
-    http://0xcc.net/migemo/
-
 
 
 LICENSE

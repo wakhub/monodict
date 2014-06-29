@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +51,6 @@ import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
-import com.github.wakhub.monodict.ui.MainContextDialogBuilder;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.App;
@@ -61,6 +59,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
@@ -208,9 +207,14 @@ public class MainActivity extends Activity implements
         dictionaryServiceConnection.search(text);
     }
 
-    @OnActivityResult(SpeechHelper.REQUEST_CODE)
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
     void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(resultCode, data);
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
+    }
+
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
+    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
     }
 
     @Click(R.id.flashcard_button)
@@ -239,6 +243,32 @@ public class MainActivity extends Activity implements
             nav.setVisibility(View.GONE);
         }
     }
+
+    @OptionsItem({
+            R.id.action_search_by_google_com,
+            R.id.action_search_by_alc_co_jp,
+            R.id.action_search_by_dictionary_com})
+    void onActionSearchByWeb(MenuItem item) {
+        String url = null;
+        String query = searchView.getQuery().toString().trim();
+        Resources resources = getResources();
+        switch (item.getItemId()) {
+            case R.id.action_search_by_google_com:
+                url = resources.getString(R.string.url_dictionary_com_search, query);
+                break;
+            case R.id.action_search_by_dictionary_com:
+                url = resources.getString(R.string.url_dictionary_com_search, query);
+                break;
+            case R.id.action_search_by_alc_co_jp:
+                url = resources.getString(R.string.url_alc_co_jp_search, query);
+                break;
+        }
+        if (url == null) {
+            return;
+        }
+        BrowserActivity_.intent(this).extraUrlOrKeywords(url).start();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -330,47 +360,15 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            new MainContextDialogBuilder(this, searchView.getQuery().toString()).show();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onDicviewItemClicked(int position) {
-        final DicItemListView.Data data = resultAdapter.getItem(position);
-        switch (data.getMode()) {
-            case DicItemListView.Data.MORE:
-                break;
-            case DicItemListView.Data.WORD: {
-                new DicContextDialogBuilder(this, data)
-                        .setContextActionListener(this)
-                        .show();
-            }
-            break;
-            case DicItemListView.Data.NONE:
-            case DicItemListView.Data.NORESULT:
-                break;
-        }
-    }
-
-    @Override
-    public boolean onDicviewItemLongClicked(int position) {
-        return false;
-    }
-
-    @Override
-    public void onDicviewItemClickAddToFlashcardButton(int position) {
-        final DicItemListView.Data data = resultAdapter.getItem(position);
-        addFlashcard(data);
-    }
-
-    @Override
     public void onDicviewItemClickSpeechButton(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         speechHelper.speech(data.Index.toString());
+    }
+
+    @Override
+    public void onDicviewItemClickActionButton(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        new DicContextDialogBuilder(this, data).setContextActionListener(this).show();
     }
 
     @Override
@@ -378,12 +376,17 @@ public class MainActivity extends Activity implements
         searchView.setQuery(selectedText, true);
     }
 
+    @Override
+    public void onDicviewItemActionModeSpeech(String selectedText) {
+        speechHelper.speech(selectedText);
+    }
+
     void addFlashcard(DicItemListView.Data data) {
         Card card;
         try {
-            card = databaseHelper.getCardByDisplay(data.Index.toString());
-            if (card != null) {
-                activityHelper.showToast(getResources().getString(R.string.message_item_already_registered, card.getDisplay()));
+            Card duplicated = databaseHelper.getCardByDisplay(data.Index.toString());
+            if (duplicated != null) {
+                activityHelper.onDuplicatedCardFound(duplicated);
                 return;
             }
             card = databaseHelper.createCard(data);
@@ -392,6 +395,11 @@ public class MainActivity extends Activity implements
             return;
         }
         activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+    }
+
+    @Override
+    public void onContextActionAddToFlashcard(DicItemListView.Data data) {
+        addFlashcard(data);
     }
 
     @Override
@@ -407,15 +415,10 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public void onContextActionCopyWord(DicItemListView.Data data) {
-        Log.d(TAG, "onContextActionCopyWord");
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("index", data.Index));
-    }
-
-    @Override
     public void onContextActionCopyAll(DicItemListView.Data data) {
         Log.d(TAG, "onContextActionCopyAll");
         clipboardManager.setPrimaryClip(ClipData.newPlainText("all", data.toSummaryString()));
+        activityHelper.showToast(R.string.message_success);
     }
 
     private static void removeDirectory(File path) {
@@ -468,6 +471,7 @@ public class MainActivity extends Activity implements
     @Override
     @UiThread
     public void onDictionaryServiceResult(String query, ArrayList<DicItemListView.Data> result) {
+        activityHelper.hideProgressDialog();
         resultData.clear();
         resultData.addAll(result);
         resultAdapter.notifyDataSetChanged();

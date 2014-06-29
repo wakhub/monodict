@@ -14,21 +14,4 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string-array name="language_labels">
-        <item>English</item>
-        <item>日本語</item>
-    </string-array>
-    <string-array name="language_codes">
-        <item>en</item>
-        <item>ja</item>
-    </string-array>
-    <string-array name="speech_locales">
-        <item>English</item>
-        <item>Chinese</item>
-        <item>French</item>
-        <item>Germany</item>
-        <item>Italian</item>
-        <item>Japanese</item>
-        <item>Korean</item>
-    </string-array>
 </resources>

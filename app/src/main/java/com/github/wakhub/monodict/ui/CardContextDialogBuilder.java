@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2014 wak
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,49 +22,52 @@ import android.content.res.Resources;
 
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.BrowserActivity_;
+import com.github.wakhub.monodict.db.Card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by wak on 5/25/14.
+ * Created by wak on 5/29/14.
  */
-public class DicContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
+public class CardContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
 
-    private static final String TAG = DicContextDialogBuilder.class.getSimpleName();
+    private static final String TAG = CardContextDialogBuilder.class.getSimpleName();
     private static final List<Integer> ITEM_IDS = Arrays.asList(
-            R.string.action_add_to_flashcard,
-            R.string.action_copy_all,
+            R.string.action_move_into_inbox,
+            R.string.action_edit,
+            R.string.action_delete,
+            R.string.action_search,
             R.string.action_search_by_google_com,
             R.string.action_search_by_dictionary_com,
-            R.string.action_search_by_alc_co_jp,
-            R.string.action_share);
+            R.string.action_search_by_alc_co_jp);
 
     private OnContextActionListener contextActionListener;
-    private DicItemListView.Data data;
+    private final CardDialog dialog;
+    private final Card card;
     private ArrayList<String> itemLabels = new ArrayList<String>();
 
     public interface OnContextActionListener {
-        void onContextActionAddToFlashcard(DicItemListView.Data data);
-
-        void onContextActionShare(DicItemListView.Data data);
-
-        void onContextActionCopyAll(DicItemListView.Data data);
+        void onContextActionMoveIntoInbox(Card card);
+        void onContextActionEdit(Card card);
+        void onContextActionDelete(Card card);
+        void onContextActionSearch(Card card);
     }
 
-    public DicContextDialogBuilder(Context context, DicItemListView.Data data) {
+    public CardContextDialogBuilder(Context context, CardDialog dialog, Card card) {
         super(context);
-        this.data = data;
+        this.dialog = dialog;
+        this.card = card;
         Resources resources = getContext().getResources();
         for (Integer id : ITEM_IDS) {
             itemLabels.add(resources.getString(id));
         }
-        setTitle(data.Index.toString());
+        setTitle(card.getDisplay());
         setItems(itemLabels.toArray(new CharSequence[0]), this);
     }
 
-    public DicContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {
+    public CardContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {
         this.contextActionListener = contextActionListener;
         return this;
     }
@@ -74,31 +77,39 @@ public class DicContextDialogBuilder extends AlertDialog.Builder implements Dial
         int id = ITEM_IDS.get(which);
         Context context = getContext();
         Resources resources = context.getResources();
+        String display = card.getDisplay();
+
         switch (id) {
-            case R.string.action_add_to_flashcard:
-                contextActionListener.onContextActionAddToFlashcard(data);
+            case R.string.action_move_into_inbox:
+                contextActionListener.onContextActionMoveIntoInbox(card);
                 break;
-            case R.string.action_copy_all:
-                contextActionListener.onContextActionCopyAll(data);
+            case R.string.action_edit:
+                contextActionListener.onContextActionEdit(card);
+                break;
+            case R.string.action_delete:
+                contextActionListener.onContextActionDelete(card);
+                break;
+            case R.string.action_search:
+                contextActionListener.onContextActionSearch(card);
                 break;
             case R.string.action_search_by_google_com:
                 BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_google_com_search, data.Index.toString()))
+                        .extraUrlOrKeywords(resources.getString(R.string.url_google_com_search, display))
                         .start();
                 break;
             case R.string.action_search_by_dictionary_com:
                 BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_dictionary_com_search, data.Index.toString()))
+                        .extraUrlOrKeywords(resources.getString(R.string.url_dictionary_com_search, display))
                         .start();
                 break;
             case R.string.action_search_by_alc_co_jp:
                 BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_alc_co_jp_search, data.Index.toString()))
+                        .extraUrlOrKeywords(resources.getString(R.string.url_alc_co_jp_search, display))
                         .start();
                 break;
-            case R.string.action_share:
-                contextActionListener.onContextActionShare(data);
-                break;
+        }
+        if (this.dialog != null) {
+            this.dialog.dismiss();
         }
     }
 }

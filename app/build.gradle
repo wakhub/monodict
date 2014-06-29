@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 16
         versionCode 6
         versionName '1.1.0b'
 

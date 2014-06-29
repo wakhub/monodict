@@ -43,10 +43,6 @@ public interface Preferences {
     @DefaultBoolean(false)
     boolean fastScroll();
 
-    /** @see com.github.wakhub.monodict.activity.bean.SpeechHelper */
-    @DefaultString("ENGLISH")
-    String speechLocale();
-
     /** @see com.github.wakhub.monodict.preferences.Dictionaries */
     @DefaultString("{\"dictionaries\": []}")
     String dictionaries();

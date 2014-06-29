@@ -16,7 +16,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@id/root">
 
     <TextView
         android:id="@id/header"
@@ -55,35 +56,32 @@
                 style="@style/AppTheme.DisplayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/add_to_flashcard_button"
                 android:layout_weight="1"
                 android:text="Index"
                 android:layout_alignParentTop="true"
-                android:textIsSelectable="true"></TextView>
-
-            <ImageButton
-                android:id="@+id/add_to_flashcard_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="@dimen/space_well"
-                android:layout_toLeftOf="@+id/speech_button"
-                android:layout_weight="1"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_action_add_to_queue" />
+                android:textIsSelectable="true"
+                android:layout_toLeftOf="@+id/speech_button"></TextView>
 
             <ImageButton
                 android:id="@+id/speech_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="@dimen/space_relax"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/space_relax"
-                android:src="@drawable/ic_action_volume_on" />
+                android:src="@drawable/ic_action_volume_on"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="false"
+                android:layout_toLeftOf="@+id/action_button"
+                android:layout_marginLeft="@dimen/space_well" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/action_button"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_action_overflow"
+                android:layout_marginLeft="@dimen/space_well" />
         </RelativeLayout>
 
         <TextView

@@ -24,4 +24,8 @@
         android:showAsAction="always"
         android:title="@string/action_search" />
 
+    <item android:id="@+id/action_speech"
+        android:icon="@drawable/ic_action_volume_on"
+        android:title="@string/action_speech"
+        android:showAsAction="always" />
 </menu>

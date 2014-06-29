@@ -29,39 +29,57 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Text"
+            android:text="@string/blank_text"
             android:id="@+id/display_text"
             style="@style/AppTheme.DisplayText"
-            android:layout_toLeftOf="@+id/delete_button" />
+            android:layout_toLeftOf="@+id/speech_button"
+            android:textIsSelectable="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/delete_button"
-            android:src="@drawable/ic_action_discard"
+            android:id="@+id/speech_button"
+            android:src="@drawable/ic_action_volume_on"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_toLeftOf="@+id/action_button" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/action_button"
+            android:src="@drawable/ic_action_overflow"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="@string/blank_text"
         android:id="@+id/translate_text"
         android:layout_margin="@dimen/space_well"
         android:textSize="20dp"
         android:minHeight="50dp"
         android:maxLines="8"
         android:scrollbars="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:textIsSelectable="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="@string/blank_text"
+        android:id="@+id/note_text"
+        android:padding="@dimen/space_well"
+        android:textIsSelectable="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/blank_text"
         android:id="@+id/dictionary_text"
-        style="@style/AppTheme.DictionaryNameText" />
+        style="@style/AppTheme.DictionaryNameText"
+        android:textIsSelectable="true" />
 
     <TableLayout
         android:layout_width="fill_parent"

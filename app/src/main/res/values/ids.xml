@@ -20,6 +20,7 @@
     <item name="header" type="id" />
     <item name="button" type="id" />
     <item name="text" type="id" />
+    <item name="root" type="id" />
     <item name="space_top" type="id" />
     <item name="space_bottom" type="id" />
     <item name="focus_dummy" type="id" />

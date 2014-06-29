@@ -16,7 +16,6 @@
 package com.github.wakhub.monodict.activity;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,8 +27,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -37,7 +34,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
@@ -51,13 +47,14 @@ import com.github.wakhub.monodict.preferences.BrowserActivityState;
 import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicItemListView;
+import com.github.wakhub.monodict.ui.TranslatePanelFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
@@ -67,18 +64,16 @@ import org.androidannotations.annotations.ViewById;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
-public class BrowserActivity extends Activity implements DictionaryService.Listener {
+public class BrowserActivity extends Activity
+        implements DictionaryService.Listener, TranslatePanelFragment.Interface {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
     private static final int REQUEST_CODE_BOOKMARKS = 10020;
     private static final int REQUEST_CODE_OPEN_LOCAL_FILE = 10021;
-    private static final int TRANSLATE_PANEL_DURATION = 150;
     private static final String ENCODING = "utf-8";
     private static final String JAVASCRIPT_CALLBACK_SEARCH = "search";
     private static final String JAVASCRIPT_CALLBACK_SPEECH = "speech";
@@ -96,15 +91,8 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
     @ViewById
     ProgressBar progressBar;
 
-    // TODO: create class
-    @ViewById
-    RelativeLayout translatePanel;
-    @ViewById
-    TextView translatePanelDisplayText;
-    @ViewById
-    TextView translatePanelTranslateText;
-    @ViewById
-    TextView translatePanelDictionaryNameText;
+    @FragmentById
+    TranslatePanelFragment translatePanelFragment;
 
     @OptionsMenuItem
     MenuItem actionBack;
@@ -129,10 +117,6 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
 
     private DictionaryServiceConnection dictionaryServiceConnection;
 
-    private List<String> currentDisplayAndTranslateAndDictionary;
-
-    private String selectedText = "";
-
     @AfterViews
     void afterViews() {
         Log.d(TAG, "state: " + state.toString());
@@ -156,6 +140,8 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName(ENCODING);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+
+        translatePanelFragment.setDelegate(this);
 
         if (extraUrlOrKeywords.isEmpty()) {
             loadUrl(state.getLastUrl());
@@ -186,11 +172,11 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         if (actionForward != null) {
             actionForward.setEnabled(webView.canGoForward());
         }
-        if (translatePanel != null) {
-            translatePanel.setVisibility(View.GONE);
+        if (translatePanelFragment != null) {
+            translatePanelFragment.hide();
         }
-    }
 
+    }
 
     @OnActivityResult(REQUEST_CODE_BOOKMARKS)
     void onActivityResultBookmarks(int resultCode, Intent data) {
@@ -213,50 +199,14 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         loadUrl(String.format("file://%s/%s", path, filename));
     }
 
-    @OnActivityResult(SpeechHelper.REQUEST_CODE)
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
     void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(resultCode, data);
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
     }
 
-    @Click(R.id.translate_panel_more_button)
-    void onClickTranslatePanelMoreButton() {
-        Intent intent = MainActivity_.intent(this).get();
-        intent.putExtra(SearchManager.QUERY, selectedText);
-        intent.setAction(Intent.ACTION_SEARCH);
-        startActivity(intent);
-    }
-
-    @Click(R.id.translate_panel_speech_button)
-    void onClickTranslatePanelSpeechButton() {
-        speechHelper.speech(selectedText);
-    }
-
-    @Click(R.id.translate_panel_close_button)
-    void onClickTranslatePanelCloseButton() {
-        translatePanel.setVisibility(View.GONE);
-    }
-
-    @Click(R.id.translate_panel_add_to_flashcard_button)
-    void onClickTranslatePanelAddToFlashcardButton() {
-        if (currentDisplayAndTranslateAndDictionary == null) {
-            return;
-        }
-        Card card;
-
-        try {
-            card = databaseHelper.getCardByDisplay(currentDisplayAndTranslateAndDictionary.get(0));
-            if (card != null) {
-                activityHelper.showToast(getResources().getString(R.string.message_item_already_registered, card.getDisplay()));
-                return;
-            }
-            card = databaseHelper.createCard(currentDisplayAndTranslateAndDictionary.get(0),
-                    currentDisplayAndTranslateAndDictionary.get(1),
-                    currentDisplayAndTranslateAndDictionary.get(2));
-        } catch (SQLException e) {
-            activityHelper.showError(e);
-            return;
-        }
-        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
+    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
     }
 
     @OptionsItem(R.id.action_back)
@@ -328,18 +278,16 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
 
     private void onJavaScriptGetSelection(String callback, String selection) {
         Log.d(TAG, "onJavaScriptGetSelection");
-        selectedText = selection;
         if (callback.equals(JAVASCRIPT_CALLBACK_SEARCH)) {
-            search(selectedText);
+            search(selection);
         }
         if (callback.equals(JAVASCRIPT_CALLBACK_SPEECH)) {
-            speechHelper.speech(selectedText);
+            speechHelper.speech(selection);
         }
     }
 
     @Background
     void search(String query) {
-        currentDisplayAndTranslateAndDictionary = null;
         dictionaryServiceConnection.search(query);
     }
 
@@ -397,8 +345,7 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
         MenuInflater inflater = actionMode.getMenuInflater();
         inflater.inflate(R.menu.browser_action_mode, menu);
 
-        translatePanel.setVisibility(View.GONE);
-        currentDisplayAndTranslateAndDictionary = null;
+        translatePanelFragment.hide();
 
         menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -447,19 +394,31 @@ public class BrowserActivity extends Activity implements DictionaryService.Liste
             return;
         }
 
-        translatePanelDisplayText.setText(firstWordData.Index.toString());
-        translatePanelTranslateText.setScrollY(0);
-        translatePanelTranslateText.setText(firstWordData.Trans.toString());
-        translatePanelDictionaryNameText.setText(dictionaryName);
-        translatePanel.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.makeInChildBottomAnimation(this);
-        animation.setDuration(TRANSLATE_PANEL_DURATION);
-        translatePanel.startAnimation(animation);
+        translatePanelFragment.setDictionaryName(dictionaryName);
+        translatePanelFragment.setData(firstWordData);
+        translatePanelFragment.show();
+    }
 
-        currentDisplayAndTranslateAndDictionary = Arrays.asList(
-                firstWordData.Index.toString(),
-                firstWordData.Trans.toString(),
-                dictionaryName);
+    @Override
+    public void onClickTranslatePanelAddToFlashcardButton(DicItemListView.Data data) {
+        Card card;
+        try {
+            final Card duplicated = databaseHelper.getCardByDisplay(data.Index.toString());
+            if (duplicated != null) {
+                activityHelper.onDuplicatedCardFound(duplicated);
+                return;
+            }
+            card = databaseHelper.createCard(data);
+        } catch (SQLException e) {
+            activityHelper.showError(e);
+            return;
+        }
+        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+    }
+
+    @Override
+    public void onClickTranslatePanelSpeechButton(DicItemListView.Data data) {
+        speechHelper.speech(data.Index.toString());
     }
 
     private final class BrowserWebViewClient extends WebViewClient {

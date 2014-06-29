@@ -34,7 +34,7 @@ RELEASE_KEYSTORE = os.path.join(CREDENTIALS_DIR, 'release.keystore')
 ACTION_ICON_NAMES = ['ic_action_{}.png'.format(i) for i in
                      ['about', 'accept', 'add_to_queue', 'cancel', 'collection',
                       'discard', 'download', 'edit', 'expand', 'favorite', 'forward',
-                      'help', 'new', 'next', 'next_item',
+                      'help', 'new', 'next', 'next_item', 'overflow',
                       'pause', 'play', 'previous', 'previous_item',
                       'refresh', 'remove',
                       'search', 'shuffle', 'sort_by_size',
