@@ -57,7 +57,7 @@ public class SettingsActivityTest extends ActivityInstrumentationTestCase2<Setti
     }
 
     public void testLanguageForSpeech() {
-        String label = "Language for Speech";
+        String label = "Default Language";
         solo.clickOnText(label);
         solo.clickOnText("Cancel");
         solo.clickOnText(label);

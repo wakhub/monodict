@@ -106,7 +106,6 @@ final class Dice implements Idice {
         return mIndex.size();
     }
 
-
     @Override
     public void close(IdicInfo info) {
         mIndex.remove(info);

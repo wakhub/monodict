@@ -234,16 +234,6 @@ public class FlashcardActivity extends ListActivity
         importCardsFrom(path + "/" + filename);
     }
 
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
-    void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
-    }
-
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
-    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
-    }
-
     @OptionsItem(R.id.action_shuffle)
     void onActionShuffle() {
         Log.d(TAG, "onActionShuffle");
@@ -408,6 +398,17 @@ public class FlashcardActivity extends ListActivity
     protected void onDestroy() {
         speechHelper.finish();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
+            if (requestCode == requestCodeInitTtsEngine) {
+                speechHelper.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

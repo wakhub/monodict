@@ -6,8 +6,8 @@ android {
     buildToolsVersion '19.0.3'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 16
+        minSdkVersion 14
+        targetSdkVersion 14
         versionCode 6
         versionName '1.1.0b'
 
@@ -62,6 +62,7 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.47@jar'
     compile 'com.j256.ormlite:ormlite-android:4.47@jar'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.mobsandgeeks:android-saripaar:1.0.2'
     compile 'com.android.support:support-v13:19.+'
 }
 

@@ -199,16 +199,6 @@ public class BrowserActivity extends Activity
         loadUrl(String.format("file://%s/%s", path, filename));
     }
 
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
-    void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
-    }
-
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
-    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
-    }
-
     @OptionsItem(R.id.action_back)
     void onActionBack() {
         Log.d(TAG, "onActionBack");
@@ -328,6 +318,17 @@ public class BrowserActivity extends Activity
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
+            if (requestCode == requestCodeInitTtsEngine) {
+                speechHelper.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

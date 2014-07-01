@@ -47,6 +47,8 @@ public class SettingsFragment extends PreferenceFragment {
 
     private static final String PREFERENCES_NAME = "Preferences";
     private static final String KEY_DICTIONARY_MANAGER = "dictionaryManager";
+    private static final String KEY_TTS_DEFAULT_LOCALE = "ttsDefaultLocale";
+    private static final String KEY_TTS_ABOUT = "ttsAbout";
     private static final String KEY_ABOUT = "about";
     private static final String KEY_LEGAL = "legal";
 
@@ -83,6 +85,25 @@ public class SettingsFragment extends PreferenceFragment {
         dictionaries.reload();
 
         Preference prefItem;
+
+        prefItem = findPreference(KEY_TTS_DEFAULT_LOCALE);
+        prefItem.setSummary(preferences.ttsDefaultLocale().get());
+        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                preference.setSummary((String) o);
+                return true;
+            }
+        });
+
+        prefItem = findPreference(KEY_TTS_ABOUT);
+        prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                activityHelper.buildNoticeDialog(activityHelper.getHtmlFromRaw(R.raw.tts)).show();
+                return false;
+            }
+        });
 
         prefItem = findPreference(KEY_ABOUT);
         PackageInfo packageInfo = app.getPackageInfo();

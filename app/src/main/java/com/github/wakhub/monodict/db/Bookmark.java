@@ -46,11 +46,12 @@ public class Bookmark extends Model {
     private String description;
 
     public Bookmark() {
+        super();
     }
 
     public Bookmark(String url, String title) {
-        this.url = url;
-        this.title = title;
+        setUrl(url);
+        setTitle(title);
     }
 
     public String getUrl() {
@@ -79,9 +80,6 @@ public class Bookmark extends Model {
 
     public static void initData(Dao<Bookmark, Long> dao) throws SQLException {
         List<Bookmark> bookmarkData = Arrays.asList(
-                new Bookmark("https://www.google.co.id", "Google Indonesia"),
-                new Bookmark("https://www.google.fr", "Google France"),
-                new Bookmark("https://www.google.co.jp", "Google Japan"),
                 new Bookmark("http://m.gutenberg.org/", "Project Gutenberg"),
                 new Bookmark("http://en.wikipedia.org/wiki/Main_Page", "Wikipedia"),
                 new Bookmark("http://mobile.nytimes.com/international/", "The New York Times"),

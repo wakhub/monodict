@@ -76,10 +76,11 @@
 <string name="title_settings_clipboard_search">クリップボード検索</string>
 <string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">高速スクロール</string>
-<string name="title_settings_language">言語設定</string>
 <string name="title_settings_legal">免責事項</string>
 <string name="title_settings_search">検索</string>
-<string name="title_settings_speech_language">音声の言語</string>
+<string name="title_settings_tts">文章読み上げ (Text to Speech)</string>
+<string name="title_settings_tts_about">Text to Speech について</string>
+<string name="title_settings_tts_default_language">デフォルトの言語</string>
 <string name="title_settings_version">バージョン</string>
 <string name="title_welcome">monodict へようこそ!</string>
 </resources>

@@ -28,6 +28,7 @@ import com.github.wakhub.monodict.ui.DicItemListView;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
@@ -99,7 +100,7 @@ public class DatabaseHelper {
     public Card getCardByDisplay(String display) throws SQLException {
         display = display.trim();
         QueryBuilder<Card, Long> queryBuilder = cardDao.queryBuilder();
-        queryBuilder.where().like(Card.Column.DISPLAY, display);
+        queryBuilder.where().like(Card.Column.DISPLAY, new SelectArg(display));
         return queryBuilder.queryForFirst();
     }
 
@@ -131,8 +132,6 @@ public class DatabaseHelper {
 
     // Card }
 
-    // { Bookmark
-
     public Map<Integer, Integer> getCountsForBoxes() throws SQLException {
         Map<Integer, Integer> countsForBoxes = new HashMap<Integer, Integer>();
         GenericRawResults results = cardDao.queryBuilder()
@@ -145,6 +144,8 @@ public class DatabaseHelper {
         }
         return countsForBoxes;
     }
+
+    // { Bookmark
 
     public Bookmark createBookmark(String url, String title, String description) throws SQLException {
         Bookmark bookmark = new Bookmark();

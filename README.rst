@@ -4,14 +4,12 @@ monodict
 
 .. image:: https://googledrive.com/host/0B7-yqP_4DkNZTjY5QmlZUTR4a2M
 
-**monodict** is a faster offline PDIC dictionary with flashcard application.
+**monodict** is a faster offline PDIC dictionary viewer app with TTS integration and flashcard.
 The application has been developed based on
 the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
 
-Google Play Store
-    https://play.google.com/store/apps/details?id=com.github.wakhub.monodict
-Screenshots
-    https://drive.google.com/folderview?id=0B7-yqP_4DkNZM1NIcWxhOWthMDQ&usp=sharing
+- `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
+- `Screenshots <https://drive.google.com/folderview?id=0B7-yqP_4DkNZUGNoX0VHOExNT2c&usp=sharing&tid=0B7-yqP_4DkNZM1NIcWxhOWthMDQ>`_
 
 
 Setup monodict Project
@@ -34,6 +32,7 @@ Then check sdk.dir and ndk.dir in your local.properties
 TODO
 ==========
 
+- Lock rotation
 - Eijiro syntax support
 - Font settings
 

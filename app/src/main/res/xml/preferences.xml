@@ -25,6 +25,20 @@
             android:key="fastScroll"
             android:title="@string/title_settings_fast_scroll" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/title_settings_tts">
+        <ListPreference
+            android:defaultValue="English"
+            android:dialogTitle="@string/title_settings_tts_default_language"
+            android:entries="@array/tts_locales"
+            android:entryValues="@array/tts_locales"
+            android:key="ttsDefaultLocale"
+            android:icon="@drawable/ic_action_volume_on"
+            android:title="@string/title_settings_tts_default_language" />
+        <Preference
+            android:icon="@drawable/ic_action_help"
+            android:key="ttsAbout"
+            android:title="@string/title_settings_tts_about" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
         <Preference android:key="dictionaryManager" />
     </PreferenceCategory>

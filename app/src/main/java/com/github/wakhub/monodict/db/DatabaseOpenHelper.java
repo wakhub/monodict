@@ -69,11 +69,14 @@ public class DatabaseOpenHelper extends OrmLiteSqliteOpenHelper {
         Log.d(TAG, "onCreate");
         List<String> tableNames = getTableNames(database);
         try {
-            TableUtils.createTableIfNotExists(connectionSource, Card.class);
 
             if (!tableNames.contains("bookmark")) {
                 TableUtils.createTableIfNotExists(connectionSource, Bookmark.class);
                 Bookmark.initData((Dao<Bookmark, Long>) getDao(Bookmark.class));
+            }
+            if (!tableNames.contains("card")) {
+                TableUtils.createTableIfNotExists(connectionSource, Card.class);
+                Card.initData((Dao<Card, Long>) getDao(Card.class));
             }
         } catch (SQLException e) {
             Log.d(TAG, "Failed to create tables", e);

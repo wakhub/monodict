@@ -58,7 +58,6 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.SystemService;
@@ -124,6 +123,10 @@ public class MainActivity extends Activity implements
     @DimensionRes
     float spaceWell;
 
+    private String extraActionSearchQuery = null;
+
+    private String extraActionSendText = null;
+
     private DictionarySearchView searchView = null;
 
     private int delay = 0;
@@ -149,8 +152,6 @@ public class MainActivity extends Activity implements
 
         commonActivityTrait.initActivity();
 
-        activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
-
         dicItemListView.setCallback(this);
         resultData = new ArrayList<DicItemListView.Data>();
         resultAdapter = new DicItemListView.ResultAdapter(
@@ -167,16 +168,13 @@ public class MainActivity extends Activity implements
         Intent intent = getIntent();
         String query = null;
 
-        if (intent != null) {
-            String action = intent.getAction();
-            if (action != null) {
-                if (action.equals(Intent.ACTION_SEARCH)) {
-                    query = intent.getExtras().getString(SearchManager.QUERY);
-                }
-                if (action.equals(Intent.ACTION_SEND)) {
-                    query = intent.getExtras().getString(Intent.EXTRA_TEXT);
-                }
-            }
+        if (extraActionSearchQuery != null && !extraActionSearchQuery.isEmpty()) {
+            query = extraActionSearchQuery;
+            extraActionSearchQuery = null;
+        }
+        if (extraActionSendText != null && !extraActionSendText.isEmpty()) {
+            query = extraActionSendText;
+            extraActionSendText = null;
         }
 
         if (query == null && preferences.clipboardSearch().get()) {
@@ -205,16 +203,6 @@ public class MainActivity extends Activity implements
     @Background
     void search(String text, int timer) {
         dictionaryServiceConnection.search(text);
-    }
-
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE)
-    void onActivityResultSpeechHelper(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_DEFAULT_ENGINE, resultCode, data);
-    }
-
-    @OnActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE)
-    void onActivityResultSpeechHelperJapanese(int resultCode, Intent data) {
-        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_INIT_JAPANESE_ENGINE, resultCode, data);
     }
 
     @Click(R.id.flashcard_button)
@@ -335,12 +323,27 @@ public class MainActivity extends Activity implements
 
         if (dictionaryServiceConnection == null) {
             dictionaryServiceConnection = new DictionaryServiceConnection(this);
+            activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
         }
 
         bindService(
                 new Intent(this, DictionaryService.class),
                 dictionaryServiceConnection,
                 Context.BIND_AUTO_CREATE);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(Intent.ACTION_SEARCH)) {
+                    extraActionSearchQuery = intent.getExtras().getString(SearchManager.QUERY);
+                }
+                if (action.equals(Intent.ACTION_SEND)) {
+                    extraActionSendText = intent.getExtras().getString(Intent.EXTRA_TEXT);
+                }
+            }
+        }
+
 
         dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
 
@@ -357,6 +360,17 @@ public class MainActivity extends Activity implements
     protected void onDestroy() {
         speechHelper.finish();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
+            if (requestCode == requestCodeInitTtsEngine) {
+                speechHelper.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -437,7 +451,6 @@ public class MainActivity extends Activity implements
     @UiThread
     public void onDictionaryServiceInitialized() {
         activityHelper.hideProgressDialog();
-
         if (app.isVersionUp()) {
             removeDirectory(getCacheDir());
 
@@ -464,14 +477,12 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDictionaryServiceUpdateDictionaries() {
-        activityHelper.hideProgressDialog();
         dictionaryServiceConnection.search(searchView.getQuery().toString());
     }
 
     @Override
     @UiThread
     public void onDictionaryServiceResult(String query, ArrayList<DicItemListView.Data> result) {
-        activityHelper.hideProgressDialog();
         resultData.clear();
         resultData.addAll(result);
         resultAdapter.notifyDataSetChanged();

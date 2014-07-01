@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by wak on 5/17/14.
  */
-public class Model {
+public abstract class Model {
 
     private static final String TAG = Model.class.getSimpleName();
 
@@ -83,7 +83,7 @@ public class Model {
     private Date updatedAt;
 
     public Model() {
-        initDates();
+        init();
     }
 
     // TODO: write test
@@ -95,7 +95,7 @@ public class Model {
         return id.equals(modelId);
     }
 
-    void initDates() {
+    void init() {
         createdAt = Calendar.getInstance().getTime();
         updatedAt = createdAt;
     }

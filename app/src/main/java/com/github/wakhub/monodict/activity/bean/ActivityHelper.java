@@ -195,11 +195,20 @@ public class ActivityHelper {
         showProgressDialog(activity.getResources().getString(resId));
     }
 
+    /**
+     * http://stackoverflow.com/questions/19538282/view-not-attached-to-window-manager-dialog-dismiss
+     */
     @UiThread
     public void hideProgressDialog() {
         if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
+            if (!activity.isFinishing()) {
+                try {
+                    progressDialog.dismiss();
+                    progressDialog = null;
+                } catch (Exception e) {
+                    // pass
+                }
+            }
         }
     }
 

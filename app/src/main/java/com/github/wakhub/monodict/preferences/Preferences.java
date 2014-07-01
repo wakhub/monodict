@@ -43,6 +43,9 @@ public interface Preferences {
     @DefaultBoolean(false)
     boolean fastScroll();
 
+    @DefaultString("English")
+    String ttsDefaultLocale();
+
     /** @see com.github.wakhub.monodict.preferences.Dictionaries */
     @DefaultString("{\"dictionaries\": []}")
     String dictionaries();

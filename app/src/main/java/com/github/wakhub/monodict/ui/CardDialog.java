@@ -121,6 +121,7 @@ public class CardDialog extends Dialog {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dismiss();
                 new CardContextDialogBuilder(contextActionContext, CardDialog.this, card)
                         .setContextActionListener(contextActionListener)
                         .show();

@@ -18,10 +18,13 @@ package com.github.wakhub.monodict.db;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,11 +78,18 @@ public class Card extends Model {
     }
 
     public Card() {
-        super();
+        init();
+    }
+    public Card(String display, String translate, String dictionary) {
+        init();
+        this.display = display;
+        this.translate = translate;
+        this.dictionary = dictionary;
+        this.box = 1;
     }
 
     public Card(JsonObject jsonObject) {
-        super();
+        init();
         display = getStringFromJson(jsonObject, Column.DISPLAY);
         translate = getStringFromJson(jsonObject, Column.TRANSLATE);
         dictionary = getStringFromJson(jsonObject, Column.DICTIONARY);
@@ -149,5 +159,18 @@ public class Card extends Model {
             return;
         }
         this.tags = TextUtils.join(TAG_SEPARATOR, tags);
+    }
+
+    public static void initData(Dao<Card, Long> dao) throws SQLException {
+        List<Card> cardData = Arrays.asList(
+                new Card("ห้องน้ำ อยู่ที่ไหน ครับ/คะ", "Where is a toilet?", null),
+                new Card("洗手间在哪里?", "Where is a toilet?", null),
+                new Card("トイレはどこですか?", "Where is a toilet?", null),
+                new Card("화장실이어디예요", "Where is a toilet?", null),
+                new Card("Où sont les toilettes?", "Where is a toilet?", null),
+                new Card("Where is a toilet?", "トイレはどこですか?", null));
+        for (Card card : cardData) {
+            dao.create(card);
+        }
     }
 }
