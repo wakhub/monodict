@@ -52,6 +52,9 @@
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>
 <string name="message_url_placeholder">keyword or URL</string>
+<string name="message_validation_max_100">Enter at least 100 characters</string>
+<string name="message_validation_max_5000">Enter at least 5000 characters</string>
+<string name="message_validation_required">Required</string>
 <string name="title_activity_browser">Browser</string>
 <string name="title_activity_browser_bookmarks">Bookmarks</string>
 <string name="title_activity_dictionary_manager">Dictionary Manager</string>

@@ -29,12 +29,11 @@
         android:text="@string/blank_text"
         android:id="@+id/title_text"
         android:layout_margin="@dimen/space_well"
-        android:textSize="20dp"
-        android:maxLines="8"
-        android:scrollbars="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:textSize="14dp"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
         android:textIsSelectable="false"
         android:textStyle="bold"
+        android:textColor="@color/dark_gray"
         android:gravity="center_horizontal" />
 
     <EditText
@@ -56,9 +55,7 @@
 
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="@dimen/space_relax"
-        android:layout_marginBottom="@dimen/space_well">
+        android:layout_height="fill_parent">
 
         <TableRow
             android:layout_width="fill_parent"

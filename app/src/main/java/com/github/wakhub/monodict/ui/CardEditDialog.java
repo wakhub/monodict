@@ -26,22 +26,39 @@ import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.db.Card;
+import com.mobsandgeeks.saripaar.Rule;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Required;
+import com.mobsandgeeks.saripaar.annotation.TextRule;
 
 /**
  * Created by wak on 6/29/14.
  */
-public class CardEditDialog extends Dialog {
+public class CardEditDialog extends Dialog implements Validator.ValidationListener {
 
     private static final String TAG = CardEditDialog.class.getSimpleName();
 
     private final TextView titleText;
+
+    @Required(order = 1, messageResId = R.string.message_validation_required)
+    @TextRule(order = 2, trim = true, messageResId =  R.string.message_validation_max_100)
     private final EditText displayText;
+
+    @Required(order = 2, messageResId = R.string.message_validation_required)
+    @TextRule(order = 4, trim = true, maxLength = 5000, messageResId = R.string.message_validation_max_5000)
     private final EditText translateText;
+
+    @TextRule(order = 5, trim = true, maxLength = 5000, messageResId = R.string.message_validation_max_5000)
     private final EditText noteText;
+
     private final Button cancelButton;
+
     private final Button saveButton;
 
+    private final com.mobsandgeeks.saripaar.Validator validator;
+
     private final Card card;
+
     private Listener listener;
 
     public interface Listener {
@@ -50,6 +67,9 @@ public class CardEditDialog extends Dialog {
 
     public CardEditDialog(Context context, Card card) {
         super(context, R.style.AppTheme_Flashcard_CardDialog);
+
+        this.validator = new com.mobsandgeeks.saripaar.Validator(this);
+        this.validator.setValidationListener(this);
 
         if (card == null) {
             this.card = new Card();
@@ -98,7 +118,10 @@ public class CardEditDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick saveButton");
-                save();
+                displayText.setError(null);
+                translateText.setError(null);
+                noteText.setError(null);
+                validator.validate();
             }
         });
     }
@@ -108,17 +131,23 @@ public class CardEditDialog extends Dialog {
     }
 
     private void save() {
-        String display = displayText.getText().toString().trim();
-        String translate = translateText.getText().toString().trim();
-        String note = noteText.getText().toString().trim();
-        if (display.isEmpty()) {
-            return;
-        }
-
-        card.setDisplay(display);
-        card.setTranslate(translate);
-        card.setNote(note);
+        card.setDisplay(displayText.getText().toString());
+        card.setTranslate(translateText.getText().toString());
+        card.setNote(noteText.getText().toString());
 
         listener.onCardEditDialogSave(this, card);
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        save();
+    }
+
+    @Override
+    public void onValidationFailed(View view, Rule<?> rule) {
+        if (view instanceof TextView) {
+            ((TextView) view).setError(rule.getFailureMessage());
+            view.requestFocus();
+        }
     }
 }

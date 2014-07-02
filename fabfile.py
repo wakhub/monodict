@@ -53,7 +53,7 @@ def init():
 
 
 @task
-def prepare_for_release():
+def prepare_for_commit():
     _sort_string_xml(os.path.join(APP_ROOT_DIR, 'src/main/res/values/strings.xml'))
     _sort_string_xml(os.path.join(APP_ROOT_DIR, 'src/main/res/values-ja/strings.xml'))
     _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/icons.svg'))

@@ -22,6 +22,7 @@
     <color name="dark_gray">#666666</color>
     <color name="transparent">#00000000</color>
     <color name="frosted_black">#99000000</color>
+    <color name="slight_frosted_black">#22000000</color>
     <color name="frosted_white">#eeffffff</color>
 
     <color name="background">@color/white</color>

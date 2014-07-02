@@ -60,19 +60,25 @@
                 android:text="Index"
                 android:layout_alignParentTop="true"
                 android:textIsSelectable="true"
-                android:layout_toLeftOf="@+id/speech_button"></TextView>
+                android:layout_toLeftOf="@+id/add_to_flashcard_button"></TextView>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_to_flashcard_button"
+                android:src="@drawable/ic_action_add_to_queue"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/speech_button" />
 
             <ImageButton
                 android:id="@+id/speech_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="@dimen/space_relax"
                 android:src="@drawable/ic_action_volume_on"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentRight="false"
                 android:layout_toLeftOf="@+id/action_button"
-                android:layout_marginLeft="@dimen/space_well" />
+                android:layout_marginLeft="@dimen/space_relax" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -81,7 +87,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_action_overflow"
-                android:layout_marginLeft="@dimen/space_well" />
+                android:layout_marginLeft="@dimen/space_relax_half" />
+
         </RelativeLayout>
 
         <TextView
@@ -96,7 +103,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Trans"
-            android:textIsSelectable="true"></TextView>
+            android:textIsSelectable="true"
+            android:textSize="16dp"></TextView>
 
         <TextView
             android:id="@+id/ListSample"
@@ -104,7 +112,8 @@
             android:layout_height="wrap_content"
             android:text="ListSample"
             android:textStyle="italic"
-            android:textIsSelectable="true"></TextView>
+            android:textIsSelectable="true"
+            android:textSize="16dp"></TextView>
 
         <Button
             android:id="@+id/ListMoreButton"

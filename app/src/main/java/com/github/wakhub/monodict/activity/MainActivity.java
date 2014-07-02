@@ -165,6 +165,9 @@ public class MainActivity extends Activity implements
     }
 
     void initQuery() {
+        if (searchView == null) {
+            return;
+        }
         Intent intent = getIntent();
         String query = null;
 
@@ -374,6 +377,12 @@ public class MainActivity extends Activity implements
     }
 
     @Override
+    public void onDicviewItemClickAddToFlashcardButton(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        addFlashcard(data);
+    }
+
+    @Override
     public void onDicviewItemClickSpeechButton(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         speechHelper.speech(data.Index.toString());
@@ -408,7 +417,12 @@ public class MainActivity extends Activity implements
             activityHelper.showError(e);
             return;
         }
-        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+        Resources resources = getResources();
+        String message = resources.getString(R.string.message_item_added_to,
+                card.getDisplay(),
+                resources.getString(R.string.title_activity_flashcard));
+
+        activityHelper.showToast(message);
     }
 
     @Override

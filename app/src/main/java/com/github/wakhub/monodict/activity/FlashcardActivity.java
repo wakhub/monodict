@@ -102,6 +102,7 @@ public class FlashcardActivity extends ListActivity
     @Bean
     FlashcardActivityState state;
 
+    // TODO: Change to CursorAdapter
     private ArrayAdapter<Card> listAdapter = null;
 
     private boolean isTabInitialized = false;
@@ -505,21 +506,32 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Override
-    public void onContextActionDelete(Card card) {
-        // TODO: confirm dialog
-        try {
-            databaseHelper.deleteCard(card);
-        } catch (SQLException e) {
-            activityHelper.showError(e);
-            return;
-        }
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            Card cardInList = listAdapter.getItem(i);
-            if (card.equals(cardInList)) {
-                listAdapter.remove(cardInList);
-            }
-        }
-        reloadTabs();
+    public void onContextActionDelete(final Card card) {
+        activityHelper
+                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int buttonPosition) {
+
+                        try {
+                            databaseHelper.deleteCard(card);
+                        } catch (SQLException e) {
+                            activityHelper.showError(e);
+                            return;
+                        }
+                        for (int i = 0; i < listAdapter.getCount(); i++) {
+                            Card cardInList = listAdapter.getItem(i);
+                            if (card.equals(cardInList)) {
+                                listAdapter.remove(cardInList);
+                            }
+                        }
+                        reloadTabs();
+                    }
+                })
+                .setIcon(R.drawable.ic_action_discard)
+                .setTitle(R.string.action_delete)
+                .setMessage(R.string.message_confirm_delete)
+                .show();
+
     }
 
     @Override
@@ -544,11 +556,22 @@ public class FlashcardActivity extends ListActivity
                 activityHelper.showError(e);
                 return;
             }
-            activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+            activityHelper.showToast(getResources().getString(R.string.message_item_added_to, card.getDisplay(), "INBOX"));
         }
-
         dialog.dismiss();
-        loadContents();
+        if (card.getBox() != state.getBox()) {
+            return;
+        }
+        int position = listAdapter.getPosition(card);
+        if (position == -1) {
+            listAdapter.add(card);
+            getListView().setSelection(listAdapter.getCount() - 1);
+        } else {
+            Card oldCard = listAdapter.getItem(position);
+            listAdapter.remove(oldCard);
+            listAdapter.insert(card, position);
+        }
+        reloadTabs();
     }
 
     private class ListAdapter extends ArrayAdapter<Card> {

@@ -50,6 +50,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.res.DimensionRes;
+import org.androidannotations.annotations.res.StringRes;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -92,6 +93,9 @@ public class DownloadsActivity extends ListActivity {
 
     @DimensionRes
     float spaceRelax;
+
+    @StringRes
+    String appName;
 
     private File sdCard;
 
@@ -276,7 +280,7 @@ public class DownloadsActivity extends ListActivity {
                 }
                 InputStream is = httpResponse.getEntity().getContent();
                 int length = (int) httpResponse.getEntity().getContentLength();
-                String filePath = sdCard.getPath() + "/adice/" + getName(url);
+                String filePath = sdCard.getPath() + "/" + appName + "/" + getName(url);
                 Log.d(TAG, "The file will be saved as " + filePath);
                 File f = new File(filePath);
                 f.getParentFile().mkdir();
@@ -327,7 +331,7 @@ public class DownloadsActivity extends ListActivity {
                     String name = ze.getName();
 
                     if (name.toLowerCase().endsWith(".dic")) {
-                        File nf = new File(sdCard.getPath() + "/adice/" + getName(name));
+                        File nf = new File(sdCard.getPath() + "/" + appName + "/" + getName(name));
                         nf.getParentFile().mkdir();
 
                         FileOutputStream fos = new FileOutputStream(nf);

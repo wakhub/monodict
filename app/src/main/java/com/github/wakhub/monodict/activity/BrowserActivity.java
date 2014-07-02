@@ -18,6 +18,7 @@ package com.github.wakhub.monodict.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -243,7 +244,11 @@ public class BrowserActivity extends Activity
             activityHelper.showError(e);
             return;
         }
-        activityHelper.showToastLong(getResources().getString(R.string.message_item_added, bookmark.getTitle()));
+        Resources resources = getResources();
+        String message = resources.getString(R.string.message_item_added_to,
+                bookmark.getTitle(),
+                resources.getString(R.string.title_activity_browser_bookmarks));
+        activityHelper.showToastLong(message);
     }
 
     @OptionsItem(R.id.action_show_bookmarks)
@@ -414,7 +419,12 @@ public class BrowserActivity extends Activity
             activityHelper.showError(e);
             return;
         }
-        activityHelper.showToast(getResources().getString(R.string.message_item_added, card.getDisplay()));
+        Resources resources = getResources();
+        String message = resources.getString(
+                R.string.message_item_added_to,
+                card.getDisplay(),
+                resources.getString(R.string.title_activity_flashcard));
+        activityHelper.showToast(message);
     }
 
     @Override

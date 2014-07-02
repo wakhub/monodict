@@ -85,7 +85,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@color/transparent"
         android:contentDescription="@string/action_close"
         android:src="@drawable/ic_action_cancel" />
 
@@ -96,7 +95,6 @@
         android:layout_below="@+id/close_button"
         android:layout_marginTop="@dimen/space_relax"
         android:layout_toRightOf="@+id/linearLayout"
-        android:background="@color/transparent"
         android:contentDescription="@string/action_add_to_flashcard"
         android:src="@drawable/ic_action_add_to_queue" />
 

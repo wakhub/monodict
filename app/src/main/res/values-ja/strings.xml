@@ -52,6 +52,9 @@
 <string name="message_success">成功</string>
 <string name="message_unable_to_access">アクセスできません</string>
 <string name="message_url_placeholder">URL 又はキーワード</string>
+<string name="message_validation_max_100">100 文字まで入力できます</string>
+<string name="message_validation_max_5000">5000 文字まで入力できます</string>
+<string name="message_validation_required">何か入力してください</string>
 <string name="title_activity_browser">ブラウザ</string>
 <string name="title_activity_browser_bookmarks">ブックマーク</string>
 <string name="title_activity_dictionary_manager">辞書管理</string>

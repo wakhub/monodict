@@ -24,23 +24,32 @@ import android.view.ViewParent;
  */
 public class ViewUtils {
 
-    private static ViewUtils instance;
+    private static final int MAX_DEPTH = 100;
 
-    public static ViewUtils getInstance() {
-        if (instance == null) {
-            instance = new ViewUtils();
-        }
-        return instance;
-    }
-
-    public ViewParent findParentView(View rootView, Class findClass) {
+    public static ViewParent findParentView(View rootView, Class findClass) {
         View currentView = rootView;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < MAX_DEPTH; i++) {
             ViewParent parentView = currentView.getParent();
             if (parentView == null) {
                 return null;
             }
             if (findClass.isInstance(parentView)) {
+                return parentView;
+            }
+            currentView = (View) parentView;
+        }
+
+        return null;
+    }
+
+    public static ViewParent findParentView(View rootView, int viewId) {
+        View currentView = rootView;
+        for (int i = 0; i < MAX_DEPTH; i++) {
+            ViewParent parentView = currentView.getParent();
+            if (parentView == null) {
+                return null;
+            }
+            if (((View)parentView).getId() == viewId) {
                 return parentView;
             }
             currentView = (View) parentView;
