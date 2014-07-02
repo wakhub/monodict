@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 14
-        versionCode 6
-        versionName '1.1.0b'
+        versionCode 7
+        versionName '1.1.0'
 
         testPackageName 'com.github.wakhub.monodict.test'
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
