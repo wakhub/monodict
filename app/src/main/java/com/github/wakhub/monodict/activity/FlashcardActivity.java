@@ -157,6 +157,7 @@ public class FlashcardActivity extends ListActivity
                 index = 0;
             }
             actionBar.getTabAt(index).select();
+            loadContents();
         }
     }
 
@@ -164,13 +165,14 @@ public class FlashcardActivity extends ListActivity
     void loadContents() {
         Log.d(TAG, "loadContents: box=" + state.getBox());
         activityHelper.showProgressDialog(R.string.message_in_processing);
+        int box = getActionBar().getSelectedTab().getPosition() + 1;
 
         List<Card> cardList;
         try {
             if (state.getOrder() == FlashcardActivityState.ORDER_SHUFFLE) {
-                cardList = databaseHelper.findCardInBoxRandomly(state.getBox(), state.getRandomSeed());
+                cardList = databaseHelper.findCardInBoxRandomly(box, state.getRandomSeed());
             } else {
-                cardList = databaseHelper.findCardInBoxAlphabetically(state.getBox());
+                cardList = databaseHelper.findCardInBoxAlphabetically(box);
             }
         } catch (SQLException e) {
             activityHelper.showError(e);

@@ -58,6 +58,11 @@ public class MainActivityState implements JsonPreferencesFieldAdapter.Interface 
     }
 
     @Override
+    public String toString() {
+        return loadJson();
+    }
+
+    @Override
     public String loadJson() {
         return preferences.mainActivityState().get();
     }

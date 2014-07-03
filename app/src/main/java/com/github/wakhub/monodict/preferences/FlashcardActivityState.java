@@ -105,8 +105,8 @@ public class FlashcardActivityState implements JsonPreferencesFieldAdapter.Inter
     }
 
     class Data {
-        int box = 0;
-        int order = 0;
+        int box = 1;
+        int order = ORDER_SHUFFLE;
         int randomSeed = 0;
     }
 }

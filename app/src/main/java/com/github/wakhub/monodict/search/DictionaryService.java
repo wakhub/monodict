@@ -154,9 +154,13 @@ public final class DictionaryService extends Service implements SearchThread.Int
             if (dicinfo == null) {
                 Log.d(TAG, "Already exists: " + path);
                 dicinfo = dice.getDicInfo(path);
-                dicinfo.SetDicName(dictionary.getName());
-                dicinfo.SetEnglish(dictionary.isEnglishIndex());
-                dicinfo.SetNotuse(!dictionary.isEnabled());
+                if (dicinfo == null) {
+                    Log.e(TAG, "Couldn't load dictionary: " + path);
+                } else {
+                    dicinfo.SetDicName(dictionary.getName());
+                    dicinfo.SetEnglish(dictionary.isEnglishIndex());
+                    dicinfo.SetNotuse(!dictionary.isEnabled());
+                }
             } else {
                 Log.d(TAG, "Opened: " + path);
                 if (!dicinfo.readIndexBlock(dictionary.createIndexCacheFile(this))) {

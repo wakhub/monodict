@@ -245,7 +245,7 @@ public class MainActivity extends Activity implements
         Resources resources = getResources();
         switch (item.getItemId()) {
             case R.id.action_search_by_google_com:
-                url = resources.getString(R.string.url_dictionary_com_search, query);
+                url = resources.getString(R.string.url_google_com_search, query);
                 break;
             case R.id.action_search_by_dictionary_com:
                 url = resources.getString(R.string.url_dictionary_com_search, query);
@@ -334,23 +334,27 @@ public class MainActivity extends Activity implements
                 dictionaryServiceConnection,
                 Context.BIND_AUTO_CREATE);
 
+        dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
+
+        nav.requestLayout();
+
+        if (speechHelper != null && speechHelper.isProcessing()) {
+            return;
+        }
         Intent intent = getIntent();
         if (intent != null) {
             String action = intent.getAction();
             if (action != null) {
                 if (action.equals(Intent.ACTION_SEARCH)) {
+                    Log.d(TAG, "ACTION_SEARCH: " + SearchManager.QUERY);
                     extraActionSearchQuery = intent.getExtras().getString(SearchManager.QUERY);
                 }
                 if (action.equals(Intent.ACTION_SEND)) {
+                    Log.d(TAG, "ACTION_SEND: " + Intent.EXTRA_TEXT);
                     extraActionSendText = intent.getExtras().getString(Intent.EXTRA_TEXT);
                 }
             }
         }
-
-
-        dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
-
-        nav.requestLayout();
     }
 
     @Override
