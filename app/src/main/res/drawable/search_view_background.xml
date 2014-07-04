@@ -26,15 +26,6 @@
         </shape>
     </item>
     <item>
-        <shape>
-            <solid android:color="#dddddd" />
-            <padding
-                android:left="1dp"
-                android:top="1dp" />
-            <corners android:radius="2dp" />
-        </shape>
-    </item>
-    <item>
         <shape android:shape="rectangle">
             <solid android:color="#ffffff" />
         </shape>

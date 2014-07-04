@@ -27,10 +27,13 @@ from fabric.colors import *
 ENCODING = 'UTF-8'
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_ROOT_DIR = os.path.join(ROOT_DIR, 'app')
-APP_IMAGE_DIR = os.path.join(APP_ROOT_DIR, 'src/main/res/drawable-xhdpi')
+APP_RES_DIR = os.path.join(APP_ROOT_DIR, 'src/main/res')
 DOWNLOADS_DIR = os.path.join(ROOT_DIR, 'downloads')
 CREDENTIALS_DIR = os.path.join(ROOT_DIR, 'credentials')
 RELEASE_KEYSTORE = os.path.join(CREDENTIALS_DIR, 'release.keystore')
+DPI = {'xhdpi': 2,
+       'xxhdpi': 3,
+       'xxxhdpi': 4}
 ACTION_ICON_NAMES = ['ic_action_{}.png'.format(i) for i in
                      ['about', 'accept', 'add_to_queue', 'cancel', 'collection',
                       'discard', 'download', 'edit', 'expand', 'favorite', 'forward',
@@ -105,13 +108,14 @@ def init_action_bar_icons(theme='holo_light'):
 
     action_bar_icons_dir = os.path.join(icons_root_dir, 'Action Bar Icons', theme)
     for root, dirs, files in os.walk(action_bar_icons_dir):
-        group, resolution = root.split('/')[-2:]
-        if resolution != 'drawable-xhdpi':
+        group, dpi_dir = root.split('/')[-2:]
+        dpi = dpi_dir.lstrip('drawable-')
+        if dpi not in DPI.keys():
             continue
         for filename in files:
             if filename in ACTION_ICON_NAMES:
                 _copy(os.path.join(root, filename),
-                      os.path.join(APP_IMAGE_DIR, filename))
+                      os.path.join(APP_RES_DIR, dpi_dir, filename))
 
 
 @task

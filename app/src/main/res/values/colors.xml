@@ -22,7 +22,7 @@
     <color name="dark_gray">#666666</color>
     <color name="transparent">#00000000</color>
     <color name="frosted_black">#99000000</color>
-    <color name="slight_frosted_black">#22000000</color>
+    <color name="shadow">#22000000</color>
     <color name="frosted_white">#eeffffff</color>
 
     <color name="background">@color/white</color>
@@ -33,9 +33,9 @@
     <color name="nav_text">@color/white</color>
 
     <color name="card">#ffffcc</color>
-    <color name="card_highlight">#ffffee</color>
-    <color name="card_shade">#ffffaa</color>
-
+    <color name="card_highlight">#ffffdd</color>
+    <color name="card_shade">#ffffbb</color>
+    <color name="card_pressed">#ffff66</color>
 
     <color name="main">#dddddd</color>
 </resources>

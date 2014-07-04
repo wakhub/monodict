@@ -26,13 +26,11 @@
         android:top="5dp" />
 
     <gradient
-        android:centerColor="@color/light_gray"
-        android:centerX="30%"
-        android:centerY="20%"
-        android:endColor="@color/gray"
-        android:gradientRadius="1000"
-        android:startColor="@color/white"
-        android:type="radial" />
+        android:centerColor="#f0f0f0"
+        android:endColor="#eeeeee"
+        android:startColor="#f9f9f9"
+        android:angle="270"
+        android:type="linear" />
 
     <corners android:radius="1dp" />
 </shape>
