@@ -611,6 +611,14 @@ public class FlashcardActivity extends ListActivity
                     speechHelper.speech(card.getDisplay());
                 }
             });
+            view.findViewById(R.id.action_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new CardContextDialogBuilder(getContext(), null, card)
+                            .setContextActionListener(FlashcardActivity.this)
+                            .show();
+                }
+            });
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

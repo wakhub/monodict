@@ -18,15 +18,22 @@ Setup monodict Project
 Requirements
 
 - `Android Studio <https://developer.android.com/sdk/installing/studio.html>`_
-- `Fabric <http://www.fabfile.org/>`_
-- `Requests <http://docs.python-requests.org/en/latest/>`_
+- `Python <https://www.python.org/>`_,
+  `Fabric <http://www.fabfile.org/>`_,
+  `Requests <http://docs.python-requests.org/en/latest/>`_
+
+Optionals
+
+- `Inkscape <http://www.inkscape.org/en/>`_
 
 Command::
 
+    $ git clone https://github.com/wakhub/monodict.git
+    $ cd monodict
     $ pip install fabric requests
     $ fab init
 
-Then check sdk.dir and ndk.dir in your local.properties
+Then check `sdk.dir` and `ndk.dir` in your `local.properties`
 
 
 TODO

@@ -36,13 +36,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/speech_button"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_volume_on"
-                style="@style/AppTheme.Flashcard.ImageButton"
-                android:layout_alignParentTop="true" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,6 +46,25 @@
                 android:layout_centerVertical="true"
                 style="@style/AppTheme.DisplayText"
                 android:layout_toLeftOf="@+id/speech_button" />
+
+            <ImageButton
+                android:id="@+id/speech_button"
+                android:src="@drawable/ic_action_volume_on"
+                style="@style/AppTheme.Flashcard.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/action_button" />
+
+            <ImageButton
+                android:id="@+id/action_button"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/ic_action_overflow"
+                style="@style/AppTheme.Flashcard.ImageButton"
+                android:layout_marginLeft="@dimen/space_relax_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
         </RelativeLayout>

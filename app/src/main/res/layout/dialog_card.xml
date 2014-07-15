@@ -50,7 +50,7 @@
             android:src="@drawable/ic_action_overflow"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/space_relax_half" />
+            android:layout_marginLeft="@dimen/space_relax" />
     </RelativeLayout>
 
     <TextView
