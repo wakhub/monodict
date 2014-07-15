@@ -59,7 +59,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -127,7 +126,7 @@ public class DownloadsActivity extends ListActivity {
                 text1.setText(Dictionary.EMOJI + item.getName());
 
                 TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                text2.setText(String.format("%s\nsize: %s", item.getDescription(), item.getKBString()));
+                text2.setText(String.format("%s\nsize: %s", item.getDescription(), item.getSize()));
 
                 return view;
             }
@@ -137,7 +136,6 @@ public class DownloadsActivity extends ListActivity {
         Downloads downloads = null;
         try {
             InputStream inputStream = getAssets().open("downloads.json");
-            JSONObject json = new JSONObject();
             downloads = (new Gson()).fromJson(IOUtils.toString(inputStream), Downloads.class);
         } catch (IOException e) {
             activityHelper.showError(e);
@@ -171,7 +169,7 @@ public class DownloadsActivity extends ListActivity {
         textView.setText(String.format(
                 "%s\nsize: %s",
                 item.getDescription(),
-                item.getKBString()));
+                item.getSize()));
         ScrollView scrollView = new ScrollView(this);
         scrollView.addView(textView);
 

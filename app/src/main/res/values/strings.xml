@@ -63,14 +63,14 @@
 <string name="title_activity_flashcard">Flashcard</string>
 <string name="title_activity_main">Search</string>
 <string name="title_activity_settings">Settings</string>
-<string name="title_dictionary_dienine">Dien Indonesian-Japanese Dictionary</string>
+<string name="title_dictionary_dienine">Matsushita-Dien Indonesian-Japanese Dictionary</string>
 <string name="title_dictionary_edict">EDICT Japanese-English Dictionary</string>
 <string name="title_dictionary_eijiro">Eijiro %s</string>
 <string name="title_dictionary_ichirofj">ICHIRO French-Japanese Dictionary</string>
 <string name="title_dictionary_pdej">PDEJ2005 English-Japanese Dictionary</string>
 <string name="title_dictionary_reijiro">Reijiro %s</string>
 <string name="title_dictionary_ryakujiro">Ryakugoro %s</string>
-<string name="title_dictionary_waeijiro">Waeiiro %s</string>
+<string name="title_dictionary_waeijiro">Waejiro %s</string>
 <string name="title_dictionary_webster">Webster English Dictionary 1913</string>
 <string name="title_help">HELP</string>
 <string name="title_keyword">Keyword</string>

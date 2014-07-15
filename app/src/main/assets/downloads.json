@@ -4,35 +4,35 @@
         {
             "name": "Webster 1913 English Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZTkNBRGFETXoxZEk",
-            "kb": 5968,
+            "size": "5968KB",
             "english": true,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
         },
         {
             "name": "PDEJ2005 English-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZdElkMVozcFVPdGM",
-            "kb": 3052,
+            "size": "3052KB",
             "english": true,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
         },
         {
             "name": "EDICT Japanese-English Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZV1R6ZGRNU3EtbEE",
-            "kb": 1424,
+            "size": "1424KB",
             "english": false,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
         },
         {
             "name": "ICHIRO French-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZd0pjdW5Ec2xtWmc",
-            "kb": 720,
+            "size": "720KB",
             "english": false,
             "description": "by ICHIRO\nhttp://rd.vector.co.jp/soft/win95/edu/se217092.html"
         },
         {
-            "name": "Dien Indonesian-Japanese Dictionary",
+            "name": "Matsushita-Dien Indonesian-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZSmY4UTRUN1B4S2M",
-            "kb": 328,
+            "size": "about 330KB",
             "english": false,
             "description": "by Dien\nhttp://www.geocities.jp/indo_ka/bahasa/id_soft.htm"
         }

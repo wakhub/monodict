@@ -22,12 +22,8 @@ public class DownloadsItem {
     private String name;
     private String url;
     private boolean english;
-    private int kb;
+    private String size;
     private String description;
-
-    public String getKBString() {
-        return String.format("%dKB", kb);
-    }
 
     public String getName() {
         return name;
@@ -36,12 +32,13 @@ public class DownloadsItem {
     public String getUrl() {
         return url;
     }
+
     public boolean isEnglish() {
         return english;
     }
 
-    public int kb() {
-        return kb;
+    public String getSize() {
+        return size;
     }
 
     public String getDescription() {
