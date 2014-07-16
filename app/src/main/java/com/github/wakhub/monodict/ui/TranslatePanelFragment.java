@@ -51,9 +51,9 @@ public class TranslatePanelFragment extends Fragment {
 
     private DicItemListView.Data data;
 
-    private Interface delegate;
+    private Listener listener;
 
-    public interface Interface {
+    public interface Listener {
         void onClickTranslatePanelAddToFlashcardButton(DicItemListView.Data data);
 
         void onClickTranslatePanelSpeechButton(DicItemListView.Data data);
@@ -80,8 +80,8 @@ public class TranslatePanelFragment extends Fragment {
         view.setVisibility(View.GONE);
     }
 
-    public void setDelegate(Interface delegate) {
-        this.delegate = delegate;
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     public void setData(DicItemListView.Data data) {
@@ -102,7 +102,7 @@ public class TranslatePanelFragment extends Fragment {
 
     @Click(R.id.speech_button)
     void onClickTranslatePanelSpeechButton() {
-        delegate.onClickTranslatePanelSpeechButton(data);
+        listener.onClickTranslatePanelSpeechButton(data);
     }
 
     @Click(R.id.close_button)
@@ -112,6 +112,6 @@ public class TranslatePanelFragment extends Fragment {
 
     @Click(R.id.add_to_flashcard_button)
     void onClickTranslatePanelAddToFlashcardButton() {
-        delegate.onClickTranslatePanelAddToFlashcardButton(data);
+        listener.onClickTranslatePanelAddToFlashcardButton(data);
     }
 }

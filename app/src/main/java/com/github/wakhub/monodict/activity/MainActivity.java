@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,6 +71,9 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * @see com.github.wakhub.monodict.activity.MainActivity_
+ */
 @EActivity(R.layout.activity_main)
 @OptionsMenu({R.menu.main})
 public class MainActivity extends Activity implements
@@ -123,6 +127,8 @@ public class MainActivity extends Activity implements
     @DimensionRes
     float spaceWell;
 
+    private boolean queryInitialized = false;
+
     private String extraActionSearchQuery = null;
 
     private String extraActionSendText = null;
@@ -144,7 +150,7 @@ public class MainActivity extends Activity implements
      */
     @AfterViews
     public void afterViews() {
-        Log.d(TAG, "state: " + state.toString());
+        Log.d(TAG, "afterViews: state=" + state.toString());
 
         Resources resources = getResources();
 
@@ -165,10 +171,11 @@ public class MainActivity extends Activity implements
     }
 
     void initQuery() {
-        if (searchView == null) {
+        Log.d(TAG, "initQuery");
+        if (queryInitialized || searchView == null || !dictionaryServiceConnection.isConnected()) {
+            Log.d(TAG, "initQuery has cancelled");
             return;
         }
-        Intent intent = getIntent();
         String query = null;
 
         if (extraActionSearchQuery != null && !extraActionSearchQuery.isEmpty()) {
@@ -196,11 +203,11 @@ public class MainActivity extends Activity implements
             searchView.setSelected(true);
         } else {
             String lastSearchQuery = state.getLastSearchQuery();
-            if (lastSearchQuery == null || lastSearchQuery.isEmpty()) {
-                return;
+            if (lastSearchQuery != null && !lastSearchQuery.isEmpty()) {
+                searchView.setQuery(lastSearchQuery, true);
             }
-            searchView.setQuery(lastSearchQuery, true);
         }
+        queryInitialized = true;
     }
 
     @Background
@@ -260,6 +267,74 @@ public class MainActivity extends Activity implements
         BrowserActivity_.intent(this).extraUrlOrKeywords(url).start();
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+
+        if (speechHelper != null && speechHelper.isProcessing()) {
+            return;
+        }
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        String action = intent.getAction();
+        if (action.equals(Intent.ACTION_SEARCH)) {
+            Log.d(TAG, "Intent.ACTION_SEARCH: " + SearchManager.QUERY);
+            extraActionSearchQuery = intent.getExtras().getString(SearchManager.QUERY);
+        }
+        if (action.equals(Intent.ACTION_SEND)) {
+            Log.d(TAG, "Intent.ACTION_SEND: " + Intent.EXTRA_TEXT);
+            extraActionSendText = intent.getExtras().getString(Intent.EXTRA_TEXT);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+        if (dictionaryServiceConnection == null) {
+            dictionaryServiceConnection = new DictionaryServiceConnection(this);
+            activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
+        }
+
+        bindService(
+                new Intent(this, DictionaryService.class),
+                dictionaryServiceConnection,
+                Context.BIND_AUTO_CREATE);
+
+        dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+
+        nav.requestLayout();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+
+        queryInitialized = false;
+        unbindService(dictionaryServiceConnection);
+    }
+
+    @Override
+    protected void onDestroy() {
+        speechHelper.finish();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -318,55 +393,6 @@ public class MainActivity extends Activity implements
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (dictionaryServiceConnection == null) {
-            dictionaryServiceConnection = new DictionaryServiceConnection(this);
-            activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
-        }
-
-        bindService(
-                new Intent(this, DictionaryService.class),
-                dictionaryServiceConnection,
-                Context.BIND_AUTO_CREATE);
-
-        dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
-
-        nav.requestLayout();
-
-        if (speechHelper != null && speechHelper.isProcessing()) {
-            return;
-        }
-        Intent intent = getIntent();
-        if (intent != null) {
-            String action = intent.getAction();
-            if (action != null) {
-                if (action.equals(Intent.ACTION_SEARCH)) {
-                    Log.d(TAG, "ACTION_SEARCH: " + SearchManager.QUERY);
-                    extraActionSearchQuery = intent.getExtras().getString(SearchManager.QUERY);
-                }
-                if (action.equals(Intent.ACTION_SEND)) {
-                    Log.d(TAG, "ACTION_SEND: " + Intent.EXTRA_TEXT);
-                    extraActionSendText = intent.getExtras().getString(Intent.EXTRA_TEXT);
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unbindService(dictionaryServiceConnection);
-    }
-
-    @Override
-    protected void onDestroy() {
-        speechHelper.finish();
-        super.onDestroy();
     }
 
     @Override

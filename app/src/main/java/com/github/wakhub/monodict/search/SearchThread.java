@@ -30,19 +30,19 @@ class SearchThread extends Thread {
 
     private final static String TAG = SearchThread.class.getSimpleName();
 
-    interface Interface {
+    interface Listener {
         void generateViewForSearch(int mode, int dic, IdicResult pr, ArrayList<DicItemListView.Data> result, int po);
 
         void onSearchFinished(String query, ArrayList<DicItemListView.Data> result);
     }
 
     private String query = null;
-    private Interface delegate = null;
+    private Listener listener = null;
     private int timer = 0;
     private final Idice dice;
 
-    public SearchThread(Interface delegate, final Idice dice, String query, int timer) {
-        this.delegate = delegate;
+    public SearchThread(Listener listener, final Idice dice, String query, int timer) {
+        this.listener = listener;
         this.query = query;
         this.timer = timer;
         this.dice = dice;
@@ -76,8 +76,8 @@ class SearchThread extends Thread {
                 if (interrupted())
                     return;
                 if (pr.getCount() > 0) {
-                    delegate.generateViewForSearch(DictionaryService.DISP_MODE_HEADER, dic, null, result, -1);
-                    delegate.generateViewForSearch(DictionaryService.DISP_MODE_RESULT, dic, pr, result, -1);
+                    listener.generateViewForSearch(DictionaryService.DISP_MODE_HEADER, dic, null, result, -1);
+                    listener.generateViewForSearch(DictionaryService.DISP_MODE_RESULT, dic, pr, result, -1);
                 }
 
                 if (interrupted())
@@ -85,11 +85,11 @@ class SearchThread extends Thread {
             }
 
             if (result.size() == 0) {
-                delegate.generateViewForSearch(DictionaryService.DISP_MODE_NORESULT, -1, null, result, -1);
+                listener.generateViewForSearch(DictionaryService.DISP_MODE_NORESULT, -1, null, result, -1);
             }
 
             if (!interrupted()) {
-                delegate.onSearchFinished(query, result);
+                listener.onSearchFinished(query, result);
             }
 
         } catch (InterruptedException e) {

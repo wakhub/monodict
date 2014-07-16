@@ -43,7 +43,7 @@ import java.util.HashMap;
  * TODO: refactoring
  * Created by wak on 6/17/14.
  */
-public final class DictionaryService extends Service implements SearchThread.Interface {
+public final class DictionaryService extends Service implements SearchThread.Listener {
 
     private static final String TAG = DictionaryService.class.getSimpleName();
 

@@ -203,6 +203,11 @@ public class DicItemListView extends ListView {
 
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem item = menu.getItem(i);
+                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+            }
+
             MenuInflater inflater = actionMode.getMenuInflater();
             inflater.inflate(R.menu.main_action_mode, menu);
             return true;

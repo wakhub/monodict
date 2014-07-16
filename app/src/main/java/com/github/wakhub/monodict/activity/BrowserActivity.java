@@ -69,7 +69,7 @@ import java.util.ArrayList;
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
 public class BrowserActivity extends Activity
-        implements DictionaryService.Listener, TranslatePanelFragment.Interface {
+        implements DictionaryService.Listener, TranslatePanelFragment.Listener {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -142,7 +142,7 @@ public class BrowserActivity extends Activity
         webSettings.setDefaultTextEncodingName(ENCODING);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
-        translatePanelFragment.setDelegate(this);
+        translatePanelFragment.setListener(this);
 
         if (extraUrlOrKeywords.isEmpty()) {
             loadUrl(state.getLastUrl());
@@ -344,13 +344,24 @@ public class BrowserActivity extends Activity
         return super.onMenuItemSelected(featureId, item);
     }
 
+    /**
+     * https://android.googlesource.com/platform/frameworks/base/+/cd92588/core/java/android/webkit/SelectActionModeCallback.java
+     *
+     * @param callback
+     * @return
+     */
     @Override
     public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
         ActionMode actionMode = super.onWindowStartingActionMode(callback);
         Menu menu = actionMode.getMenu();
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        }
+
         MenuInflater inflater = actionMode.getMenuInflater();
         inflater.inflate(R.menu.browser_action_mode, menu);
-
         translatePanelFragment.hide();
 
         menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
