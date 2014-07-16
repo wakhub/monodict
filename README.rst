@@ -39,7 +39,6 @@ Then check `sdk.dir` and `ndk.dir` in your `local.properties`
 TODO
 ==========
 
-- Remove native web search from Browser
 - Lock rotation
 - Eijiro syntax support
 - Font settings
