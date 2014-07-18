@@ -24,6 +24,11 @@
         android:showAsAction="always"
         android:title="A-Z" />
     <item
+        android:id="@+id/action_auto_play"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_play"
+        android:title="Auto Play" />
+    <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="collapseActionView"

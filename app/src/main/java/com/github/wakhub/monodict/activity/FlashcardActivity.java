@@ -252,6 +252,29 @@ public class FlashcardActivity extends ListActivity
         loadContents();
     }
 
+    @OptionsItem(R.id.action_auto_play)
+    void onActionAutoPlay() {
+        Log.d(TAG, "onActionAutoPlay");
+        autoPlay();
+    }
+
+    @Background
+    void autoPlay() {
+        int count = listAdapter.getCount();
+        long interval = 3 * 1000;
+        for (int i = 0; i < count; i++) {
+            Card card = listAdapter.getItem(i);
+            try {
+                speechHelper.speech(card.getDisplay());
+                Thread.sleep(interval);
+                speechHelper.speech(card.getTranslate());
+                Thread.sleep(interval * 2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @OptionsItem(R.id.action_add)
     void onActionAdd() {
         CardEditDialog dialog = new CardEditDialog(this, null);

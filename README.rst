@@ -42,6 +42,7 @@ TODO
 - Lock rotation
 - Eijiro syntax support
 - Font settings
+- Auto reading mode
 
 
 LICENSE
