@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -70,6 +71,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @see com.github.wakhub.monodict.activity.MainActivity_
@@ -212,6 +214,7 @@ public class MainActivity extends Activity implements
 
     @Background
     void search(String text, int timer) {
+        resultAdapter.setHighlightKeyword(text);
         dictionaryServiceConnection.search(text);
     }
 
@@ -276,9 +279,11 @@ public class MainActivity extends Activity implements
             return;
         }
         Intent intent = getIntent();
+        Log.d(TAG, "intent: " + intent);
         if (intent == null) {
             return;
         }
+
         String action = intent.getAction();
         if (action.equals(Intent.ACTION_SEARCH)) {
             Log.d(TAG, "Intent.ACTION_SEARCH: " + SearchManager.QUERY);
@@ -305,6 +310,23 @@ public class MainActivity extends Activity implements
                 Context.BIND_AUTO_CREATE);
 
         dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Uri uriData = intent.getData();
+        if (uriData != null) {
+            Log.d(TAG, "uriData: " + uriData.toString());
+            if (uriData.getScheme().equals("monodict") && uriData.getHost().equals("search")) {
+                List<String> paths = uriData.getPathSegments();
+                if (paths.size() > 0) {
+                    searchView.setQuery(paths.get(0), true);
+                }
+            }
+        }
     }
 
     @Override

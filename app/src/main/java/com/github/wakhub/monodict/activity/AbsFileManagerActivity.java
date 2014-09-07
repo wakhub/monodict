@@ -186,6 +186,15 @@ public abstract class AbsFileManagerActivity extends ListActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (!isRoot()) {
+            goUp();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();

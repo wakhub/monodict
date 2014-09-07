@@ -18,6 +18,8 @@ package com.github.wakhub.monodict.ui;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.ActionMode;
@@ -259,9 +261,29 @@ public class DicItemListView extends ListView {
             View hr;
         }
 
+        private String highlightKeyword = null;
 
         public ResultAdapter(Context context, int resource, int textViewResourceId, ArrayList<Data> objects) {
             super(context, resource, textViewResourceId, objects);
+        }
+
+        public void setHighlightKeyword(String highlightKeyword) {
+            this.highlightKeyword = highlightKeyword;
+        }
+
+        private Spanned getRichTranslateText(Data data) {
+            // http://www.eijiro.jp/e/spec.htm
+            String richText = data.Trans.toString();
+            richText = richText
+                    .trim()
+                    .replace("<", "＜")
+                    .replace(">", "＞")
+                    .replace("\n", "<br />")
+                    .replaceAll("＜(.?)→(.*)＞", "＜→ $2 ＞") // Search "jasper" to check this
+                    .replaceAll("(?i)" + highlightKeyword, "<b>" + highlightKeyword + "</b>")
+                    .trim();
+
+            return Html.fromHtml(richText);
         }
 
         @Override
@@ -344,7 +366,7 @@ public class DicItemListView extends ListView {
                 case Data.WORD:
                     setItem(holder.Index, d.Index, d.IndexFont, 24);
                     setItem(holder.Phone, d.Phone, d.PhoneFont, 0);
-                    setItem(holder.Trans, d.Trans, d.TransFont, 0);
+                    setItem(holder.Trans, getRichTranslateText(d), d.TransFont, 0);
                     setItem(holder.Sample, d.Sample, d.SampleFont, 0);
                     holder.addToFlashcardButton.setVisibility(View.VISIBLE);
                     holder.speechButton.setVisibility(View.VISIBLE);
