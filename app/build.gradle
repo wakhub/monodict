@@ -3,18 +3,29 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.3'
+    buildToolsVersion '19.1.0'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 14
+        targetSdkVersion 19
         versionCode 12
         versionName '1.3.0b'
 
-        testPackageName 'com.github.wakhub.monodict.test'
-        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
-        testHandleProfiling true
-        testFunctionalTest true
+        /*
+        TODO: Enabled tests::
+
+            Error:(14, 0) Build script error, unsupported Gradle DSL method found: 'testApplicationId()'!
+
+            Possible causes could be:
+
+                - you are using Gradle version where the method is absent (<a href="open_gradle_settings">Fix Gradle settings</a>)
+                - you didn't apply Gradle plugin which provides the method (<a href="apply_gradle_plugin">Apply Gradle plugin</a>)
+                - or there is a mistake in a build script (<a href="goto_source">Goto source</a>)
+        */
+//        testApplicationId 'com.github.wakhub.monodict.test'
+//        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+//        testHandleProfiling true
+//        testFunctionalTest true
 
         ndk {
             moduleName 'monodict'
@@ -22,7 +33,11 @@ android {
     }
 
     signingConfigs {
-        release
+        release {
+        }
+        debug {
+
+        }
     }
 
     buildTypes {
@@ -31,6 +46,8 @@ android {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
+        }
+        debug {
         }
     }
 
@@ -56,14 +73,13 @@ dependencies {
     apt 'org.androidannotations:androidannotations:3.0.1'
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3'
-    compile 'com.android.support:appcompat-v7:19.+'
     compile 'org.androidannotations:androidannotations-api:3.0.1'
     compile 'com.google.code.gson:gson:2.2.4@jar'
     compile 'com.j256.ormlite:ormlite-core:4.47@jar'
     compile 'com.j256.ormlite:ormlite-android:4.47@jar'
     compile 'commons-io:commons-io:2.4'
     compile 'com.mobsandgeeks:android-saripaar:1.0.2'
-    compile 'com.android.support:support-v13:19.+'
+    compile 'com.android.support:support-v13:19.0.1'
 }
 
 sourceSets {
@@ -73,21 +89,28 @@ sourceSets {
     }
 }
 
+configurations {
+    apt
+}
+
+// https://github.com/excilys/androidannotations/issues/1052
 android.applicationVariants.all { variant ->
-    aptOutput = file("${project.buildDir}/source/apt/${variant.dirName}")
-    println "****************************"
-    println "variant: ${variant.name}"
-    println "manifest:  ${variant.processResources.manifestFile}"
-    println "aptOutput:  ${aptOutput}"
-    println "****************************"
+
+    def aptOutput = project.file("build/generated/source/apt/${variant.dirName}")
+
+    android.sourceSets[variant.baseName].java.srcDirs += aptOutput.getPath()
 
     variant.javaCompile.doFirst {
-        println "*** compile doFirst ${variant.name}"
         aptOutput.mkdirs()
-        variant.javaCompile.options.compilerArgs += [
-                '-processorpath', configurations.apt.getAsPath(),
-                '-AandroidManifestFile=' + variant.processResources.manifestFile,
-                '-s', aptOutput
-        ]
+    }
+
+    variant.javaCompile.options.compilerArgs += [
+            '-processorpath', configurations.apt.getAsPath(),
+            '-AandroidManifestFile=' + variant.processResources.manifestFile,
+            '-s', aptOutput
+    ]
+
+    variant.javaCompile.source = variant.javaCompile.source.filter { p ->
+        return !p.getPath().startsWith(aptOutput.getPath())
     }
 }
