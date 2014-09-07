@@ -14,6 +14,16 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string-array name="orientations">
+        <item>Auto</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
+    <string-array name="orientation_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="tts_locales">
         <item>English</item>
         <item>Chinese</item>
@@ -21,5 +31,33 @@
         <item>Japanese</item>
         <item>Korean</item>
         <item>Thai</item>
+    </string-array>
+    <string-array name="tts_engines">
+        <item>@string/title_system_default</item>
+        <item>com.github.wakhub.abstts</item>
+        <item>com.google.android.tts</item>
+        <item>com.a_quest.aquestalka</item>
+        <item>com.ivona.tts</item>
+        <item>com.samsung.SMT</item>
+        <item>com.spt.tts.vaja</item>
+        <item>com.svox.classic</item>
+        <item>com.svox.pico</item>
+        <item>jp.co.createsystem</item>
+        <item>jp.co.createsystem.DTalkerTtsDemo</item>
+        <item>jp.kddilabs.n2tts</item>
+    </string-array>
+    <string-array name="tts_engine_labels">
+        <item>@string/title_system_default</item>
+        <item>com.github.wakhub.abstts (Recommended)</item>
+        <item>com.google.android.tts (Recommended)</item>
+        <item>com.a_quest.aquestalka</item>
+        <item>com.ivona.tts</item>
+        <item>com.samsung.SMT</item>
+        <item>com.spt.tts.vaja</item>
+        <item>com.svox.classic</item>
+        <item>com.svox.pico</item>
+        <item>jp.co.createsystem</item>
+        <item>jp.co.createsystem.DTalkerTtsDemo</item>
+        <item>jp.kddilabs.n2tts</item>
     </string-array>
 </resources>

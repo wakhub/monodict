@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/back_button"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_previous"
+                android:src="@drawable/ic_action_bad"
                 android:layout_weight="1" />
 
             <Button
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/forward_button"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_next"
+                android:src="@drawable/ic_action_good"
                 android:layout_weight="1" />
         </TableRow>
 

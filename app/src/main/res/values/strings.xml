@@ -63,6 +63,7 @@
 <string name="title_activity_flashcard">Flashcard</string>
 <string name="title_activity_main">Search</string>
 <string name="title_activity_settings">Settings</string>
+<string name="title_default">Default</string>
 <string name="title_dictionary_dienine">Matsushita-Dien Indonesian-Japanese Dictionary</string>
 <string name="title_dictionary_edict">EDICT Japanese-English Dictionary</string>
 <string name="title_dictionary_eijiro">Eijiro %s</string>
@@ -83,7 +84,11 @@
 <string name="title_settings_search">Search</string>
 <string name="title_settings_tts">Text to Speech</string>
 <string name="title_settings_tts_about">About Text to Speech</string>
+<string name="title_settings_tts_default_engine">Default Engine</string>
+<string name="title_settings_orientation">Orientation</string>
 <string name="title_settings_tts_default_language">Default Language</string>
+<string name="title_settings_tts_language_for_translate">Language for translate</string>
 <string name="title_settings_version">Version</string>
+<string name="title_system_default">System Default</string>
 <string name="title_welcome">Welcome to monodict!</string>
 </resources>

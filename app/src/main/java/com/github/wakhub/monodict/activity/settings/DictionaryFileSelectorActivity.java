@@ -21,6 +21,7 @@ import android.content.Intent;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.AbsFileManagerActivity;
 import com.github.wakhub.monodict.preferences.DictionaryFileSelectorActivityState;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -28,6 +29,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Created by wak on 6/27/14.
@@ -42,6 +44,9 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
 
     private static final String DICTIONARY_EXT = ".dic";
 
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     DictionaryFileSelectorActivityState state;
 
@@ -50,6 +55,7 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
     protected void afterViews() {
         currentFullPath = state.getLastPath();
         super.afterViews();
+        commonActivityTrait.initActivity(preferences);
     }
 
     @OptionsItem(R.id.action_help)

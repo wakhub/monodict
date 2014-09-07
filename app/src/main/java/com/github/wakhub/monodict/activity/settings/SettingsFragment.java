@@ -16,6 +16,7 @@
 package com.github.wakhub.monodict.activity.settings;
 
 import android.content.pm.PackageInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -47,7 +48,10 @@ public class SettingsFragment extends PreferenceFragment {
 
     private static final String PREFERENCES_NAME = "Preferences";
     private static final String KEY_DICTIONARY_MANAGER = "dictionaryManager";
+    private static final String KEY_ORIENTATION = "orientation";
     private static final String KEY_TTS_DEFAULT_LOCALE = "ttsDefaultLocale";
+    private static final String KEY_TTS_DEFAULT_ENGINE = "ttsDefaultEngine";
+    private static final String KEY_TTS_LANGUAGE_FOR_TRANSLATE = "ttsLanguageForTranslate";
     private static final String KEY_TTS_ABOUT = "ttsAbout";
     private static final String KEY_ABOUT = "about";
     private static final String KEY_LEGAL = "legal";
@@ -81,13 +85,62 @@ public class SettingsFragment extends PreferenceFragment {
         reload();
     }
 
+    private String getOrientationLabel(String value) {
+        Resources resources = getResources();
+        String[] orientationValues = resources.getStringArray(R.array.orientation_values);
+        String[] orientationLabels = resources.getStringArray(R.array.orientations);
+
+        for (int i = 0; i < orientationValues.length; i++) {
+            if (orientationValues[i].equals(value)) {
+                return orientationLabels[i];
+            }
+        }
+        return "";
+    }
+
     public void reload() {
         dictionaries.reload();
 
         Preference prefItem;
 
+        prefItem = findPreference(KEY_ORIENTATION);
+        prefItem.setSummary(getOrientationLabel(preferences.orientation().get()));
+        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                preference.setSummary(getOrientationLabel((String) o));
+                ((SettingsActivity) getActivity()).setOrientation((String)o);
+                return true;
+            }
+        });
+
         prefItem = findPreference(KEY_TTS_DEFAULT_LOCALE);
         prefItem.setSummary(preferences.ttsDefaultLocale().get());
+        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                preference.setSummary((String) o);
+                return true;
+            }
+
+        });
+
+        prefItem = findPreference(KEY_TTS_LANGUAGE_FOR_TRANSLATE);
+        prefItem.setSummary(preferences.ttsLanguageForTranslate().get());
+        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                preference.setSummary((String) o);
+                return true;
+            }
+        });
+
+        prefItem = findPreference(KEY_TTS_DEFAULT_ENGINE);
+        String ttsDefaultEngine = preferences.ttsDefaultEngine().get();
+        if (ttsDefaultEngine.isEmpty()) {
+            ttsDefaultEngine = getResources().getString(R.string.title_system_default);
+        }
+        prefItem.setSummary(ttsDefaultEngine);
         prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {

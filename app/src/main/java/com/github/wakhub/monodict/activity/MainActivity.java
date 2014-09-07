@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements
 
         setTitle(String.format("%s %s", resources.getString(R.string.app_name), app.getPackageInfo().versionName));
 
-        commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
 
         dicItemListView.setCallback(this);
         resultData = new ArrayList<DicItemListView.Data>();
@@ -311,6 +311,7 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+        commonActivityTrait.setOrientation(preferences.orientation().get());
 
         nav.requestLayout();
     }
@@ -325,6 +326,7 @@ public class MainActivity extends Activity implements
     protected void onStop() {
         Log.d(TAG, "onStop");
         super.onStop();
+        speechHelper.finish();
 
         queryInitialized = false;
         unbindService(dictionaryServiceConnection);
@@ -332,7 +334,6 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onDestroy() {
-        speechHelper.finish();
         super.onDestroy();
     }
 
@@ -397,11 +398,9 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
-            if (requestCode == requestCodeInitTtsEngine) {
-                speechHelper.onActivityResult(requestCode, resultCode, data);
-                return;
-            }
+        if (requestCode == SpeechHelper.REQUEST_CODE_TTS) {
+            speechHelper.onActivityResult(requestCode, resultCode, data);
+            return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

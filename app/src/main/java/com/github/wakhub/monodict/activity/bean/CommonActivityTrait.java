@@ -17,9 +17,13 @@ package com.github.wakhub.monodict.activity.bean;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.github.wakhub.monodict.activity.MainActivity;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
@@ -30,6 +34,8 @@ import org.androidannotations.annotations.RootContext;
 @EBean
 public class CommonActivityTrait {
 
+    private static final String TAG = CommonActivityTrait.class.getSimpleName();
+
     //private static final int REQUEST_CODE = 20000;
 
     @RootContext
@@ -37,7 +43,9 @@ public class CommonActivityTrait {
 
     private boolean isGoingBack = false;
 
-    public void initActivity() {
+    public void initActivity(Preferences_ preferences) {
+        setOrientation(preferences.orientation().get());
+
         if (activity instanceof MainActivity) {
             return;
         }
@@ -46,6 +54,28 @@ public class CommonActivityTrait {
             return;
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+
+    public void setOrientation(String orientation) {
+        setOrientation(Integer.valueOf(orientation));
+    }
+
+    // http://stackoverflow.com/questions/13171132/disable-the-orientation-change
+    public void setOrientation(int orientation) {
+        Log.d(TAG, "setOrientation: " + orientation);
+        switch (orientation) {
+            case Configuration.ORIENTATION_UNDEFINED:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+        }
+        activity.getResources().getConfiguration().orientation = orientation;
     }
 
     public boolean onMenuItemSelected(int featureId, MenuItem item) {

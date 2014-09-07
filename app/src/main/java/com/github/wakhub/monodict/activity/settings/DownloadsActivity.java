@@ -39,6 +39,7 @@ import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.json.Downloads;
 import com.github.wakhub.monodict.json.DownloadsItem;
 import com.github.wakhub.monodict.preferences.Dictionary;
+import com.github.wakhub.monodict.preferences.Preferences_;
 import com.google.gson.Gson;
 
 import org.androidannotations.annotations.AfterViews;
@@ -51,6 +52,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -81,6 +83,9 @@ public class DownloadsActivity extends ListActivity {
 
     private static final int REQUEST_CODE_DOWNLOAD = 10120;
 
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     CommonActivityTrait commonActivityTrait;
 
@@ -108,7 +113,7 @@ public class DownloadsActivity extends ListActivity {
 
     @AfterViews
     void afterViews() {
-        commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         sdCard = Environment.getExternalStorageDirectory();

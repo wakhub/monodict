@@ -46,6 +46,8 @@ public class DirectorySelectorActivity extends AbsFileManagerActivity {
     protected void afterViews() {
         currentFullPath = state.getLastPath();
         super.afterViews();
+
+        commonActivityTrait.initActivity(preferences);
     }
 
     @Override

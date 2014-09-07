@@ -29,6 +29,7 @@ import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.db.Bookmark;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Background;
@@ -38,6 +39,7 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ItemLongClick;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -50,6 +52,9 @@ public class BrowserBookmarksActivity extends ListActivity {
     //private static final int REQUEST_CODE = 10030;
 
     public static final String EXTRA_URL = "url";
+
+    @Pref
+    Preferences_ preferences;
 
     @Bean
     CommonActivityTrait commonActivityTrait;
@@ -64,7 +69,7 @@ public class BrowserBookmarksActivity extends ListActivity {
 
     @AfterInject
     void afterInject() {
-        commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
         listAdapter = new ArrayAdapter<Bookmark>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {

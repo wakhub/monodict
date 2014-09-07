@@ -14,20 +14,25 @@
 package com.github.wakhub.monodict.activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
@@ -37,6 +42,7 @@ import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
+import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.ui.CardContextDialogBuilder;
 import com.github.wakhub.monodict.ui.CardDialog;
 import com.github.wakhub.monodict.ui.CardEditDialog;
@@ -54,7 +60,9 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +75,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -87,6 +96,12 @@ public class FlashcardActivity extends ListActivity
 
     private static final String JSON_KEY_CARDS = "cards";
 
+    @SystemService
+    PowerManager powerManager;
+
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     CommonActivityTrait commonActivityTrait;
 
@@ -102,6 +117,13 @@ public class FlashcardActivity extends ListActivity
     @Bean
     FlashcardActivityState state;
 
+    private boolean isAutoPlayRunning = false;
+    private boolean requestStopAutoPlay = false;
+
+    private AlertDialog autoPlayDialog = null;
+    private TextView autoPlayTranslateText = null;
+    private TextView autoPlayDisplayText = null;
+
     // TODO: Change to CursorAdapter
     private ArrayAdapter<Card> listAdapter = null;
 
@@ -110,6 +132,7 @@ public class FlashcardActivity extends ListActivity
     @AfterViews
     void afterViews() {
         Log.d(TAG, "state: " + state.toString());
+        commonActivityTrait.initActivity(preferences);
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -258,20 +281,112 @@ public class FlashcardActivity extends ListActivity
         autoPlay();
     }
 
+    @UiThread
+    void showAutoPlayAlertDialog() {
+        if (autoPlayDialog != null) {
+            return;
+        }
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setPadding(20, 20, 20, 20);
+        autoPlayDisplayText = new TextView(this);
+        autoPlayDisplayText.setTypeface(Typeface.DEFAULT_BOLD);
+        layout.addView(autoPlayDisplayText);
+        autoPlayTranslateText = new TextView(this);
+        autoPlayTranslateText.setText(R.string.message_in_processing);
+        layout.addView(autoPlayTranslateText);
+
+        // TODO: strings.xml
+        autoPlayDialog = new AlertDialog.Builder(this)
+                .setTitle("Auto Play")
+                .setIcon(R.drawable.ic_action_play)
+                .setView(layout)
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        autoPlayDisplayText = null;
+                        autoPlayTranslateText = null;
+                        stopAutoPlay();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .show();
+    }
+
+    @UiThread
+    void setAutoPlayCard(int position, Card card) {
+        activityHelper.setListPosition(position);
+        if (autoPlayDialog == null || autoPlayDisplayText == null || autoPlayTranslateText == null) {
+            return;
+        }
+        autoPlayDialog.setTitle(String.format("Auto Play: %d/%d", position + 1, listAdapter.getCount()));
+        autoPlayDisplayText.setText(card.getDisplay());
+        autoPlayTranslateText.setText(card.getTranslate());
+    }
+
     @Background
     void autoPlay() {
-        int count = listAdapter.getCount();
-        long interval = 3 * 1000;
-        for (int i = 0; i < count; i++) {
+        isAutoPlayRunning = true;
+        speechHelper.init();
+
+        showAutoPlayAlertDialog();
+
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        wakeLock.acquire();
+
+        String languageForTranslate = preferences.ttsLanguageForTranslate().get();
+        Locale localeForTranslate = new Locale(languageForTranslate.substring(0, 2));
+
+        long interval = 4 * 1000;
+        try {
+            Thread.sleep(interval);
+        } catch (InterruptedException e) {
+            activityHelper.showError(e);
+        }
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
             Card card = listAdapter.getItem(i);
+            if (requestStopAutoPlay) {
+                requestStopAutoPlay = false;
+                break;
+            }
+            setAutoPlayCard(i, card);
             try {
                 speechHelper.speech(card.getDisplay());
                 Thread.sleep(interval);
-                speechHelper.speech(card.getTranslate());
+
+                String shortTranslate = card.getTranslate().substring(0, Math.min(30, card.getTranslate().length())).replace("\n", " ");
+                speechHelper.speech(shortTranslate, localeForTranslate, null);
                 Thread.sleep(interval * 2);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                activityHelper.showError(e);
             }
+        }
+
+        wakeLock.release();
+        stopAutoPlay();
+        isAutoPlayRunning = false;
+        requestStopAutoPlay = false;
+    }
+
+    void stopAutoPlay() {
+        Log.d(TAG, "stopAutoPlay");
+        if (isAutoPlayRunning) {
+            requestStopAutoPlay = true;
+        }
+        speechHelper.finish();
+        if (autoPlayDialog != null) {
+            autoPlayDialog.dismiss();
+            autoPlayDialog = null;
         }
     }
 
@@ -422,17 +537,16 @@ public class FlashcardActivity extends ListActivity
 
     @Override
     protected void onDestroy() {
+        stopAutoPlay();
         speechHelper.finish();
         super.onDestroy();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
-            if (requestCode == requestCodeInitTtsEngine) {
-                speechHelper.onActivityResult(requestCode, resultCode, data);
-                return;
-            }
+        if (requestCode == SpeechHelper.REQUEST_CODE_TTS) {
+            speechHelper.onActivityResult(requestCode, resultCode, data);
+            return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -450,6 +564,7 @@ public class FlashcardActivity extends ListActivity
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         Integer index = (Integer) tab.getTag();
         if (isTabInitialized || (index == 0 && state.getBox() == 1)) {
+            stopAutoPlay();
             state.setBox(index + 1);
             loadContents();
         }
@@ -474,7 +589,7 @@ public class FlashcardActivity extends ListActivity
     @Override
     public boolean onCardDialogClickBackButton(Card card) {
         if (state.getBox() - 1 < 1) {
-            return false;
+            return true;
         }
         try {
             card.setBox(state.getBox() - 1);

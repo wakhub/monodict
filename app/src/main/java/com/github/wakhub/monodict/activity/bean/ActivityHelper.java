@@ -17,6 +17,7 @@ package com.github.wakhub.monodict.activity.bean;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
@@ -265,5 +266,10 @@ public class ActivityHelper {
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    @UiThread
+    public void setListPosition(int position) {
+        ((ListActivity) activity).getListView().setSelection(position);
     }
 }

@@ -43,38 +43,62 @@ public interface Preferences {
     @DefaultBoolean(false)
     boolean fastScroll();
 
+    // Configuration.ORIENTATION_xxx
+    @DefaultString("0")
+    String orientation();
+
     @DefaultString("English")
     String ttsDefaultLocale();
 
-    /** @see com.github.wakhub.monodict.preferences.Dictionaries */
+    @DefaultString("Japanese")
+    String ttsLanguageForTranslate();
+
+    @DefaultString("")
+    String ttsDefaultEngine();
+
+    /**
+     * @see com.github.wakhub.monodict.preferences.Dictionaries
+     */
     @DefaultString("{\"dictionaries\": []}")
     String dictionaries();
 
-   // Settings }
+    // Settings }
 
-   // { Activity state
+    // { Activity state
 
-    /** @see com.github.wakhub.monodict.preferences.MainActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.MainActivityState
+     */
     @DefaultString("{}")
     String mainActivityState();
 
-    /** @see com.github.wakhub.monodict.preferences.FlashcardActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.FlashcardActivityState
+     */
     @DefaultString("{}")
     String flashcardActivityState();
 
-    /** @see com.github.wakhub.monodict.preferences.BrowserActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.BrowserActivityState
+     */
     @DefaultString("{}")
     String browserActivityState();
 
-    /** @see com.github.wakhub.monodict.preferences.DirectorySelectorActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.DirectorySelectorActivityState
+     */
     @DefaultString("{}")
     String directorySelectorActivityState();
 
-    /** @see com.github.wakhub.monodict.preferences.FileSelectorActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.FileSelectorActivityState
+     */
     @DefaultString("{}")
     String fileSelectorActivityState();
 
-    /** @see com.github.wakhub.monodict.preferences.DictionaryFileSelectorActivityState */
+    /**
+     * @see com.github.wakhub.monodict.preferences.DictionaryFileSelectorActivityState
+     */
     @DefaultString("{}")
     String dictionaryFileSelectorActivityState();
 

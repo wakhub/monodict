@@ -22,10 +22,12 @@ import android.view.MenuItem;
 
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Created by wak on 6/8/14.
@@ -42,6 +44,9 @@ public class SettingsActivity extends Activity {
     @Extra
     boolean extraOpenDownloads = false;
 
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     CommonActivityTrait commonActivityTrait;
 
@@ -56,12 +61,16 @@ public class SettingsActivity extends Activity {
         settingsFragment = new SettingsFragment_();
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, settingsFragment).commit();
-                commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
 
         if (extraOpenDownloads) {
             Log.d(TAG, "EXTRA: openDownloads");
             DictionaryManagerActivity_.intent(this).extraOpenDownloads(true).start();
         }
+    }
+
+    void setOrientation(String orientation) {
+        commonActivityTrait.setOrientation(orientation);
     }
 
     @Override

@@ -39,10 +39,8 @@ Then check `sdk.dir` and `ndk.dir` in your `local.properties`
 TODO
 ==========
 
-- Lock rotation
 - Eijiro syntax support
 - Font settings
-- Auto reading mode
 
 
 LICENSE

@@ -37,6 +37,7 @@ import com.github.wakhub.monodict.dice.IdicInfo;
 import com.github.wakhub.monodict.dice.Idice;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Dictionary;
+import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.ui.DictionaryContextDialogBuilder;
 
 import org.androidannotations.annotations.AfterViews;
@@ -49,6 +50,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,6 +68,9 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
     @Extra
     boolean extraOpenDownloads = false;
 
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     CommonActivityTrait commonActivityTrait;
 
@@ -81,7 +86,7 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
 
     @AfterViews
     void afterViews() {
-        commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
 
         dice = DiceFactory.getInstance();
 

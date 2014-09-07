@@ -35,9 +35,9 @@ DPI = {'xhdpi': 2,
        'xxhdpi': 3,
        'xxxhdpi': 4}
 ACTION_ICON_NAMES = ['ic_action_{}.png'.format(i) for i in
-                     ['about', 'accept', 'add_to_queue', 'cancel', 'collection',
+                     ['about', 'accept', 'add_to_queue', 'bad', 'cancel', 'collection',
                       'discard', 'download', 'edit', 'expand', 'favorite', 'forward',
-                      'help', 'new', 'next', 'next_item', 'overflow',
+                      'good', 'help', 'new', 'next', 'next_item', 'overflow',
                       'pause', 'play', 'previous', 'previous_item',
                       'refresh', 'remove',
                       'search', 'shuffle', 'sort_by_size',
@@ -245,7 +245,6 @@ def _sort_string_xml(xml_path):
 
 def _cleanup_inkscape_svg(svg_path):
     print('Cleaning inkscape svg...')
-    inkscape_ns = 'http://www.inkscape.org/namespaces/inkscape'
     ns_dict = {'osb': 'http://www.openswatchbook.org/uri/2009/osb',
                'dc': 'http://purl.org/dc/elements/1.1/',
                'cc': 'http://creativecommons.org/ns#',
@@ -253,13 +252,13 @@ def _cleanup_inkscape_svg(svg_path):
                'svg': 'http://www.w3.org/2000/svg',
                'xlink': 'http://www.w3.org/1999/xlink',
                'sodipodi': 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
-               'inkscape': inkscape_ns}
+               'inkscape': 'http://www.inkscape.org/namespaces/inkscape'}
     for key in ns_dict:
         xml.etree.ElementTree.register_namespace(key, ns_dict[key])
 
     tree = ElementTree()
     svg = tree.parse(svg_path)
-    filename_attr = '{%s}export-filename' % inkscape_ns
+    filename_attr = '{%s}export-filename' % ns_dict['inkscape']
     for g in svg.findall('{%s}g' % ns_dict['svg']):
         for element in g.findall('*'):
             if filename_attr in element.attrib:

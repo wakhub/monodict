@@ -45,6 +45,7 @@ import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Bookmark;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.BrowserActivityState;
+import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicItemListView;
@@ -62,6 +63,7 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,6 +103,9 @@ public class BrowserActivity extends Activity
     @OptionsMenuItem
     MenuItem actionForward;
 
+    @Pref
+    Preferences_ preferences;
+
     @Bean
     CommonActivityTrait commonActivityTrait;
 
@@ -122,7 +127,7 @@ public class BrowserActivity extends Activity
     void afterViews() {
         Log.d(TAG, "state: " + state.toString());
 
-        commonActivityTrait.initActivity();
+        commonActivityTrait.initActivity(preferences);
 
         urlText.setSelectAllOnFocus(true);
         urlText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -327,11 +332,9 @@ public class BrowserActivity extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        for (int requestCodeInitTtsEngine : SpeechHelper.REQUEST_CODE_LIST_OF_INIT_ENGINE) {
-            if (requestCode == requestCodeInitTtsEngine) {
-                speechHelper.onActivityResult(requestCode, resultCode, data);
-                return;
-            }
+        if (requestCode == SpeechHelper.REQUEST_CODE_TTS) {
+            speechHelper.onActivityResult(requestCode, resultCode, data);
+            return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -42,7 +42,7 @@
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:divider="@drawable/abc_list_divider_holo_light"
+            android:divider="@color/black"
             android:showDividers="middle">
 
            <ImageButton

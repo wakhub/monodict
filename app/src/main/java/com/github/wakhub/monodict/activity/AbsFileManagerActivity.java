@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -32,6 +33,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,6 +55,9 @@ public abstract class AbsFileManagerActivity extends ListActivity {
     @ViewById
     protected TextView pathText;
 
+    @Pref
+    protected Preferences_ preferences;
+
     @Bean
     protected CommonActivityTrait commonActivityTrait;
 
@@ -67,7 +72,6 @@ public abstract class AbsFileManagerActivity extends ListActivity {
 
     @AfterViews
     protected void afterViews() {
-        commonActivityTrait.initActivity();
         if (currentFullPath == null || currentFullPath.isEmpty()) {
             currentFullPath = "/";
         }
@@ -179,15 +183,6 @@ public abstract class AbsFileManagerActivity extends ListActivity {
         pathText.setText(currentFullPath);
         listAdapter.clear();
         listAdapter.addAll(items);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!isRoot()) {
-            goUp();
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override
