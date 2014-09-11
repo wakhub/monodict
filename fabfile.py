@@ -172,6 +172,7 @@ def diff_strings(matches_only=False):
 
 @task
 def clean():
+    local('{}/gradlew clean packageDebug'.format(ROOT_DIR))
     local('rm -rf {}'.format(os.path.join(ROOT_DIR, 'androidapp-androidapp/build/*')))
     _clean_garbages()
     _clean_gradle_caches()

@@ -1,5 +1,49 @@
-apply plugin: 'android'
+// https://github.com/excilys/androidannotations/wiki/Building-Project-Gradle
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // http://stackoverflow.com/questions/24088275/android-studio-after-updating-to-build-tools-19-1-0
+        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+//        classpath 'com.squareup.gradle:gradle-android-test-plugin:0.9.+'
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+
+apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    apt 'org.androidannotations:androidannotations:3.0.1'
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3'
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
+    compile 'com.google.code.gson:gson:2.2.4@jar'
+    compile 'com.j256.ormlite:ormlite-core:4.47@jar'
+    compile 'com.j256.ormlite:ormlite-android:4.47@jar'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.mobsandgeeks:android-saripaar:1.0.2'
+    compile 'com.android.support:support-v13:19.0.1'
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.processResources.manifestFile
+
+        resourcePackageName 'com.github.wakhub.monodict'
+    }
+}
 
 android {
     compileSdkVersion 19
@@ -35,9 +79,6 @@ android {
     signingConfigs {
         release {
         }
-        debug {
-
-        }
     }
 
     buildTypes {
@@ -47,13 +88,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
         }
-        debug {
+    }
+    /*
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['res']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
         }
+    }
+    */
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
     }
 
     lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
+        //checkReleaseBuilds false
+        //abortOnError false
     }
 }
 
@@ -68,32 +126,23 @@ if (signingPropertiesFile.exists()) {
     android.signingConfigs.release.keyPassword = props.keyPassword
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    apt 'org.androidannotations:androidannotations:3.0.1'
-
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3'
-    compile 'org.androidannotations:androidannotations-api:3.0.1'
-    compile 'com.google.code.gson:gson:2.2.4@jar'
-    compile 'com.j256.ormlite:ormlite-core:4.47@jar'
-    compile 'com.j256.ormlite:ormlite-android:4.47@jar'
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.mobsandgeeks:android-saripaar:1.0.2'
-    compile 'com.android.support:support-v13:19.0.1'
-}
-
+/*
 sourceSets {
     testLocal {
         java.srcDir file('src/androidTest/java')
         resources.srcDir file('src/androidTest/resources')
     }
 }
+*/
 
+/*
 configurations {
     apt
 }
+*/
 
 // https://github.com/excilys/androidannotations/issues/1052
+/*
 android.applicationVariants.all { variant ->
 
     def aptOutput = project.file("build/generated/source/apt/${variant.dirName}")
@@ -114,3 +163,4 @@ android.applicationVariants.all { variant ->
         return !p.getPath().startsWith(aptOutput.getPath())
     }
 }
+*/
