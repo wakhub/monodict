@@ -21,11 +21,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
-import com.github.wakhub.monodict.preferences.Preferences_;
-
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EApplication;
-import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.Locale;
 
@@ -36,9 +33,6 @@ import java.util.Locale;
 public class MonodictApp extends Application {
 
     private static final String TAG = MonodictApp.class.getSimpleName();
-
-    @Pref
-    Preferences_ preferences;
 
     @AfterInject
     void afterInject() {
@@ -52,16 +46,6 @@ public class MonodictApp extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
-    }
-
-    public boolean isVersionUp() {
-        PackageInfo packageInfo = getPackageInfo();
-        int lastVersionCode = preferences.lastVersionCode().get();
-        if (packageInfo.versionCode == lastVersionCode) {
-            return false;
-        }
-        preferences.edit().lastVersionCode().put(packageInfo.versionCode).apply();
-        return true;
     }
 
     private void setLocale(Locale locale) {

@@ -40,8 +40,7 @@
 <string name="message_in_processing">処理を行っています…</string>
 <string name="message_item_added">%s を追加しました</string>
 <string name="message_item_added_to">%2$s に %1$s を追加しました</string>
-<string name="message_item_already_registered_and_confirm">%1$s は既に BOX%2$d に登録されています。INBOX に移動しますか?</string>
-<string name="message_item_already_registered_in_inbox">%s は既に INBOX に登録されています</string>
+<string name="message_item_already_registered_and_confirm">%1$s は既に %2$s に登録されています。内容を上書きして INBOX に移動しますか?</string>
 <string name="message_item_is_not_supported">%s はシステムでサポートされていません</string>
 <string name="message_item_loading_failed">%s の読み込みに失敗しました</string>
 <string name="message_item_removed">%s を削除しました</string>

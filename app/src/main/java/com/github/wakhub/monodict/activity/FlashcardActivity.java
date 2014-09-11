@@ -686,9 +686,9 @@ public class FlashcardActivity extends ListActivity
             activityHelper.showToast(R.string.message_modified);
         } else {
             try {
-                Card duplicated = databaseHelper.getCardByDisplay(card.getDisplay());
-                if (duplicated != null) {
-                    activityHelper.onDuplicatedCardFound(duplicated);
+                Card duplicate = databaseHelper.getCardByDisplay(card.getDisplay());
+                if (duplicate != null) {
+                    activityHelper.onDuplicatedCardFound(duplicate, card.getDisplay(), card.getDictionary());
                     return;
                 }
                 databaseHelper.createCard(card);

@@ -40,8 +40,7 @@
 <string name="message_in_processing">In Processing…</string>
 <string name="message_item_added">%s has been added</string>
 <string name="message_item_added_to">%1$s has been added to %2$s</string>
-<string name="message_item_already_registered_and_confirm">%1$s is already registered in BOX%2$d. Do you want to move the card into INBOX?</string>
-<string name="message_item_already_registered_in_inbox">%s is already registered in INBOX.</string>
+<string name="message_item_already_registered_and_confirm">%1$s is already registered in %2$s. Do you want to override the content and move the card into INBOX?</string>
 <string name="message_item_is_not_supported">%s is not supported by the system</string>
 <string name="message_item_loading_failed">Could not load %s</string>
 <string name="message_item_removed">%s has been removed</string>

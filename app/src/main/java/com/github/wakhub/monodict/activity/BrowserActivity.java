@@ -45,6 +45,7 @@ import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.db.Bookmark;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.BrowserActivityState;
+import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
@@ -120,6 +121,9 @@ public class BrowserActivity extends Activity
 
     @Bean
     SpeechHelper speechHelper;
+
+    @Bean
+    Dictionaries dictionaries;
 
     private DictionaryServiceConnection dictionaryServiceConnection;
 
@@ -423,9 +427,11 @@ public class BrowserActivity extends Activity
     public void onClickTranslatePanelAddToFlashcardButton(DicItemListView.Data data) {
         Card card;
         try {
-            final Card duplicated = databaseHelper.getCardByDisplay(data.Index.toString());
-            if (duplicated != null) {
-                activityHelper.onDuplicatedCardFound(duplicated);
+            final Card duplicate = databaseHelper.getCardByDisplay(data.Index.toString());
+            if (duplicate != null) {
+                activityHelper.onDuplicatedCardFound(duplicate,
+                        data.Trans.toString(),
+                        dictionaries.getDictionary(data.getDic()).getName());
                 return;
             }
             card = databaseHelper.createCard(data);

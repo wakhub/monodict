@@ -38,11 +38,15 @@ import android.widget.Toast;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.MainActivity_;
 import com.github.wakhub.monodict.db.Card;
+import com.github.wakhub.monodict.preferences.Dictionaries;
+import com.github.wakhub.monodict.preferences.Preferences_;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.res.DimensionRes;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -65,6 +69,12 @@ public class ActivityHelper {
 
     @DimensionRes
     float spaceWell;
+
+    @Pref
+    Preferences_ preferences;
+
+    @Bean
+    Dictionaries dictionaries;
 
     private ProgressDialog progressDialog = null;
 
@@ -149,31 +159,34 @@ public class ActivityHelper {
         return new AlertDialog.Builder(activity).setView(scrollView).setPositiveButton(android.R.string.ok, null);
     }
 
-    public void onDuplicatedCardFound(final Card card) {
-        int box = card.getBox();
+    public void onDuplicatedCardFound(final Card duplicateCard, final String newTranslate, final String newDictionary) {
+        int box = duplicateCard.getBox();
         Resources resources = activity.getResources();
+        String boxName = String.format("BOX%d", box);
         if (box <= 1) {
-            showToast(resources.getString(R.string.message_item_already_registered_in_inbox, card.getDisplay()));
-            return;
+            boxName = "INBOX";
         }
 
         String message = resources.getString(
                 R.string.message_item_already_registered_and_confirm,
-                card.getDisplay(),
-                box);
+                duplicateCard.getDisplay(),
+                boxName);
         final DatabaseHelper databaseHelper = DatabaseHelper_.getInstance_(activity);
+
         buildConfirmDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                card.setBox(1);
+                duplicateCard.setBox(1);
+                duplicateCard.setTranslate(newTranslate);
+                duplicateCard.setDictionary(newDictionary);
                 try {
-                    databaseHelper.updateCard(card);
+                    databaseHelper.updateCard(duplicateCard);
                     showToast(R.string.message_modified);
                 } catch (SQLException e) {
                     showError(e);
                 }
             }
-        }).setTitle(card.getDisplay().toString()).setMessage(message).show();
+        }).setTitle(duplicateCard.getDisplay().toString()).setMessage(message).show();
     }
 
     /**

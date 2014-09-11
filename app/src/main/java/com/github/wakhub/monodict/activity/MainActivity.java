@@ -46,6 +46,7 @@ import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.dice.DiceFactory;
+import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.MainActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.search.DictionaryService;
@@ -122,6 +123,9 @@ public class MainActivity extends Activity implements
 
     @Bean
     SpeechHelper speechHelper;
+
+    @Bean
+    Dictionaries dictionaries;
 
     @DimensionRes
     float spaceRelax;
@@ -458,9 +462,11 @@ public class MainActivity extends Activity implements
     void addFlashcard(DicItemListView.Data data) {
         Card card;
         try {
-            Card duplicated = databaseHelper.getCardByDisplay(data.Index.toString());
-            if (duplicated != null) {
-                activityHelper.onDuplicatedCardFound(duplicated);
+            Card duplicate = databaseHelper.getCardByDisplay(data.Index.toString());
+            if (duplicate != null) {
+                activityHelper.onDuplicatedCardFound(duplicate,
+                        data.Trans.toString(),
+                        dictionaries.getDictionary(data.getDic()).getName());
                 return;
             }
             card = databaseHelper.createCard(data);
@@ -516,7 +522,10 @@ public class MainActivity extends Activity implements
     @UiThread
     public void onDictionaryServiceInitialized() {
         activityHelper.hideProgressDialog();
-        if (app.isVersionUp()) {
+        int lastVersionCode = preferences.lastVersionCode().getOr(0);
+        int currentVersionCode = app.getPackageInfo().versionCode;
+        if (currentVersionCode > lastVersionCode) {
+            preferences.lastVersionCode().put(currentVersionCode);
             removeDirectory(getCacheDir());
 
             new AlertDialog.Builder(MainActivity.this)
