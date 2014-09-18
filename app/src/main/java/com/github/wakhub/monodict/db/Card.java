@@ -15,6 +15,7 @@
  */
 package com.github.wakhub.monodict.db;
 
+import android.database.Cursor;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
@@ -26,6 +27,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,6 +88,16 @@ public class Card extends Model {
         this.translate = translate;
         this.dictionary = dictionary;
         this.box = 1;
+    }
+
+    public Card(Cursor cursor) {
+        id = cursor.getLong(cursor.getColumnIndex(Column.ID));
+        createdAt = new Date(cursor.getInt(cursor.getColumnIndex(Column.CREATED_AT)));
+        updatedAt = new Date(cursor.getInt(cursor.getColumnIndex(Column.UPDATED_AT)));
+        display = cursor.getString(cursor.getColumnIndex(Column.DISPLAY));
+        translate = cursor.getString(cursor.getColumnIndex(Column.TRANSLATE));
+        dictionary = cursor.getString(cursor.getColumnIndex(Column.DICTIONARY));
+        box = cursor.getInt(cursor.getColumnIndex(Column.BOX));
     }
 
     public Card(JsonObject jsonObject) {

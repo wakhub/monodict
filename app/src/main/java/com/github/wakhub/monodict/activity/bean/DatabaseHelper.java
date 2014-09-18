@@ -17,6 +17,7 @@
 package com.github.wakhub.monodict.activity.bean;
 
 import android.app.Activity;
+import android.database.Cursor;
 
 import com.github.wakhub.monodict.db.Bookmark;
 import com.github.wakhub.monodict.db.Card;
@@ -25,6 +26,8 @@ import com.github.wakhub.monodict.db.Model;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.ui.DicItemListView;
+import com.j256.ormlite.android.AndroidDatabaseResults;
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -104,22 +107,28 @@ public class DatabaseHelper {
         return queryBuilder.queryForFirst();
     }
 
-    public List<Card> findAllCards() throws SQLException {
-        return cardDao.queryForAll();
+    public Cursor findAllCards() throws SQLException {
+        return getCursor(cardDao.queryBuilder());
     }
 
-    public List<Card> findCardInBoxAlphabetically(int box) throws SQLException {
+    private Cursor getCursor(QueryBuilder<Card, Long> queryBuilder) throws SQLException {
+        CloseableIterator<Card> iterator = cardDao.iterator(queryBuilder.prepare());
+        AndroidDatabaseResults results = (AndroidDatabaseResults) iterator.getRawResults();
+        return results.getRawCursor();
+    }
+
+    public Cursor findCardInBoxAlphabetically(int box) throws SQLException {
         QueryBuilder<Card, Long> queryBuilder = cardDao.queryBuilder();
         queryBuilder.where().eq(Card.Column.BOX, box);
         queryBuilder.orderBy(Card.Column.DISPLAY, true);
-        return queryBuilder.query();
+        return getCursor(queryBuilder);
     }
 
-    public List<Card> findCardInBoxRandomly(int box, int randomSeed) throws SQLException {
+    public Cursor findCardInBoxRandomly(int box, int randomSeed) throws SQLException {
         QueryBuilder<Card, Long> queryBuilder = cardDao.queryBuilder();
         queryBuilder.where().eq(Card.Column.BOX, box);
         queryBuilder.orderByRaw(Model.getRandomOrderSql(randomSeed));
-        return queryBuilder.query();
+        return getCursor(queryBuilder);
     }
 
     public void deleteCard(Card card) throws SQLException {

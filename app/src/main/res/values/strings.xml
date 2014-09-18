@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="action_auto_play">Auto Play</string>
 <string name="action_add_dictionary">Add dictionary</string>
 <string name="action_add_new_card">Add new card</string>
 <string name="action_add_to_bookmarks">Add to Bookmarks</string>

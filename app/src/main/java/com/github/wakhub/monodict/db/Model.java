@@ -74,13 +74,13 @@ public abstract class Model {
     }
 
     @DatabaseField(generatedId = true, columnName = Column.ID)
-    private Long id;
+    protected Long id;
 
     @DatabaseField(canBeNull = false)
-    private Date createdAt;
+    protected Date createdAt;
 
     @DatabaseField(canBeNull = false)
-    private Date updatedAt;
+    protected Date updatedAt;
 
     public Model() {
         init();
