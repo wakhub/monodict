@@ -278,9 +278,9 @@ public class DicItemListView extends ListView {
                     .trim()
                     .replace("<", "＜")
                     .replace(">", "＞")
-                    .replace("\n", "<br />")
                     .replaceAll("＜(.?)→(.*)＞", "＜→ $2 ＞") // Search "jasper" to check this
                     .replaceAll("(?i)" + highlightKeyword, "<b>" + highlightKeyword + "</b>")
+                    .replace("\n", "<br />")
                     .trim();
 
             return Html.fromHtml(richText);

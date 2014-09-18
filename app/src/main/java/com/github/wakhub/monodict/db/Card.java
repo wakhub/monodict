@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,17 +67,6 @@ public class Card extends Model {
     @DatabaseField
     private String tags = "";
 
-    public static String getStringFromJson(JsonObject jsonObject, String key) {
-        if (jsonObject.get(key) == null) {
-            return "";
-        }
-        String itemString = jsonObject.get(key).getAsString();
-        if (itemString == null) {
-            return "";
-        }
-        return itemString;
-    }
-
     public Card() {
         init();
     }
@@ -90,22 +78,22 @@ public class Card extends Model {
         this.box = 1;
     }
 
-    public Card(Cursor cursor) {
-        id = cursor.getLong(cursor.getColumnIndex(Column.ID));
-        createdAt = new Date(cursor.getInt(cursor.getColumnIndex(Column.CREATED_AT)));
-        updatedAt = new Date(cursor.getInt(cursor.getColumnIndex(Column.UPDATED_AT)));
-        display = cursor.getString(cursor.getColumnIndex(Column.DISPLAY));
-        translate = cursor.getString(cursor.getColumnIndex(Column.TRANSLATE));
-        dictionary = cursor.getString(cursor.getColumnIndex(Column.DICTIONARY));
-        box = cursor.getInt(cursor.getColumnIndex(Column.BOX));
-    }
-
     public Card(JsonObject jsonObject) {
         init();
         display = getStringFromJson(jsonObject, Column.DISPLAY);
         translate = getStringFromJson(jsonObject, Column.TRANSLATE);
         dictionary = getStringFromJson(jsonObject, Column.DICTIONARY);
         box = jsonObject.get(Column.BOX).getAsInt();
+    }
+
+    public Card(Cursor cursor) {
+        id = getLongFromCursor(cursor, Column.ID);
+        createdAt = getDateFromCursor(cursor, Column.CREATED_AT);
+        updatedAt = getDateFromCursor(cursor, Column.UPDATED_AT);
+        display = getStringFromCursor(cursor, Column.DISPLAY);
+        translate = getStringFromCursor(cursor, Column.TRANSLATE);
+        dictionary = getStringFromCursor(cursor, Column.DICTIONARY);
+        box = getIntFromCursor(cursor, Column.BOX);
     }
 
     @Override

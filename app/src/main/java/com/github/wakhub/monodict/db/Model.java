@@ -15,6 +15,9 @@
  */
 package com.github.wakhub.monodict.db;
 
+import android.database.Cursor;
+
+import com.google.gson.JsonObject;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.security.MessageDigest;
@@ -35,6 +38,33 @@ public abstract class Model {
         public static final String ID = "_id";
         public static final String CREATED_AT = "createdAt";
         public static final String UPDATED_AT = "updatedAt";
+    }
+
+    static String getStringFromJson(JsonObject jsonObject, String key) {
+        if (jsonObject.get(key) == null) {
+            return "";
+        }
+        String itemString = jsonObject.get(key).getAsString();
+        if (itemString == null) {
+            return "";
+        }
+        return itemString;
+    }
+
+    static String getStringFromCursor(Cursor cursor, String columnName) {
+        return cursor.getString(cursor.getColumnIndex(columnName));
+    }
+
+    static int getIntFromCursor(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndex(columnName));
+    }
+
+    static long getLongFromCursor(Cursor cursor, String columnName) {
+        return cursor.getLong(cursor.getColumnIndex(columnName));
+    }
+
+    static Date getDateFromCursor(Cursor cursor, String columnName) {
+        return new Date(getLongFromCursor(cursor, columnName));
     }
 
     /**
