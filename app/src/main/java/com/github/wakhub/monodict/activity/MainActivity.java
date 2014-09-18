@@ -188,6 +188,7 @@ public class MainActivity extends Activity implements
             query = extraActionSearchQuery;
             extraActionSearchQuery = null;
         }
+        // TODO: Better create new activity for ACTION_SEND
         if (extraActionSendText != null && !extraActionSendText.isEmpty()) {
             query = extraActionSendText;
             extraActionSendText = null;
@@ -278,24 +279,8 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-
         if (speechHelper != null && speechHelper.isProcessing()) {
             return;
-        }
-        Intent intent = getIntent();
-        Log.d(TAG, "intent: " + intent);
-        if (intent == null) {
-            return;
-        }
-
-        String action = intent.getAction();
-        if (action.equals(Intent.ACTION_SEARCH)) {
-            Log.d(TAG, "Intent.ACTION_SEARCH: " + SearchManager.QUERY);
-            extraActionSearchQuery = intent.getExtras().getString(SearchManager.QUERY);
-        }
-        if (action.equals(Intent.ACTION_SEND)) {
-            Log.d(TAG, "Intent.ACTION_SEND: " + Intent.EXTRA_TEXT);
-            extraActionSendText = intent.getExtras().getString(Intent.EXTRA_TEXT);
         }
     }
 
@@ -303,6 +288,26 @@ public class MainActivity extends Activity implements
     protected void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
+
+        Intent intent = getIntent();
+        Log.d(TAG, "intent: " + intent);
+        if (intent != null) {
+
+            if (getIntent() != null) {
+                Log.d(TAG, "onCreate:" + getIntent().getExtras());
+            }
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SEARCH)) {
+                String query = intent.getExtras().getString(SearchManager.QUERY);
+                Log.d(TAG, "Intent.ACTION_SEARCH: " + query);
+                extraActionSearchQuery = query;
+            }
+            if (action.equals(Intent.ACTION_SEND)) {
+                String query = intent.getExtras().getString(Intent.EXTRA_TEXT);
+                Log.d(TAG, "Intent.ACTION_SEND: " + query);
+                extraActionSendText = query;
+            }
+        }
         if (dictionaryServiceConnection == null) {
             dictionaryServiceConnection = new DictionaryServiceConnection(this);
             activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
@@ -356,6 +361,13 @@ public class MainActivity extends Activity implements
 
         queryInitialized = false;
         unbindService(dictionaryServiceConnection);
+
+        String action = getIntent().getAction();
+        if (Intent.ACTION_SEND.equals(action)) {
+            Log.d(TAG, "Cancel ACTION_SEND");
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     @Override
