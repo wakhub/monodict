@@ -65,10 +65,7 @@ public class ActivityHelper {
     Activity activity;
 
     @DimensionRes
-    float spaceRelax;
-
-    @DimensionRes
-    float spaceWell;
+    float spaceSuperRelax;
 
     @Pref
     Preferences_ preferences;
@@ -87,6 +84,13 @@ public class ActivityHelper {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.finish();
         activity.startActivity(intent);
+    }
+
+    public void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+        }
     }
 
     public void showToast(int resId) {
@@ -152,7 +156,7 @@ public class ActivityHelper {
     public AlertDialog.Builder buildNoticeDialog(CharSequence text) {
         TextView textView = new TextView(activity);
         textView.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-        textView.setPadding((int) spaceRelax, (int) spaceRelax, (int) spaceRelax, (int) spaceRelax);
+        textView.setPadding((int) spaceSuperRelax, (int) spaceSuperRelax, (int) spaceSuperRelax, (int) spaceSuperRelax);
         textView.setText(text);
         ScrollView scrollView = new ScrollView(activity);
         scrollView.addView(textView);

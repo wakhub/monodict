@@ -29,13 +29,13 @@ class JsonPreferencesFieldAdapter {
 
     private static final String TAG = JsonPreferencesFieldAdapter.class.getSimpleName();
 
-    private Interface delegate = null;
+    private Delegate delegate = null;
 
     private Class dataClass = null;
 
     private Object data = null;
 
-    public JsonPreferencesFieldAdapter(Interface delegate, Class dataClass) {
+    public JsonPreferencesFieldAdapter(Delegate delegate, Class dataClass) {
         this.delegate = delegate;
         this.dataClass = dataClass;
         load();
@@ -59,7 +59,7 @@ class JsonPreferencesFieldAdapter {
         return data;
     }
 
-    public interface Interface {
+    public interface Delegate {
         String loadJson();
 
         StringPrefEditorField<?> edit();

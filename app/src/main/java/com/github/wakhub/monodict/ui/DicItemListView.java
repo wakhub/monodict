@@ -40,10 +40,12 @@ import android.widget.TextView;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.utils.ViewUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 // TODO: refactoring
 public class DicItemListView extends ListView {
@@ -196,11 +198,10 @@ public class DicItemListView extends ListView {
 
     static class ActionModeCallback implements ActionMode.Callback {
 
-        private TextView textView;
-        private Context context;
+        private WeakReference<TextView> textViewRef;
 
         ActionModeCallback(Context context, TextView textView) {
-            this.textView = textView;
+            this.textViewRef = new WeakReference<TextView>(textView);
         }
 
         @Override
@@ -222,20 +223,29 @@ public class DicItemListView extends ListView {
 
         @Override
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            if (textViewRef.get() == null) {
+                return false;
+            }
+            TextView textView = textViewRef.get();
             ViewParent parentView = ViewUtils.findParentView(textView, DicItemListView.class);
             int selectionStart = textView.getSelectionStart();
             int selectionEnd = textView.getSelectionEnd();
             int min = Math.max(0, Math.min(selectionStart, selectionEnd));
             int max = Math.max(0, Math.max(selectionStart, selectionEnd));
             String selectedText = textView.getText().subSequence(min, max).toString();
+            Callback callback = ((DicItemListView) parentView).callback;
 
             if (menuItem.getItemId() == R.id.action_search) {
-                ((DicItemListView) parentView).callback.onDicviewItemActionModeSearch(selectedText);
+                if (callback != null) {
+                    callback.onDicviewItemActionModeSearch(selectedText);
+                }
                 actionMode.finish();
                 return true;
             }
             if (menuItem.getItemId() == R.id.action_speech) {
-                ((DicItemListView) parentView).callback.onDicviewItemActionModeSpeech(selectedText);
+                if (callback != null) {
+                    callback.onDicviewItemActionModeSpeech(selectedText);
+                }
                 actionMode.finish();
                 return true;
             }
@@ -278,10 +288,13 @@ public class DicItemListView extends ListView {
                     .trim()
                     .replace("<", "＜")
                     .replace(">", "＞")
-                    .replaceAll("＜(.?)→(.*)＞", "＜→ $2 ＞") // Search "jasper" to check this
-                    .replaceAll("(?i)" + highlightKeyword, "<b>" + highlightKeyword + "</b>")
-                    .replace("\n", "<br />")
-                    .trim();
+                    .replaceAll("＜(.?)→(.*)＞", "＜→ $2 ＞"); // Search "jasper" to check this
+            try {
+                richText = richText.replaceAll("(?i)" + highlightKeyword, "<b>" + highlightKeyword + "</b>");
+            } catch (PatternSyntaxException e) {
+                // TODO: Multi bytes
+            }
+            richText = richText.replace("\n", "<br />").trim();
 
             return Html.fromHtml(richText);
         }
@@ -319,7 +332,9 @@ public class DicItemListView extends ListView {
                     public void onClick(View view) {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
-                        listView.callback.onDicviewItemClickAddToFlashcardButton(listView.getPositionForView(rowView));
+                        if (listView.callback != null) {
+                            listView.callback.onDicviewItemClickAddToFlashcardButton(listView.getPositionForView(rowView));
+                        }
                     }
                 });
                 holder.speechButton = (ImageButton) view.findViewById(R.id.speech_button);
@@ -328,7 +343,9 @@ public class DicItemListView extends ListView {
                     public void onClick(View view) {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
-                        listView.callback.onDicviewItemClickSpeechButton(listView.getPositionForView(rowView));
+                        if (listView.callback != null) {
+                            listView.callback.onDicviewItemClickSpeechButton(listView.getPositionForView(rowView));
+                        }
                     }
                 });
                 holder.actionButton = (ImageButton) view.findViewById(R.id.action_button);
@@ -337,7 +354,9 @@ public class DicItemListView extends ListView {
                     public void onClick(View view) {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
-                        listView.callback.onDicviewItemClickActionButton(listView.getPositionForView(rowView));
+                        if (listView.callback != null) {
+                            listView.callback.onDicviewItemClickActionButton(listView.getPositionForView(rowView));
+                        }
                     }
                 });
                 holder.hr = view.findViewById(R.id.hr);

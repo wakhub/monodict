@@ -28,7 +28,7 @@ import org.androidannotations.api.sharedpreferences.StringPrefEditorField;
  * Created by wak on 6/8/14.
  */
 @EBean
-public class BrowserActivityState implements JsonPreferencesFieldAdapter.Interface {
+public class BrowserActivityState implements JsonPreferencesFieldAdapter.Delegate {
 
     @Pref
     Preferences_ preferences;
@@ -69,7 +69,7 @@ public class BrowserActivityState implements JsonPreferencesFieldAdapter.Interfa
         return preferences.edit().browserActivityState();
     }
 
-    class Data {
+    static class Data {
         String lastUrl = "";
     }
 }

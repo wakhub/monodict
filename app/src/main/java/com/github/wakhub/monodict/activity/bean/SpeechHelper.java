@@ -15,10 +15,13 @@
  */
 package com.github.wakhub.monodict.activity.bean;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,9 +33,9 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -50,14 +53,19 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
 
     public static final int REQUEST_CODE_TTS = 20300;
 
+    private WeakReference<OnUtteranceListener> onUtteranceListenerRef = new WeakReference<OnUtteranceListener>(null);
+
+    public interface OnUtteranceListener {
+        void onUtteranceDone(String utteranceId);
+
+        void onUtteranceError(String utteranceId);
+    }
+
     @Pref
     Preferences_ preferences;
 
     @RootContext
     Activity activity;
-
-    @StringRes
-    String titleSystemDefault;
 
     private TextToSpeech tts = null;
 
@@ -74,6 +82,8 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
         Toast.makeText(activity, R.string.message_in_processing, Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
             Log.d(TAG, "TTS doesn't have voice data");
@@ -82,16 +92,58 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
             activity.startActivity(installIntent);
             return;
         }
-        String ttsDefaultEngine = preferences.ttsDefaultEngine().get();
-        Log.d(TAG, "defaultEngine: " + ttsDefaultEngine);
-        if (ttsDefaultEngine.isEmpty()) {
-            ttsDefaultEngine = titleSystemDefault;
-        }
-        if (!ttsDefaultEngine.equals(titleSystemDefault)) {
-            tts = new TextToSpeech(activity, this, ttsDefaultEngine);
-        }
+
+
+        final WeakReference<SpeechHelper> helperRef = new WeakReference<SpeechHelper>(this);
+        int listenerResult = -1;
+
         if (tts == null) {
             tts = new TextToSpeech(activity, this);
+            if (Build.VERSION.SDK_INT >= 15) {
+                Log.d(TAG, "setUtteranceProgressListener");
+                listenerResult = tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                        Log.d(TAG, "onStart: " + utteranceId);
+                    }
+
+                    @Override
+                    public void onDone(String utteranceId) {
+                        Log.d(TAG, "onDone: " + utteranceId);
+                        if (helperRef.get() != null) {
+                            helperRef.get().onUtteranceDone(utteranceId);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        Log.d(TAG, "onError: " + utteranceId);
+                        if (helperRef.get() != null) {
+                            helperRef.get().onUtteranceError(utteranceId);
+                        }
+                    }
+                });
+                if (listenerResult != TextToSpeech.SUCCESS) {
+                    tts.setOnUtteranceProgressListener(null);
+                    Log.d(TAG, "failed to add utterance progress listener");
+                }
+            }
+            if (listenerResult != TextToSpeech.SUCCESS) {
+                Log.d(TAG, "setOnUtteranceCompletedListener");
+                listenerResult = tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                    @Override
+                    public void onUtteranceCompleted(String utteranceId) {
+                        Log.d(TAG, "onUtteranceCompleted: " + utteranceId);
+                        if (helperRef.get() != null) {
+                            helperRef.get().onUtteranceDone(utteranceId);
+                        }
+                    }
+                });
+                if (listenerResult != TextToSpeech.SUCCESS) {
+                    tts.setOnUtteranceCompletedListener(null);
+                    Log.d(TAG, "failed to add utterance completed listener");
+                }
+            }
         }
     }
 
@@ -134,7 +186,7 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
             return;
         }
         tts.setLanguage(speechLocale);
-        tts.speak(text, TextToSpeech.QUEUE_ADD, buildSpeakParams(params));
+        Log.d(TAG, "TextToSpeech.speak: " + tts.speak(text, TextToSpeech.QUEUE_ADD, buildSpeakParams(params)));
     }
 
     private HashMap<String, String> buildSpeakParams(HashMap<String, String> additional) {
@@ -158,6 +210,10 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
         }
     }
 
+    public void setOnUtteranceListener(OnUtteranceListener listener) {
+        this.onUtteranceListenerRef = new WeakReference<OnUtteranceListener>(listener);
+    }
+
     @Override
     public void onInit(int status) {
         Log.d(TAG, "onInit: " + status);
@@ -169,6 +225,20 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
         if (suspendedText != null) {
             speech(suspendedText);
             suspendedText = null;
+        }
+    }
+
+    private void onUtteranceDone(String utteranceId) {
+        Log.d(TAG, "onUtteranceDone: " + utteranceId);
+        if (onUtteranceListenerRef.get() != null) {
+            onUtteranceListenerRef.get().onUtteranceDone(utteranceId);
+        }
+    }
+
+    private void onUtteranceError(String utteranceId) {
+        Log.d(TAG, "onUtteranceError: " + utteranceId);
+        if (onUtteranceListenerRef.get() != null) {
+            onUtteranceListenerRef.get().onUtteranceError(utteranceId);
         }
     }
 }

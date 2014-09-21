@@ -21,6 +21,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by wak on 6/17/14.
  */
@@ -30,12 +32,12 @@ public final class DictionaryServiceConnection implements ServiceConnection {
 
     private DictionaryService.DictionaryServiceBinder binder;
 
-    private DictionaryService.Listener listener;
+    private final WeakReference<DictionaryService.Listener> listenerRef;
 
     private boolean isConnected = false;
 
     public DictionaryServiceConnection(DictionaryService.Listener listener) {
-        this.listener = listener;
+        this.listenerRef = new WeakReference<DictionaryService.Listener>(listener);
     }
 
     public void search(String query) {
@@ -53,7 +55,7 @@ public final class DictionaryServiceConnection implements ServiceConnection {
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Log.d(TAG, "onServiceConnected");
         binder = ((DictionaryService.DictionaryServiceBinder) iBinder);
-        binder.setListener(this.listener);
+        binder.setListener(this.listenerRef.get());
         isConnected = true;
     }
 

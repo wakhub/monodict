@@ -44,8 +44,11 @@ public class CardContextDialogBuilder extends AlertDialog.Builder implements Dia
             R.string.action_search_by_alc_co_jp);
 
     private OnContextActionListener contextActionListener;
+
     private final CardDialog dialog;
+
     private final Card card;
+
     private ArrayList<String> itemLabels = new ArrayList<String>();
 
     public interface OnContextActionListener {

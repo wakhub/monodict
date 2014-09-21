@@ -50,9 +50,7 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String KEY_DICTIONARY_MANAGER = "dictionaryManager";
     private static final String KEY_ORIENTATION = "orientation";
     private static final String KEY_TTS_DEFAULT_LOCALE = "ttsDefaultLocale";
-    private static final String KEY_TTS_DEFAULT_ENGINE = "ttsDefaultEngine";
     private static final String KEY_TTS_LANGUAGE_FOR_TRANSLATE = "ttsLanguageForTranslate";
-    private static final String KEY_TTS_ABOUT = "ttsAbout";
     private static final String KEY_ABOUT = "about";
     private static final String KEY_LEGAL = "legal";
 
@@ -135,12 +133,6 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        prefItem = findPreference(KEY_TTS_DEFAULT_ENGINE);
-        String ttsDefaultEngine = preferences.ttsDefaultEngine().get();
-        if (ttsDefaultEngine.isEmpty()) {
-            ttsDefaultEngine = getResources().getString(R.string.title_system_default);
-        }
-        prefItem.setSummary(ttsDefaultEngine);
         prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -149,28 +141,12 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        prefItem = findPreference(KEY_TTS_ABOUT);
-        prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                activityHelper.buildNoticeDialog(activityHelper.getHtmlFromRaw(R.raw.tts)).show();
-                return false;
-            }
-        });
-
         prefItem = findPreference(KEY_ABOUT);
-        PackageInfo packageInfo = app.getPackageInfo();
+        PackageInfo packageInfo = MonodictApp.getPackageInfo(getActivity());
         prefItem.setSummary(String.format(
                 "%s %s",
                 appName,
                 packageInfo.versionName));
-        prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                activityHelper.buildNoticeDialog(activityHelper.getHtmlFromRaw(R.raw.about)).show();
-                return false;
-            }
-        });
 
         findPreference(KEY_LEGAL).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

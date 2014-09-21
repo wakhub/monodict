@@ -28,6 +28,8 @@ import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by wak on 6/21/14.
  */
@@ -38,7 +40,7 @@ public class DictionarySearchView extends SearchView {
     private final ImageView icon;
     private final ImageView closeButton;
 
-    private Listener listener;
+    private final Listener listener;
 
     public interface Listener {
         void onSearchViewFocusChange(boolean b);
@@ -82,31 +84,51 @@ public class DictionarySearchView extends SearchView {
 
         searchPlate.setBackgroundResource(R.drawable.search_view_background);
 
-        textView.setOnFocusChangeListener(new OnFocusChangeListener());
-        setOnQueryTextListener(new OnQueryTextListener());
+        textView.setOnFocusChangeListener(new OnFocusChangeListener(this.listener));
+        setOnQueryTextListener(new OnQueryTextListener(this));
 
         closeButton.setImageDrawable(resources.getDrawable(R.drawable.ic_action_cancel));
     }
 
     // TODO: http://stackoverflow.com/questions/6918364/edittext-does-not-trigger-changes-when-back-is-pressed
-    private class OnFocusChangeListener implements SearchView.OnFocusChangeListener {
+    private static class OnFocusChangeListener implements SearchView.OnFocusChangeListener {
+
+        private final WeakReference<Listener> listenerRef;
+
+        private OnFocusChangeListener(Listener listener) {
+            this.listenerRef = new WeakReference<Listener>(listener);
+        }
+
         @Override
         public void onFocusChange(View view, boolean b) {
-            listener.onSearchViewFocusChange(b);
+            if (listenerRef.get() != null) {
+                listenerRef.get().onSearchViewFocusChange(b);
+            }
         }
     }
 
-    private class OnQueryTextListener implements SearchView.OnQueryTextListener {
+    private static class OnQueryTextListener implements SearchView.OnQueryTextListener {
+
+        private final WeakReference<DictionarySearchView> viewRef;
+
+        OnQueryTextListener(DictionarySearchView view) {
+            viewRef = new WeakReference<DictionarySearchView>(view);
+        }
+
         @Override
         public boolean onQueryTextSubmit(String s) {
-            clearFocus();
-            listener.onSearchViewQueryTextSubmit(s);
+            if (viewRef.get() != null) {
+                viewRef.get().clearFocus();
+                viewRef.get().listener.onSearchViewQueryTextSubmit(s);
+            }
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String s) {
-            listener.onSearchViewQueryTextChange(s);
+            if (viewRef.get() != null) {
+                viewRef.get().listener.onSearchViewQueryTextChange(s);
+            }
             return false;
         }
     }

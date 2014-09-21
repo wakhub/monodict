@@ -37,13 +37,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:baselineAligned="true"
-        android:shrinkColumns="3">
+        android:shrinkColumns="3"
+        android:dividerPadding="3dp">
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:divider="@color/black"
-            android:showDividers="middle">
+            android:divider="@drawable/nav_divider"
+            android:showDividers="middle"
+            android:dividerPadding="3dp">
 
            <ImageButton
                 android:id="@+id/browser_button"

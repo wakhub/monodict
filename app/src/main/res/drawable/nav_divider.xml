@@ -13,14 +13,21 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-
-    <dimen name="space_well">3dp</dimen>
-    <dimen name="space_relax">10dp</dimen>
-    <dimen name="space_relax_half">5dp</dimen>
-    <dimen name="space_super_relax">20dp</dimen>
-    <dimen name="text_size_medium">16sp</dimen>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-
-</resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@android:color/transparent" />
+            <padding android:left="@dimen/space_well" android:right="@dimen/space_well" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <size
+                android:width="1dp"
+                android:height="1dp" />
+            <corners android:radius="1dp" />
+            <solid
+                android:color="@color/gray" />
+        </shape>
+    </item>
+</layer-list>

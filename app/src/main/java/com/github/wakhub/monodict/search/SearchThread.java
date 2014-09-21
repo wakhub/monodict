@@ -21,6 +21,7 @@ import com.github.wakhub.monodict.dice.IdicResult;
 import com.github.wakhub.monodict.dice.Idice;
 import com.github.wakhub.monodict.ui.DicItemListView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -36,16 +37,19 @@ class SearchThread extends Thread {
         void onSearchFinished(String query, ArrayList<DicItemListView.Data> result);
     }
 
-    private String query = null;
-    private Listener listener = null;
-    private int timer = 0;
-    private final Idice dice;
+    private final WeakReference<Listener> listenerRef;
+
+    private final WeakReference<Idice> diceRef;
+
+    private final String query;
+
+    private final int timer;
 
     public SearchThread(Listener listener, final Idice dice, String query, int timer) {
-        this.listener = listener;
+        this.listenerRef = new WeakReference<Listener>(listener);
+        this.diceRef = new WeakReference<Idice>(dice);
         this.query = query;
         this.timer = timer;
-        this.dice = dice;
     }
 
     public void run() {
@@ -53,10 +57,14 @@ class SearchThread extends Thread {
     }
 
     private void search() {
-
         final ArrayList<DicItemListView.Data> result = new ArrayList<DicItemListView.Data>();
+
         try {
             sleep(timer);
+            Idice dice = diceRef.get();
+            if (dice == null) {
+                return;
+            }
             int dicnum = dice.getDicNum();
             for (int dic = 0; dic < dicnum; dic++) {
                 if (interrupted())
@@ -76,25 +84,28 @@ class SearchThread extends Thread {
                 if (interrupted())
                     return;
                 if (pr.getCount() > 0) {
-                    listener.generateViewForSearch(DictionaryService.DISP_MODE_HEADER, dic, null, result, -1);
-                    listener.generateViewForSearch(DictionaryService.DISP_MODE_RESULT, dic, pr, result, -1);
+                    if (listenerRef.get() != null) {
+                        listenerRef.get().generateViewForSearch(DictionaryService.DISP_MODE_HEADER, dic, null, result, -1);
+                        listenerRef.get().generateViewForSearch(DictionaryService.DISP_MODE_RESULT, dic, pr, result, -1);
+                    }
                 }
 
                 if (interrupted())
                     return;
             }
 
-            if (result.size() == 0) {
-                listener.generateViewForSearch(DictionaryService.DISP_MODE_NORESULT, -1, null, result, -1);
-            }
+            if (listenerRef.get() != null) {
+                if (result.size() == 0) {
+                    listenerRef.get().generateViewForSearch(DictionaryService.DISP_MODE_NORESULT, -1, null, result, -1);
+                }
 
-            if (!interrupted()) {
-                listener.onSearchFinished(query, result);
+                if (!interrupted()) {
+                    listenerRef.get().onSearchFinished(query, result);
+                }
             }
 
         } catch (InterruptedException e) {
             Log.d(TAG, "interrupted.");
         }
-
     }
 }

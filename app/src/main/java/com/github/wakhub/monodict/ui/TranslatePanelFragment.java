@@ -114,4 +114,15 @@ public class TranslatePanelFragment extends Fragment {
     void onClickTranslatePanelAddToFlashcardButton() {
         listener.onClickTranslatePanelAddToFlashcardButton(data);
     }
+
+    // Possible Memory Leaks and missing onDestroyView cleanup
+    // https://github.com/excilys/androidannotations/issues/933
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        displayText = null;
+        translateText = null;
+        dictionaryNameText = null;
+    }
 }

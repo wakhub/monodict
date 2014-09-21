@@ -27,7 +27,7 @@ import java.util.List;
  * Created by wak on 6/8/14.
  */
 @EBean
-public class Dictionaries implements JsonPreferencesFieldAdapter.Interface {
+public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
 
     private static final String TAG = Dictionaries.class.getSimpleName();
 
@@ -155,7 +155,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Interface {
         return preferences.edit().dictionaries();
     }
 
-    class Data {
+    static class Data {
         List<Dictionary> dictionaries;
     }
 }

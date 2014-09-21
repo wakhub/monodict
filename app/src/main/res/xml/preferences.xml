@@ -15,6 +15,9 @@
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
+        <Preference android:key="dictionaryManager" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_search">
         <CheckBoxPreference
             android:defaultValue="false"
@@ -31,16 +34,7 @@
             android:key="orientation"
             android:title="@string/title_settings_orientation" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
-        <Preference android:key="dictionaryManager" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_tts">
-        <ListPreference
-            android:dialogTitle="@string/title_settings_tts_default_engine"
-            android:entries="@array/tts_engine_labels"
-            android:entryValues="@array/tts_engines"
-            android:key="ttsDefaultEngine"
-            android:title="@string/title_settings_tts_default_engine" />
         <ListPreference
             android:defaultValue="English"
             android:dialogTitle="@string/title_settings_tts_default_language"
@@ -50,21 +44,16 @@
             android:title="@string/title_settings_tts_default_language" />
         <ListPreference
             android:defaultValue="Japanese"
-            android:dialogTitle="@string/title_settings_tts_language_for_translate"
+            android:dialogTitle="@string/title_settings_tts_language_for_translation"
             android:entries="@array/tts_locales"
             android:entryValues="@array/tts_locales"
             android:key="ttsLanguageForTranslate"
-            android:title="@string/title_settings_tts_language_for_translate" />
-        <!-- TODO: strings.xml -->
+            android:title="@string/title_settings_tts_language_for_translation" />
         <Preference
-            android:summary="Open Text-to-speech options in Android Settings"
-            android:title="Text-to-speech options">
+            android:summary="@string/message_settings_open_tts_settings"
+            android:title="@string/title_settings_open_tts_settings">
             <intent android:action="com.android.settings.TTS_SETTINGS" />
         </Preference>
-        <Preference
-            android:icon="@drawable/ic_action_help"
-            android:key="ttsAbout"
-            android:title="@string/title_settings_tts_about" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_app_information">
         <Preference

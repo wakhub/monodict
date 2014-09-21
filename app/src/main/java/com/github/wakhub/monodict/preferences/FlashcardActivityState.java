@@ -32,7 +32,7 @@ import java.util.Random;
  * Created by wak on 6/8/14.
  */
 @EBean
-public class FlashcardActivityState implements JsonPreferencesFieldAdapter.Interface {
+public class FlashcardActivityState implements JsonPreferencesFieldAdapter.Delegate {
 
     private static final int RANDOM_MAX = 100000;
 
@@ -104,7 +104,7 @@ public class FlashcardActivityState implements JsonPreferencesFieldAdapter.Inter
         return preferences.edit().flashcardActivityState();
     }
 
-    class Data {
+    static class Data {
         int box = 1;
         int order = ORDER_SHUFFLE;
         int randomSeed = 0;

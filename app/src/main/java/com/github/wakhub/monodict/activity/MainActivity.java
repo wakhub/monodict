@@ -160,7 +160,7 @@ public class MainActivity extends Activity implements
 
         Resources resources = getResources();
 
-        setTitle(String.format("%s %s", resources.getString(R.string.app_name), app.getPackageInfo().versionName));
+        setTitle(String.format("%s %s", resources.getString(R.string.app_name), MonodictApp.getPackageInfo(this).versionName));
 
         commonActivityTrait.initActivity(preferences);
 
@@ -188,7 +188,6 @@ public class MainActivity extends Activity implements
             query = extraActionSearchQuery;
             extraActionSearchQuery = null;
         }
-        // TODO: Better create new activity for ACTION_SEND
         if (extraActionSendText != null && !extraActionSendText.isEmpty()) {
             query = extraActionSendText;
             extraActionSendText = null;
@@ -282,6 +281,22 @@ public class MainActivity extends Activity implements
         if (speechHelper != null && speechHelper.isProcessing()) {
             return;
         }
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        Log.d(TAG, "intent: " + intent);
+        String action = intent.getAction();
+        if (action.equals(Intent.ACTION_SEARCH)) {
+            String query = intent.getExtras().getString(SearchManager.QUERY);
+            Log.d(TAG, "Intent.ACTION_SEARCH: " + query);
+            extraActionSearchQuery = query;
+        }
+        if (action.equals(Intent.ACTION_SEND)) {
+            String query = intent.getExtras().getString(Intent.EXTRA_TEXT);
+            Log.d(TAG, "Intent.ACTION_SEND: " + query);
+            extraActionSendText = query;
+        }
     }
 
     @Override
@@ -289,25 +304,6 @@ public class MainActivity extends Activity implements
         Log.d(TAG, "onStart");
         super.onStart();
 
-        Intent intent = getIntent();
-        Log.d(TAG, "intent: " + intent);
-        if (intent != null) {
-
-            if (getIntent() != null) {
-                Log.d(TAG, "onCreate:" + getIntent().getExtras());
-            }
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_SEARCH)) {
-                String query = intent.getExtras().getString(SearchManager.QUERY);
-                Log.d(TAG, "Intent.ACTION_SEARCH: " + query);
-                extraActionSearchQuery = query;
-            }
-            if (action.equals(Intent.ACTION_SEND)) {
-                String query = intent.getExtras().getString(Intent.EXTRA_TEXT);
-                Log.d(TAG, "Intent.ACTION_SEND: " + query);
-                extraActionSendText = query;
-            }
-        }
         if (dictionaryServiceConnection == null) {
             dictionaryServiceConnection = new DictionaryServiceConnection(this);
             activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
@@ -319,7 +315,6 @@ public class MainActivity extends Activity implements
                 Context.BIND_AUTO_CREATE);
 
         dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
-
     }
 
     @Override
@@ -535,7 +530,7 @@ public class MainActivity extends Activity implements
     public void onDictionaryServiceInitialized() {
         activityHelper.hideProgressDialog();
         int lastVersionCode = preferences.lastVersionCode().getOr(0);
-        int currentVersionCode = app.getPackageInfo().versionCode;
+        int currentVersionCode = MonodictApp.getPackageInfo(this).versionCode;
         if (currentVersionCode > lastVersionCode) {
             preferences.lastVersionCode().put(currentVersionCode);
             removeDirectory(getCacheDir());

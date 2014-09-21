@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.TextUtils;
@@ -75,7 +77,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 
@@ -88,7 +89,8 @@ public class FlashcardActivity extends ListActivity
         implements ActionBar.TabListener,
         CardDialog.OnCardDialogListener,
         CardEditDialog.Listener,
-        CardContextDialogBuilder.OnContextActionListener {
+        CardContextDialogBuilder.OnContextActionListener,
+        SpeechHelper.OnUtteranceListener {
 
     private static final String TAG = FlashcardActivity.class.getSimpleName();
 
@@ -118,12 +120,17 @@ public class FlashcardActivity extends ListActivity
     @Bean
     FlashcardActivityState state;
 
-    private boolean isAutoPlayRunning = false;
-    private boolean requestStopAutoPlay = false;
-
     private AlertDialog autoPlayDialog = null;
     private TextView autoPlayTranslateText = null;
     private TextView autoPlayDisplayText = null;
+
+    private ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+
+    private static enum AutoPlayProgress {
+        START, WAIT_FOR_TRANSLATE, TRANSLATE, WAIT_FOR_DISPLAY, DISPLAY, WAIT_FOR_NEXT, WAIT_FOR_STOP, STOP
+    }
+
+    private AutoPlayProgress autoPlayProgress = AutoPlayProgress.STOP;
 
     private ListAdapter listAdapter = null;
 
@@ -242,7 +249,6 @@ public class FlashcardActivity extends ListActivity
             return;
         }
         String path = data.getExtras().getString(DirectorySelectorActivity.RESULT_INTENT_PATH);
-        Calendar now = Calendar.getInstance();
 
         String defaultPath = String.format("%s/%s-%s.json",
                 path,
@@ -290,7 +296,7 @@ public class FlashcardActivity extends ListActivity
     @OptionsItem(R.id.action_auto_play)
     void onActionAutoPlay() {
         Log.d(TAG, "onActionAutoPlay");
-        autoPlay();
+        startAutoPlay();
     }
 
     @UiThread
@@ -334,73 +340,87 @@ public class FlashcardActivity extends ListActivity
     }
 
     @UiThread
-    void setAutoPlayCard(int position, Card card) {
-        activityHelper.setListPosition(position);
+    void setAutoPlayCard(Card card) {
         if (autoPlayDialog == null || autoPlayDisplayText == null || autoPlayTranslateText == null) {
             return;
         }
         String autoPlayText = getResources().getString(R.string.action_auto_play);
-        autoPlayDialog.setTitle(String.format("%s: %d/%d", autoPlayText, position + 1, listAdapter.getCount()));
+        autoPlayDialog.setTitle(String.format(
+                "%s: %d/%d",
+                autoPlayText,
+                listAdapter.getCursor().getPosition() + 1,
+                listAdapter.getCount()));
         autoPlayDisplayText.setText(card.getDisplay());
         autoPlayTranslateText.setText(card.getTranslate());
     }
 
+    private boolean autoPlayLoop() {
+        Cursor cursor = listAdapter.getCursor();
+        switch (autoPlayProgress) {
+            case START:
+                speechHelper.init();
+                showAutoPlayAlertDialog();
+                speechHelper.setOnUtteranceListener(this);
+                cursor.moveToFirst();
+                autoPlayProgress = AutoPlayProgress.WAIT_FOR_DISPLAY;
+                setAutoPlayCard(new Card(cursor));
+                toneGenerator.startTone(ToneGenerator.TONE_PROP_ACK);
+                activityHelper.sleep(2000);
+                break;
+            case WAIT_FOR_DISPLAY:
+                autoPlayProgress = AutoPlayProgress.DISPLAY;
+                activityHelper.sleep(500);
+                speechHelper.speech(new Card(cursor).getDisplay());
+                break;
+            case WAIT_FOR_TRANSLATE:
+                autoPlayProgress = AutoPlayProgress.TRANSLATE;
+                String languageForTranslate = preferences.ttsLanguageForTranslate().get();
+                Locale localeForTranslate = new Locale(languageForTranslate.substring(0, 2));
+
+                activityHelper.sleep(500);
+                Card card = new Card(cursor);
+                speechHelper.speech(
+                        card.getTranslate().substring(0, Math.min(card.getTranslate().length(), 100)),
+                        localeForTranslate, null);
+                break;
+            case WAIT_FOR_NEXT:
+                cursor.moveToNext();
+                setAutoPlayCard(new Card(cursor));
+                autoPlayProgress = AutoPlayProgress.WAIT_FOR_DISPLAY;
+
+                activityHelper.sleep(500);
+                toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
+                activityHelper.sleep(1000);
+                break;
+            case WAIT_FOR_STOP:
+                stopAutoPlay();
+                return false;
+        }
+        return true;
+    }
+
     @Background
-    void autoPlay() {
-        isAutoPlayRunning = true;
-        speechHelper.init();
-
-        showAutoPlayAlertDialog();
-
+    void startAutoPlay() {
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         wakeLock.acquire();
 
-        String languageForTranslate = preferences.ttsLanguageForTranslate().get();
-        Locale localeForTranslate = new Locale(languageForTranslate.substring(0, 2));
+        autoPlayProgress = AutoPlayProgress.START;
 
-        long interval = 4 * 1000;
-        try {
-            Thread.sleep(interval);
-        } catch (InterruptedException e) {
-            activityHelper.showError(e);
+        while (autoPlayLoop()) {
+            activityHelper.sleep(500);
         }
-        Cursor cursor = listAdapter.getCursor();
-        cursor.moveToFirst();
-
-        for (int i = 0; i < cursor.getCount(); i++) {
-            Card card = new Card(cursor);
-            if (requestStopAutoPlay) {
-                requestStopAutoPlay = false;
-                break;
-            }
-            setAutoPlayCard(i, card);
-            try {
-                speechHelper.speech(card.getDisplay());
-                Thread.sleep(interval);
-
-                String shortTranslate = card.getTranslate()
-                        .substring(0, Math.min(30, card.getTranslate().length())).replace("\n", " ");
-                speechHelper.speech(shortTranslate, localeForTranslate, null);
-                Thread.sleep(interval * 2);
-            } catch (InterruptedException e) {
-                activityHelper.showError(e);
-            }
-
-            cursor.moveToNext();
-        }
-
         wakeLock.release();
-        stopAutoPlay();
-        isAutoPlayRunning = false;
-        requestStopAutoPlay = false;
     }
 
     void stopAutoPlay() {
         Log.d(TAG, "stopAutoPlay");
-        if (isAutoPlayRunning) {
-            requestStopAutoPlay = true;
+        if (autoPlayProgress == AutoPlayProgress.STOP) {
+            return;
         }
+        autoPlayProgress = AutoPlayProgress.STOP;
         speechHelper.finish();
+        speechHelper.setOnUtteranceListener(null);
+        toneGenerator.startTone(ToneGenerator.TONE_PROP_ACK);
         if (autoPlayDialog != null) {
             autoPlayDialog.dismiss();
             autoPlayDialog = null;
@@ -650,7 +670,6 @@ public class FlashcardActivity extends ListActivity
             loadContents();
         } catch (SQLException e) {
             activityHelper.showError(e);
-            return;
         }
     }
 
@@ -715,6 +734,31 @@ public class FlashcardActivity extends ListActivity
         loadContents();
     }
 
+    // { OnUtteranceListener
+
+    @Override
+    public void onUtteranceDone(String utteranceId) {
+        switch (autoPlayProgress) {
+            case DISPLAY:
+                autoPlayProgress = AutoPlayProgress.WAIT_FOR_TRANSLATE;
+                return;
+            case TRANSLATE:
+                if (listAdapter.getCursor().getPosition() >= listAdapter.getCount() - 1) {
+                    autoPlayProgress = AutoPlayProgress.WAIT_FOR_STOP;
+                } else {
+                    autoPlayProgress = AutoPlayProgress.WAIT_FOR_NEXT;
+                }
+        }
+    }
+
+    @Override
+    public void onUtteranceError(String utteranceId) {
+        activityHelper.showToast("Canceled");
+        onUtteranceDone(utteranceId);
+    }
+
+    // OnUtteranceListener }
+
     private static class ListAdapter extends CursorAdapter {
 
         private final WeakReference<FlashcardActivity> activityRef;
@@ -775,7 +819,7 @@ public class FlashcardActivity extends ListActivity
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             FlashcardActivity activity = activityRef.get();
-            if (activityRef == null) {
+            if (activity == null) {
                 return null;
             }
             LinearLayout view = new LinearLayout(activity);

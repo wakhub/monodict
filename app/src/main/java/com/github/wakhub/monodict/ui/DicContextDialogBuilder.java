@@ -42,7 +42,9 @@ public class DicContextDialogBuilder extends AlertDialog.Builder implements Dial
             R.string.action_share);
 
     private OnContextActionListener contextActionListener;
+
     private DicItemListView.Data data;
+
     private ArrayList<String> itemLabels = new ArrayList<String>();
 
     public interface OnContextActionListener {

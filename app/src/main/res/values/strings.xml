@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="action_auto_play">Auto Play</string>
 <string name="action_add_dictionary">Add dictionary</string>
 <string name="action_add_new_card">Add new card</string>
 <string name="action_add_to_bookmarks">Add to Bookmarks</string>
 <string name="action_add_to_flashcard">Add to Flashcard</string>
+<string name="action_auto_play">Auto Play</string>
 <string name="action_back">Back</string>
 <string name="action_close">Close</string>
 <string name="action_copy_all">Copy all</string>
@@ -49,6 +49,7 @@
 <string name="message_loading_dictionaries">Now loading dictionaries…</string>
 <string name="message_modified">Modified</string>
 <string name="message_no_result">No result</string>
+<string name="message_settings_open_tts_settings">Open Text-to-Speech settings in Android Settings</string>
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>
 <string name="message_url_placeholder">keyword or URL</string>
@@ -81,13 +82,12 @@
 <string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">Fast Scroll</string>
 <string name="title_settings_legal">Legal Notices</string>
+<string name="title_settings_open_tts_settings">Open Text-to-Speech settings</string>
+<string name="title_settings_orientation">Orientation</string>
 <string name="title_settings_search">Search</string>
 <string name="title_settings_tts">Text to Speech</string>
-<string name="title_settings_tts_about">About Text to Speech</string>
-<string name="title_settings_tts_default_engine">Default Engine</string>
-<string name="title_settings_orientation">Orientation</string>
 <string name="title_settings_tts_default_language">Default Language</string>
-<string name="title_settings_tts_language_for_translate">Language for translate</string>
+<string name="title_settings_tts_language_for_translation">Language for translation</string>
 <string name="title_settings_version">Version</string>
 <string name="title_system_default">System Default</string>
 <string name="title_welcome">Welcome to monodict!</string>

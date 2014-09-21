@@ -16,6 +16,7 @@
 package com.github.wakhub.monodict;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -39,10 +40,10 @@ public class MonodictApp extends Application {
 //        setLocale(Locale.JAPANESE);
     }
 
-    public PackageInfo getPackageInfo() {
-        String packageName = getApplicationInfo().packageName;
+    public static final PackageInfo getPackageInfo(Context context) {
+        String packageName = context.getPackageName();
         try {
-            return getPackageManager().getPackageInfo(packageName, 0);
+            return context.getPackageManager().getPackageInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }

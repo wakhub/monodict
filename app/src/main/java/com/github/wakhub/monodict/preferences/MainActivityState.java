@@ -27,7 +27,7 @@ import org.androidannotations.api.sharedpreferences.StringPrefEditorField;
  * Created by wak on 6/8/14.
  */
 @EBean
-public class MainActivityState implements JsonPreferencesFieldAdapter.Interface {
+public class MainActivityState implements JsonPreferencesFieldAdapter.Delegate {
 
     @Pref
     Preferences_ preferences;
@@ -72,7 +72,7 @@ public class MainActivityState implements JsonPreferencesFieldAdapter.Interface 
         return preferences.edit().mainActivityState();
     }
 
-    class Data {
+    static class Data {
         String lastSearchQuery;
     }
 }

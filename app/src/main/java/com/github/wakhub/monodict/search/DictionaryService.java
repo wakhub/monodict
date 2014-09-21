@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -56,15 +57,15 @@ public final class DictionaryService extends Service implements SearchThread.Lis
 
     private final HashMap<String, String> irreg = new HashMap<String, String>();
 
-    private final Binder binder = new DictionaryServiceBinder();
+    private final Binder binder;
 
     private SearchThread searchThread;
 
-    private Listener listener;
+    private WeakReference<Listener> listenerRef = new WeakReference<Listener>(null);
 
     private boolean isInitialized = false;
 
-    private ArrayList<DicItemListView.Data> resultData = new ArrayList<DicItemListView.Data>();
+    private ArrayList<WeakReference<DicItemListView.Data>> resultData = new ArrayList<WeakReference<DicItemListView.Data>>();
 
     private Dictionaries dictionaries;
 
@@ -77,26 +78,45 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         void onDictionaryServiceResult(String query, ArrayList<DicItemListView.Data> result);
     }
 
-    final class DictionaryServiceBinder extends Binder {
+    final static class DictionaryServiceBinder extends Binder {
+
+        private WeakReference<DictionaryService> dictionaryServiceRef = new WeakReference<DictionaryService>(null);
+
+        public DictionaryServiceBinder(DictionaryService service) {
+            super();
+            dictionaryServiceRef = new WeakReference<DictionaryService>(service);
+        }
 
         DictionaryService getService() {
-            return DictionaryService.this;
+            return dictionaryServiceRef.get();
         }
 
         void search(String query) {
-            searchInThread(query);
+            if (dictionaryServiceRef.get() != null) {
+                dictionaryServiceRef.get().searchInThread(query);
+            }
         }
 
         void setListener(Listener listener) {
-            DictionaryService.this.listener = listener;
-            if (isInitialized) {
+            DictionaryService service = getService();
+            if (service != null) {
+                service.listenerRef = new WeakReference<Listener>(listener);
+            }
+            if (service.isInitialized) {
                 listener.onDictionaryServiceInitialized();
             }
         }
 
         void removeListener() {
-            DictionaryService.this.listener = null;
+            if (getService() != null) {
+                getService().listenerRef = new WeakReference<Listener>(null);
+            }
         }
+    }
+
+    public DictionaryService() {
+        super();
+        binder = new DictionaryServiceBinder(this);
     }
 
     @Override
@@ -175,15 +195,15 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         }
         if (!isInitialized) {
             isInitialized = true;
-            if (listener != null) {
-                listener.onDictionaryServiceInitialized();
+            if (listenerRef.get() != null) {
+                listenerRef.get().onDictionaryServiceInitialized();
             }
         }
         Log.d(TAG, String.format(
                 "Initialized dice: %s",
                 dice.toString()));
-        if (listener != null) {
-            listener.onDictionaryServiceUpdateDictionaries();
+        if (listenerRef.get() != null) {
+            listenerRef.get().onDictionaryServiceUpdateDictionaries();
         }
     }
 
@@ -267,14 +287,14 @@ public final class DictionaryService extends Service implements SearchThread.Lis
     public void onSearchFinished(String query, ArrayList<DicItemListView.Data> result) {
         resultData.clear();
         for (DicItemListView.Data d : result) {
-            resultData.add(d);
+            resultData.add(new WeakReference<DicItemListView.Data>(d));
         }
 
         if (result.size() < 1) {
             return;
         }
-        if (listener != null) {
-            listener.onDictionaryServiceResult(query, result);
+        if (listenerRef.get() != null) {
+            listenerRef.get().onDictionaryServiceResult(query, result);
         }
     }
 

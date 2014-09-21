@@ -25,7 +25,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
  * Created by wak on 6/28/14.
  */
 @EBean
-public abstract class AbsFileManagerActivityState implements JsonPreferencesFieldAdapter.Interface {
+public abstract class AbsFileManagerActivityState implements JsonPreferencesFieldAdapter.Delegate {
 
     @Pref
     Preferences_ preferences;
@@ -56,7 +56,7 @@ public abstract class AbsFileManagerActivityState implements JsonPreferencesFiel
         return (Data) adapter.getData();
     }
 
-    class Data {
+    static class Data {
         String lastPath = "";
     }
 }

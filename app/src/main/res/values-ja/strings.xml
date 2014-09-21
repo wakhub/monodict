@@ -81,7 +81,6 @@
 <string name="title_settings_legal">免責事項</string>
 <string name="title_settings_search">検索</string>
 <string name="title_settings_tts">文章読み上げ (Text to Speech)</string>
-<string name="title_settings_tts_about">Text to Speech について</string>
 <string name="title_settings_tts_default_language">デフォルトの言語</string>
 <string name="title_settings_version">バージョン</string>
 <string name="title_welcome">monodict へようこそ!</string>

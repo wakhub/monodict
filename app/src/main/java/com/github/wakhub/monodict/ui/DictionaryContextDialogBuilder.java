@@ -33,6 +33,7 @@ import java.util.List;
 public class DictionaryContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
 
     private static final String TAG = DictionaryContextDialogBuilder.class.getSimpleName();
+
     private static final List<Integer> ITEM_IDS = Arrays.asList(
             R.string.action_delete,
             R.string.action_enable,
@@ -42,8 +43,10 @@ public class DictionaryContextDialogBuilder extends AlertDialog.Builder implemen
             android.R.string.cancel);
 
     private OnContextActionListener contextActionListener;
+
     private ArrayList<String> itemLabels = new ArrayList<String>();
-    private Dictionary dictionary;
+
+    private final Dictionary dictionary;
 
     public DictionaryContextDialogBuilder(Context context, Dictionary dictionary) {
         super(context);
