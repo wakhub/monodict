@@ -66,13 +66,14 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
 public class BrowserActivity extends Activity
-        implements DictionaryService.Listener, TranslatePanelFragment.Listener {
+        implements DictionaryService.Listener, TranslatePanelFragment.Listener, TextView.OnEditorActionListener {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -134,18 +135,10 @@ public class BrowserActivity extends Activity
         commonActivityTrait.initActivity(preferences);
 
         urlText.setSelectAllOnFocus(true);
-        urlText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_GO) {
-                    loadUrl(textView.getText().toString());
-                }
-                return false;
-            }
-        });
+        urlText.setOnEditorActionListener(this);
 
-        webView.setWebViewClient(new BrowserWebViewClient());
-        webView.addJavascriptInterface(new BrowserJavaScriptInterface(), BrowserJavaScriptInterface.NAME);
+        webView.setWebViewClient(new BrowserWebViewClient(this));
+        webView.addJavascriptInterface(new BrowserJavaScriptInterface(this), BrowserJavaScriptInterface.NAME);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName(ENCODING);
@@ -185,7 +178,6 @@ public class BrowserActivity extends Activity
         if (translatePanelFragment != null) {
             translatePanelFragment.hide();
         }
-
     }
 
     @OnActivityResult(REQUEST_CODE_BOOKMARKS)
@@ -318,6 +310,12 @@ public class BrowserActivity extends Activity
     @Override
     protected void onDestroy() {
         speechHelper.finish();
+        webView.setWebViewClient(null);
+        webView.removeJavascriptInterface(BrowserJavaScriptInterface.NAME);
+        webView.stopLoading();
+        webView.destroy();
+        translatePanelFragment.setListener(null);
+
         super.onDestroy();
     }
 
@@ -452,39 +450,67 @@ public class BrowserActivity extends Activity
         speechHelper.speech(data.Index.toString());
     }
 
-    private final class BrowserWebViewClient extends WebViewClient {
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            loadUrl(v.getText().toString());
+        }
+        return false;
+    }
+
+    private static final class BrowserWebViewClient extends WebViewClient {
+
+        private final WeakReference<BrowserActivity> activityRef;
+
+        private BrowserWebViewClient(BrowserActivity activity) {
+            this.activityRef = new WeakReference<BrowserActivity>(activity);
+        }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            progressBar.setVisibility(View.VISIBLE);
-            urlText.setText(url);
-            state.setLastUrl(url);
-            reloadViews();
+            BrowserActivity activity = this.activityRef.get();
+            if (activity != null) {
+                activity.progressBar.setVisibility(View.VISIBLE);
+                activity.urlText.setText(url);
+                activity.state.setLastUrl(url);
+                activity.reloadViews();
+            }
             super.onPageStarted(view, url, favicon);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            progressBar.setVisibility(View.GONE);
-            if (url.startsWith("file://")) {
-                String[] split = url.split("/");
-                String filename = split[split.length - 1];
-                setTitle(filename);
-            } else {
-                setTitle(webView.getTitle());
+            BrowserActivity activity = this.activityRef.get();
+            if (activity != null) {
+                activity.progressBar.setVisibility(View.GONE);
+                if (url.startsWith("file://")) {
+                    String[] split = url.split("/");
+                    String filename = split[split.length - 1];
+                    activity.setTitle(filename);
+                } else {
+                    activity.setTitle(activity.webView.getTitle());
+                }
+                activity.reloadViews();
             }
-            reloadViews();
             super.onPageFinished(view, url);
         }
     }
 
-    private final class BrowserJavaScriptInterface {
+    private static final class BrowserJavaScriptInterface {
 
-        public static final String NAME = "__com_github_wakhub_monodict";
+        private static final String NAME = "__com_github_wakhub_monodict";
+
+        private final WeakReference<BrowserActivity> activityRef;
+
+        private BrowserJavaScriptInterface(BrowserActivity activity) {
+            this.activityRef = new WeakReference<BrowserActivity>(activity);
+        }
 
         @JavascriptInterface
         public void onBrowserJavaScriptGetSelection(String callback, String selection) {
-            onJavaScriptGetSelection(callback, selection);
+            if (this.activityRef.get() != null) {
+                this.activityRef.get().onJavaScriptGetSelection(callback, selection);
+            }
         }
     }
 }

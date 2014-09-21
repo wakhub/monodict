@@ -124,5 +124,6 @@ public class TranslatePanelFragment extends Fragment {
         displayText = null;
         translateText = null;
         dictionaryNameText = null;
+        listener = null;
     }
 }
