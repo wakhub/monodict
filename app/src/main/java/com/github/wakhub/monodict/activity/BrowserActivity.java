@@ -73,7 +73,9 @@ import java.util.ArrayList;
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
 public class BrowserActivity extends Activity
-        implements DictionaryService.Listener, TranslatePanelFragment.Listener, TextView.OnEditorActionListener {
+        implements DictionaryService.Listener,
+        TranslatePanelFragment.Listener,
+        TextView.OnEditorActionListener {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -419,6 +421,11 @@ public class BrowserActivity extends Activity
         translatePanelFragment.setDictionaryName(dictionaryName);
         translatePanelFragment.setData(firstWordData);
         translatePanelFragment.show();
+    }
+
+    @Override
+    public void onDictionaryServiceError(String query, Exception e) {
+        activityHelper.showError(e);
     }
 
     @Override

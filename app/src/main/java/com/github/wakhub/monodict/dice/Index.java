@@ -777,6 +777,18 @@ class Index implements IdicInfo {
     boolean SearchWord(String _word) {
         // 検索結果クリア
         int cnt = 0;
+        /* TODO: Error
+
+        E/AndroidRuntime( 3877): Process: com.github.wakhub.monodict, PID: 3877
+        E/AndroidRuntime( 3877): java.util.ConcurrentModificationException
+        E/AndroidRuntime( 3877):    at java.util.ArrayList$ArrayListIterator.next(ArrayList.java:573)
+        E/AndroidRuntime( 3877):    at java.util.AbstractCollection.removeAll(AbstractCollection.java:277)
+        E/AndroidRuntime( 3877):    at com.github.wakhub.monodict.dice.Index.SearchWord(Index.java:780)
+        E/AndroidRuntime( 3877):    at com.github.wakhub.monodict.dice.Index.Search(Index.java:547)
+        E/AndroidRuntime( 3877):    at com.github.wakhub.monodict.dice.Dice.search(Dice.java:135)
+        E/AndroidRuntime( 3877):    at com.github.wakhub.monodict.search.SearchThread.search(SearchThread.java:80)
+        E/AndroidRuntime( 3877):    at com.github.wakhub.monodict.search.SearchThread.run(SearchThread.java:56)
+         */
         mSearchResult.removeAll(mSearchResult);
 
         int ret = searchIndexBlock(_word);
@@ -1015,6 +1027,17 @@ class Index implements IdicInfo {
                 int retptr = ptr;
                 int b;
 
+                /*
+                TODO: Error
+                E/AndroidRuntime( 6988): Process: com.github.wakhub.monodict, PID: 6988
+                E/AndroidRuntime( 6988): java.lang.ArrayIndexOutOfBoundsException: length=2048; index=-1
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.dice.Index$AnalyzeBlock.searchWord(Index.java:1018)
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.dice.Index.SearchWord(Index.java:797)
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.dice.Index.Search(Index.java:547)
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.dice.Dice.search(Dice.java:135)
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.search.SearchThread.search(SearchThread.java:80)
+                E/AndroidRuntime( 6988):    at com.github.wakhub.monodict.search.SearchThread.run(SearchThread.java:56)
+                 */
                 b = buff[ptr++];
                 flen |= (b & 0xFF);
 

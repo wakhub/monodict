@@ -54,6 +54,7 @@ import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
+import com.github.wakhub.monodict.ui.MainActivityRootLayout;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.App;
@@ -80,6 +81,7 @@ import java.util.List;
 @EActivity(R.layout.activity_main)
 @OptionsMenu({R.menu.main})
 public class MainActivity extends Activity implements
+        MainActivityRootLayout.Listener,
         DicItemListView.Callback,
         DicContextDialogBuilder.OnContextActionListener,
         DictionaryService.Listener {
@@ -93,6 +95,9 @@ public class MainActivity extends Activity implements
 
     @Pref
     Preferences_ preferences;
+
+    @ViewById
+    MainActivityRootLayout rootLayout;
 
     @ViewById
     DicItemListView dicItemListView;
@@ -163,6 +168,8 @@ public class MainActivity extends Activity implements
         setTitle(String.format("%s %s", resources.getString(R.string.app_name), MonodictApp.getPackageInfo(this).versionName));
 
         commonActivityTrait.initActivity(preferences);
+
+        rootLayout.setListener(this);
 
         dicItemListView.setCallback(this);
         resultData = new ArrayList<DicItemListView.Data>();
@@ -235,18 +242,6 @@ public class MainActivity extends Activity implements
     @Click(R.id.settings_button)
     void onClickSettingsButton() {
         SettingsActivity_.intent(this).start();
-    }
-
-    @UiThread
-    void setNavVisibility(boolean visible) {
-        if (visible) {
-            if (inputMethodManager != null && getCurrentFocus() != null) {
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
-            nav.setVisibility(View.VISIBLE);
-        } else {
-            nav.setVisibility(View.GONE);
-        }
     }
 
     @OptionsItem({
@@ -377,7 +372,7 @@ public class MainActivity extends Activity implements
         searchView = new DictionarySearchView(this, new DictionarySearchView.Listener() {
             @Override
             public void onSearchViewFocusChange(boolean b) {
-                setNavVisibility(!b);
+                // TODO: can be removed?
             }
 
             @Override
@@ -575,5 +570,15 @@ public class MainActivity extends Activity implements
             return;
         }
         state.setLastSearchQuery(query);
+    }
+
+    @Override
+    public void onDictionaryServiceError(String query, Exception e) {
+        activityHelper.showError(e);
+    }
+
+    @Override
+    public void onSoftKeyboardShown(boolean isShowing) {
+        nav.setVisibility(isShowing ? View.GONE : View.VISIBLE);
     }
 }

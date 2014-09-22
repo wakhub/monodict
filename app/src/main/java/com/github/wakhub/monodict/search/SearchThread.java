@@ -35,6 +35,8 @@ class SearchThread extends Thread {
         void generateViewForSearch(int mode, int dic, IdicResult pr, ArrayList<DicItemListView.Data> result, int po);
 
         void onSearchFinished(String query, ArrayList<DicItemListView.Data> result);
+
+        void onSearchError(String query, Exception e);
     }
 
     private final WeakReference<Listener> listenerRef;
@@ -106,6 +108,11 @@ class SearchThread extends Thread {
 
         } catch (InterruptedException e) {
             Log.d(TAG, "interrupted.");
+        } catch (Exception e) {
+            if (listenerRef.get() != null) {
+                listenerRef.get().onSearchError(query, e);
+                Log.d(TAG, "Unknown Error", e);
+            }
         }
     }
 }

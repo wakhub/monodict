@@ -13,61 +13,66 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.wakhub.monodict.ui.MainActivityRootLayout_ xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <com.github.wakhub.monodict.ui.DicItemListView
-        android:id="@+id/dic_item_list_view"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/nav"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        style="@style/AppTheme.Main.ListView" />
+        android:layout_height="fill_parent">
 
-    <TableLayout
-        android:id="@+id/nav"
-        style="@style/AppTheme.Main.Nav"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:baselineAligned="true"
-        android:shrinkColumns="3"
-        android:dividerPadding="3dp">
-
-        <TableRow
+        <com.github.wakhub.monodict.ui.DicItemListView
+            android:id="@+id/dic_item_list_view"
+            style="@style/AppTheme.Main.ListView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:divider="@drawable/nav_divider"
-            android:showDividers="middle"
-            android:dividerPadding="3dp">
+            android:layout_above="@+id/nav"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
 
-           <ImageButton
-                android:id="@+id/browser_button"
-                style="@style/AppTheme.Main.Nav.ImageButton"
-                android:layout_weight="1"
-                android:src="@drawable/ic_browser"
-               android:contentDescription="@string/title_activity_browser" />
+        <TableLayout
+            android:id="@+id/nav"
+            style="@style/AppTheme.Main.Nav"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:baselineAligned="true"
+            android:dividerPadding="3dp"
+            android:shrinkColumns="3">
 
-            <ImageButton
-                android:id="@+id/flashcard_button"
-                style="@style/AppTheme.Main.Nav.ImageButton"
-                android:layout_weight="1"
-                android:src="@drawable/ic_flashcard"
-                android:contentDescription="@string/title_activity_flashcard" />
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:divider="@drawable/nav_divider"
+                android:dividerPadding="3dp"
+                android:showDividers="middle">
 
-            <ImageButton
-                android:id="@+id/settings_button"
-                style="@style/AppTheme.Main.Nav.ImageButton"
-                android:layout_weight="1"
-                android:src="@drawable/ic_settings"
-                android:contentDescription="@string/title_activity_settings" />
-        </TableRow>
-    </TableLayout>
+                <ImageButton
+                    android:id="@+id/browser_button"
+                    style="@style/AppTheme.Main.Nav.ImageButton"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/title_activity_browser"
+                    android:src="@drawable/ic_browser" />
 
-</RelativeLayout>
+                <ImageButton
+                    android:id="@+id/flashcard_button"
+                    style="@style/AppTheme.Main.Nav.ImageButton"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/title_activity_flashcard"
+                    android:src="@drawable/ic_flashcard" />
+
+                <ImageButton
+                    android:id="@+id/settings_button"
+                    style="@style/AppTheme.Main.Nav.ImageButton"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/title_activity_settings"
+                    android:src="@drawable/ic_settings" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+</com.github.wakhub.monodict.ui.MainActivityRootLayout_>

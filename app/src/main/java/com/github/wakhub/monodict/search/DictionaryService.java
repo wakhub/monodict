@@ -76,6 +76,8 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         void onDictionaryServiceUpdateDictionaries();
 
         void onDictionaryServiceResult(String query, ArrayList<DicItemListView.Data> result);
+
+        void onDictionaryServiceError(String query, Exception e);
     }
 
     final static class DictionaryServiceBinder extends Binder {
@@ -295,6 +297,13 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         }
         if (listenerRef.get() != null) {
             listenerRef.get().onDictionaryServiceResult(query, result);
+        }
+    }
+
+    @Override
+    public void onSearchError(String query, Exception e) {
+        if (listenerRef.get() != null) {
+            listenerRef.get().onDictionaryServiceError(query, e);
         }
     }
 

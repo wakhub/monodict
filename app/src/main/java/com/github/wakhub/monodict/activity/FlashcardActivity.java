@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,7 @@ public class FlashcardActivity extends ListActivity
     private TextView autoPlayTranslateText = null;
     private TextView autoPlayDisplayText = null;
 
-    private ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+    private ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, 80);
 
     private static enum AutoPlayProgress {
         START, WAIT_FOR_TRANSLATE, TRANSLATE, WAIT_FOR_DISPLAY, DISPLAY, WAIT_FOR_NEXT, WAIT_FOR_STOP, STOP
@@ -136,16 +137,15 @@ public class FlashcardActivity extends ListActivity
 
     private boolean isTabInitialized = false;
 
+    private boolean isReloadRequired = false;
+
     @AfterViews
     void afterViews() {
         Log.d(TAG, "state: " + state.toString());
         commonActivityTrait.initActivity(preferences);
-
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        reloadTabs();
     }
 
     @UiThread
@@ -178,14 +178,31 @@ public class FlashcardActivity extends ListActivity
             tab.setText(label);
         }
 
-        if (!isTabInitialized) {
+        if (!isTabInitialized || isReloadRequired) {
             isTabInitialized = true;
+            isReloadRequired = false;
+            // TODO: not working
             int index = state.getBox() - 1;
             if (index < 0 || actionBar.getTabCount() < index) {
                 index = 0;
             }
             actionBar.getTabAt(index).select();
             loadContents();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu");
+        reloadTabs();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isReloadRequired) {
+            reloadTabs();
         }
     }
 
@@ -241,6 +258,11 @@ public class FlashcardActivity extends ListActivity
 
         reloadTabs();
         activityHelper.hideProgressDialog();
+    }
+
+    @OnActivityResult(SpeechHelper.REQUEST_CODE_TTS)
+    void onActivityResultSpeechHelper(int resultCode, Intent data) {
+        speechHelper.onActivityResult(SpeechHelper.REQUEST_CODE_TTS, resultCode, data);
     }
 
     @OnActivityResult(REQUEST_CODE_SELECT_DIRECTORY_TO_EXPORT)
@@ -412,7 +434,7 @@ public class FlashcardActivity extends ListActivity
         wakeLock.release();
     }
 
-    void stopAutoPlay() {
+    private void stopAutoPlay() {
         Log.d(TAG, "stopAutoPlay");
         if (autoPlayProgress == AutoPlayProgress.STOP) {
             return;
@@ -582,15 +604,6 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SpeechHelper.REQUEST_CODE_TTS) {
-            speechHelper.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public boolean onMenuItemSelected(int featureId, final MenuItem item) {
         if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
             return true;
@@ -598,15 +611,14 @@ public class FlashcardActivity extends ListActivity
         return super.onMenuItemSelected(featureId, item);
     }
 
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         Integer index = (Integer) tab.getTag();
-        if (isTabInitialized || (index == 0 && state.getBox() == 1)) {
-            stopAutoPlay();
-            state.setBox(index + 1);
-            loadContents();
-        }
+        Log.d(TAG, "onTabSelected: " + index);
+        stopAutoPlay();
+        state.setBox(index + 1);
+        getListView().setSelection(0);
+        loadContents();
     }
 
     @Override
@@ -656,6 +668,7 @@ public class FlashcardActivity extends ListActivity
 
     @Override
     public void onContextActionSearch(Card card) {
+        isReloadRequired = true;
         activityHelper.searchOnMainActivity(card.getDisplay());
     }
 

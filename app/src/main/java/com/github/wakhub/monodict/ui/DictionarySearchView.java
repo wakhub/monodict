@@ -90,7 +90,6 @@ public class DictionarySearchView extends SearchView {
         closeButton.setImageDrawable(resources.getDrawable(R.drawable.ic_action_cancel));
     }
 
-    // TODO: http://stackoverflow.com/questions/6918364/edittext-does-not-trigger-changes-when-back-is-pressed
     private static class OnFocusChangeListener implements SearchView.OnFocusChangeListener {
 
         private final WeakReference<Listener> listenerRef;

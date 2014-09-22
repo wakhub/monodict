@@ -22,7 +22,8 @@
         <item name="android:buttonStyle">@style/AppTheme.Button</item>
         <item name="android:buttonStyleSmall">@style/AppTheme.ButtonSmall</item>
         <item name="android:imageButtonStyle">@style/AppTheme.ImageButtonStyle</item>
-        <item name="android:listViewStyle">@style/AppTheme.ListView</item>
+        <!-- TODO: Does it working well? -->
+        <item name="android:listSelector">@drawable/list_selector</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
@@ -56,6 +57,8 @@
         <item name="android:paddingLeft">@dimen/space_relax</item>
         <item name="android:paddingRight">@dimen/space_relax</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
+        <!-- TODO: Does it working well? -->
+        <item name="android:listSelector">@drawable/list_selector</item>
     </style>
 
     <!-- Utils -->

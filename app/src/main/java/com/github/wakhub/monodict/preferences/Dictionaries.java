@@ -155,7 +155,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
         return preferences.edit().dictionaries();
     }
 
-    static class Data {
+    static final class Data {
         List<Dictionary> dictionaries;
     }
 }

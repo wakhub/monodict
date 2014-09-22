@@ -107,7 +107,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 preference.setSummary(getOrientationLabel((String) o));
-                ((SettingsActivity) getActivity()).setOrientation((String)o);
+                ((SettingsActivity) getActivity()).setOrientation((String) o);
                 return true;
             }
         });
@@ -147,6 +147,13 @@ public class SettingsFragment extends PreferenceFragment {
                 "%s %s",
                 appName,
                 packageInfo.versionName));
+        prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                activityHelper.buildNoticeDialog(activityHelper.getHtmlFromRaw(R.raw.about)).show();
+                return false;
+            }
+        });
 
         findPreference(KEY_LEGAL).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
