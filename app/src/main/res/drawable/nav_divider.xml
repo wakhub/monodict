@@ -17,17 +17,18 @@
     <item>
         <shape>
             <solid android:color="@android:color/transparent" />
-            <padding android:left="@dimen/space_well" android:right="@dimen/space_well" />
+            <padding
+                android:bottom="@dimen/space_well"
+                android:top="@dimen/space_well" />
         </shape>
     </item>
     <item>
         <shape>
             <size
-                android:width="1dp"
-                android:height="1dp" />
+                android:width="2dp"
+                android:height="2dp" />
             <corners android:radius="1dp" />
-            <solid
-                android:color="@color/gray" />
+            <solid android:color="#e3e3e3" />
         </shape>
     </item>
 </layer-list>

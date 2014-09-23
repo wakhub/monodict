@@ -22,6 +22,7 @@ from xml.etree.ElementTree import ElementTree, Element
 
 from fabric.api import *
 from fabric.colors import *
+from PIL import Image
 
 
 ENCODING = 'UTF-8'
@@ -116,6 +117,25 @@ def init_action_bar_icons(theme='holo_light'):
             if filename in ACTION_ICON_NAMES:
                 _copy(os.path.join(root, filename),
                       os.path.join(APP_RES_DIR, dpi_dir, filename))
+
+
+@task
+def init_inversed_images():
+
+    for basename in ['ic_action_search']:
+        for dpi in ['xhdpi', 'xxhdpi']:
+            current_dir = os.path.join(APP_RES_DIR, 'drawable-' + dpi)
+            image = Image.open(os.path.join(current_dir, basename + '.png'))
+
+            (r, g, b, a) = image.split()
+            (r, g, b) = [i.point(lambda p: 255) for i in (r, g, b)]
+            image = Image.merge(image.mode, (r, g, b, a))
+
+            (r, g, b, a) = image.split()
+            new_a = a.point(lambda p: p * 2)
+            image = Image.merge('RGBA', [r, g, b] + [new_a])
+ 
+            image.save(os.path.join(current_dir, basename + '_inverse.png'))
 
 
 @task
@@ -265,4 +285,3 @@ def _cleanup_inkscape_svg(svg_path):
             if filename_attr in element.attrib:
                 element.attrib[filename_attr] = ''
     tree.write(svg_path, encoding=ENCODING)
-

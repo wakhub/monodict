@@ -80,7 +80,7 @@ public class DictionarySearchView extends SearchView {
         setIconifiedByDefault(false);
         setQueryHint(resources.getString(R.string.title_keyword));
 
-        icon.setImageDrawable(resources.getDrawable(R.drawable.ic_action_search));
+        icon.setImageDrawable(resources.getDrawable(R.drawable.ic_action_search_inverse));
 
         searchPlate.setBackgroundResource(R.drawable.search_view_background);
 

@@ -16,9 +16,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="line">
     <stroke
-        android:color="@color/dark_gray"
+        android:color="@color/gray"
         android:width="1dp"
         android:dashGap="4dp"
-        android:dashWidth="1dp" />
+        android:dashWidth="2dp" />
 
 </shape>

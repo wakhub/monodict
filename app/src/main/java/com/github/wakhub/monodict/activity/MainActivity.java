@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -162,6 +163,8 @@ public class MainActivity extends Activity implements
     @AfterViews
     public void afterViews() {
         Log.d(TAG, "afterViews: state=" + state.toString());
+
+        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main)));
 
         Resources resources = getResources();
 
