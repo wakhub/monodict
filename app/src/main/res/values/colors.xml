@@ -25,17 +25,14 @@
     <color name="shadow">#22000000</color>
     <color name="frosted_white">#eeffffff</color>
 
-    <color name="background">@color/white</color>
-    <color name="text">@color/black</color>
-    <color name="border">@color/gray</color>
-
     <color name="nav_background">@color/frosted_black</color>
     <color name="nav_text">@color/white</color>
 
-    <color name="card">#f9f9f9</color>
+    <color name="card">#fcfcfc</color>
     <color name="card_highlight">#ffffff</color>
-    <color name="card_shade">#f3f3f3</color>
+    <color name="card_shade">#f9f9f9</color>
     <color name="card_pressed">#d0d0d0</color>
 
     <color name="main">#c0c0c0</color>
+    <color name="background">#e0e0e0</color>
 </resources>

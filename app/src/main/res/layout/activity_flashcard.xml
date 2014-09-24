@@ -18,7 +18,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.github.wakhub.monodict.activity.FlashcardActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/background">
 
     <ListView
         android:id="@android:id/list"

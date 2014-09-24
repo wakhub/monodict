@@ -58,7 +58,7 @@
     </style>
 
     <style name="AppTheme.ListView" parent="@android:style/Widget.ListView">
-        <item name="android:divider">@color/border</item>
+        <item name="android:divider">@color/gray</item>
         <item name="android:dividerHeight">1dp</item>
         <item name="android:paddingLeft">@dimen/space_relax</item>
         <item name="android:paddingRight">@dimen/space_relax</item>
