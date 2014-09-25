@@ -28,11 +28,7 @@
     <color name="nav_background">@color/frosted_black</color>
     <color name="nav_text">@color/white</color>
 
-    <color name="card">#fcfcfc</color>
-    <color name="card_highlight">#ffffff</color>
-    <color name="card_shade">#f9f9f9</color>
-    <color name="card_pressed">#d0d0d0</color>
-
     <color name="main">#c0c0c0</color>
+    <color name="sub">#e9e9e9</color>
     <color name="background">#e0e0e0</color>
 </resources>

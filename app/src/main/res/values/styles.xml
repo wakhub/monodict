@@ -96,18 +96,19 @@
     </style>
 
     <style name="AppTheme.Main.Nav">
-        <item name="android:background">@drawable/solid_background</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginBottom">@dimen/space_well</item>
     </style>
 
     <style name="AppTheme.Main.Nav.ImageButton" parent="@android:style/Widget.ImageButton">
-        <item name="android:layout_marginLeft">@dimen/space_well</item>
-        <item name="android:layout_marginRight">@dimen/space_well</item>
-        <item name="android:paddingLeft">@dimen/space_relax</item>
-        <item name="android:paddingRight">@dimen/space_relax</item>
-        <item name="android:background">@drawable/clickable_background</item>
+        <item name="android:layout_marginLeft">7dp</item>
+        <item name="android:layout_marginRight">7dp</item>
+        <item name="android:background">@drawable/circle_button</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:layout_height">42dp</item>
-        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">60dp</item>
     </style>
 
     <!-- FlashcardActivity -->
@@ -134,6 +135,7 @@
         <item name="android:paddingLeft">@dimen/space_relax</item>
         <item name="android:paddingRight">@dimen/space_relax</item>
         <item name="android:divider">@color/transparent</item>
-        <item name="android:dividerHeight">5dp</item>
+        <item name="android:dividerHeight">@dimen/space_relax</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
     </style>
 </resources>

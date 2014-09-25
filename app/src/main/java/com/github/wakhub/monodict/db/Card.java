@@ -16,6 +16,7 @@
 package com.github.wakhub.monodict.db;
 
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
@@ -86,7 +87,7 @@ public class Card extends Model {
         box = jsonObject.get(Column.BOX).getAsInt();
     }
 
-    public Card(Cursor cursor) {
+    public Card(Cursor cursor) throws CursorIndexOutOfBoundsException {
         id = getLongFromCursor(cursor, Column.ID);
         createdAt = getDateFromCursor(cursor, Column.CREATED_AT);
         updatedAt = getDateFromCursor(cursor, Column.UPDATED_AT);

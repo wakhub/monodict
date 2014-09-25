@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -378,6 +379,7 @@ public class FlashcardActivity extends ListActivity
 
     private boolean autoPlayLoop() {
         Cursor cursor = listAdapter.getCursor();
+        Card card = null;
         switch (autoPlayProgress) {
             case START:
                 speechHelper.init();
@@ -385,7 +387,13 @@ public class FlashcardActivity extends ListActivity
                 speechHelper.setOnUtteranceListener(this);
                 cursor.moveToFirst();
                 autoPlayProgress = AutoPlayProgress.WAIT_FOR_DISPLAY;
-                setAutoPlayCard(new Card(cursor));
+                try {
+                    card = new Card(cursor);
+                } catch (CursorIndexOutOfBoundsException e) {
+                    activityHelper.showError(e);
+                    return false;
+                }
+                setAutoPlayCard(card);
                 toneGenerator.startTone(ToneGenerator.TONE_PROP_ACK);
                 activityHelper.sleep(2000);
                 break;
@@ -400,7 +408,12 @@ public class FlashcardActivity extends ListActivity
                 Locale localeForTranslate = new Locale(languageForTranslate.substring(0, 2));
 
                 activityHelper.sleep(500);
-                Card card = new Card(cursor);
+                try {
+                    card = new Card(cursor);
+                } catch (CursorIndexOutOfBoundsException e) {
+                    activityHelper.showError(e);
+                    return false;
+                }
                 speechHelper.speech(
                         card.getTranslate().substring(0, Math.min(card.getTranslate().length(), 100)),
                         localeForTranslate, null);

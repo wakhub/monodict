@@ -14,16 +14,17 @@
   ~ limitations under the License.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@id/root">
+    android:orientation="vertical">
 
     <TextView
         android:id="@id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/header_background"
+        android:fontFamily="sans-serif-condensed"
         android:paddingBottom="@dimen/space_well"
         android:paddingLeft="@dimen/space_relax"
         android:paddingRight="@dimen/space_relax"
@@ -35,8 +36,7 @@
         android:text="New Text"
         android:textColor="#333333"
         android:textSize="16dp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-condensed" />
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@id/content"
@@ -56,38 +56,38 @@
                 style="@style/AppTheme.DisplayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/add_to_flashcard_button"
                 android:layout_weight="1"
                 android:text="Index"
-                android:layout_alignParentTop="true"
-                android:textIsSelectable="true"
-                android:layout_toLeftOf="@+id/add_to_flashcard_button"></TextView>
+                android:textIsSelectable="true"></TextView>
 
             <ImageButton
+                android:id="@+id/add_to_flashcard_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/add_to_flashcard_button"
-                android:src="@drawable/ic_action_add_to_queue"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/speech_button" />
+                android:layout_toLeftOf="@+id/speech_button"
+                android:src="@drawable/ic_action_add_to_queue" />
 
             <ImageButton
                 android:id="@+id/speech_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_action_volume_on"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/space_relax"
                 android:layout_toLeftOf="@+id/action_button"
-                android:layout_marginLeft="@dimen/space_relax" />
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_volume_on" />
 
             <ImageButton
+                android:id="@+id/action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/action_button"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_action_overflow"
-                android:layout_marginLeft="@dimen/space_relax_half" />
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/space_relax_half"
+                android:src="@drawable/ic_action_overflow" />
 
         </RelativeLayout>
 
@@ -111,9 +111,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="ListSample"
-            android:textStyle="italic"
             android:textIsSelectable="true"
-            android:textSize="16dp"></TextView>
+            android:textSize="16dp"
+            android:textStyle="italic"></TextView>
 
         <Button
             android:id="@+id/ListMoreButton"
@@ -122,14 +122,21 @@
             android:visibility="gone"></Button>
 
         <View
+            android:id="@+id/space_for_last_item"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone" />
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_super_relax" />
+
         <View
-            android:layerType="software"
             android:id="@+id/hr"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@drawable/dotted_border" />
+            android:background="@drawable/dotted_border"
+            android:layerType="software" />
     </LinearLayout>
 
 </LinearLayout>

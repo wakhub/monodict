@@ -18,7 +18,7 @@ package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.github.wakhub.monodict.activity.bean.DimensionHelper;
 
@@ -34,7 +34,7 @@ import java.lang.ref.WeakReference;
  * http://stackoverflow.com/questions/6918364/edittext-does-not-trigger-changes-when-back-is-pressed
  */
 @EView
-public class MainActivityRootLayout extends LinearLayout {
+public class MainActivityRootLayout extends RelativeLayout {
 
     @Bean
     DimensionHelper dimensionHelper;

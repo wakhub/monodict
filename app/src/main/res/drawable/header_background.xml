@@ -15,10 +15,6 @@
   -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <stroke
-        android:width="1px"
-        android:color="#aaaaaa" />
-
     <padding
         android:bottom="5dp"
         android:left="10dp"
@@ -26,9 +22,8 @@
         android:top="5dp" />
 
     <gradient
-        android:endColor="#eeeeee"
-        android:centerColor="#dfdfdf"
-        android:startColor="#dddddd"
         android:angle="90"
-        />
+        android:centerColor="#dcdcdc"
+        android:endColor="@color/sub"
+        android:startColor="#dfdfdf" />
 </shape>

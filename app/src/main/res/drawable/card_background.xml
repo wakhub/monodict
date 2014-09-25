@@ -14,111 +14,18 @@
   ~ limitations under the License.
   -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Referenced from style.xml -->
-
     <item android:state_pressed="true">
-        <layer-list>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp" />
-
-                    <solid android:color="#00000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp" />
-
-                    <solid android:color="#05000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" />
-
-                    <solid android:color="#10000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" />
-
-                    <solid android:color="#15000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape android:shape="rectangle">
-                    <stroke android:width="1px" android:color="@color/black" />
-                    <solid android:color="@color/card_pressed" />
-                    <corners android:radius="3dp" />
-                </shape>
-            </item>
-        </layer-list>
+        <shape android:shape="rectangle">
+            <padding android:bottom="5dp" android:left="10dp" android:right="10dp" android:top="5dp" />
+            <solid android:color="@color/light_gray" />
+            <corners android:radius="2dp" />
+        </shape>
     </item>
     <item>
-        <layer-list>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp" />
-
-                    <solid android:color="#00000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp" />
-
-                    <solid android:color="#05000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" />
-
-                    <solid android:color="#10000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape>
-                    <padding android:bottom="1dp" />
-
-                    <solid android:color="#15000000" />
-
-                    <corners android:radius="4dp" />
-                </shape>
-            </item>
-            <item>
-                <shape android:shape="rectangle">
-                    <stroke android:width="1px" android:color="@color/gray" />
-
-                    <padding android:bottom="5dp" android:left="10dp" android:right="10dp" android:top="5dp" />
-
-                    <gradient
-                        android:centerColor="@color/card"
-                        android:endColor="@color/card_shade"
-                        android:startColor="@color/card_highlight"
-                        android:angle="270"
-                        android:type="linear" />
-
-                    <corners android:radius="3dp" />
-                </shape>
-            </item>
-        </layer-list>
+        <shape android:shape="rectangle">
+            <padding android:bottom="5dp" android:left="10dp" android:right="10dp" android:top="5dp" />
+            <solid android:color="@color/white" />
+            <corners android:radius="2dp" />
+        </shape>
     </item>
-
 </selector>

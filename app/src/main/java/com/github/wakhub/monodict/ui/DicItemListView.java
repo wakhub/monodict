@@ -57,7 +57,6 @@ public class DicItemListView extends ListView {
         public static final int NORESULT = 3;
         public static final int FOOTER = 4;
 
-
         private int mDic;
         private int mMode;
         public CharSequence Index;
@@ -268,6 +267,7 @@ public class DicItemListView extends ListView {
             ImageButton actionButton;
             TextView Sample;
             Button moreButton;
+            View spaceForLastItem;
             View hr;
         }
 
@@ -359,6 +359,7 @@ public class DicItemListView extends ListView {
                         }
                     }
                 });
+                holder.spaceForLastItem = view.findViewById(R.id.space_for_last_item);
                 holder.hr = view.findViewById(R.id.hr);
 
                 holder.Index.setTextColor(Color.BLACK);
@@ -374,6 +375,7 @@ public class DicItemListView extends ListView {
             holder.speechButton.setVisibility(View.GONE);
             holder.actionButton.setVisibility(View.GONE);
             holder.hr.setVisibility(View.VISIBLE);
+            holder.spaceForLastItem.setVisibility(View.GONE);
             TextView header = (TextView) view.findViewById(R.id.header);
             header.setVisibility(View.GONE);
             View content = view.findViewById(R.id.content);
@@ -393,6 +395,7 @@ public class DicItemListView extends ListView {
                     holder.moreButton.setVisibility(View.GONE);
                     if (d.LastItem) {
                         holder.hr.setVisibility(View.GONE);
+                        holder.spaceForLastItem.setVisibility(View.VISIBLE);
                     }
                     break;
                 case Data.MORE:
