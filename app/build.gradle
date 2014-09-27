@@ -77,6 +77,11 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/notice.txt'
     }
+
+    lintOptions {
+//        checkReleaseBuilds false
+//        abortOnError false
+    }
 }
 
 File signingPropertiesFile = rootProject.file('credentials/release.keystore.properties')
