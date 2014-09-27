@@ -72,6 +72,7 @@ import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,8 +147,6 @@ public class MainActivity extends Activity implements
     private String extraActionSendText = null;
 
     private DictionarySearchView searchView = null;
-
-    private int delay = 0;
 
     private DicItemListView.ResultAdapter resultAdapter;
 
@@ -372,6 +371,8 @@ public class MainActivity extends Activity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
+        final WeakReference<MainActivity> activityRef = new WeakReference<MainActivity>(this);
+
         searchView = new DictionarySearchView(this, new DictionarySearchView.Listener() {
             @Override
             public void onSearchViewFocusChange(boolean b) {
@@ -380,20 +381,27 @@ public class MainActivity extends Activity implements
 
             @Override
             public void onSearchViewQueryTextSubmit(String query) {
-                search(query, delay);
+                if (activityRef.get() != null) {
+                    activityRef.get().search(query, 0);
+                }
             }
 
             @Override
             public void onSearchViewQueryTextChange(String s) {
                 String text = DiceFactory.convert(s);
-                String lastSearchQuery = state.getLastSearchQuery();
+                String lastSearchQuery = "";
+                if (activityRef.get() != null) {
+                    lastSearchQuery = activityRef.get().state.getLastSearchQuery();
+                }
                 if (text.length() > 0 && !lastSearchQuery.equals(text)) {
-                    int timer = delay;
+                    int delay = 0;
                     if (lastSearchQuery.length() > 0 &&
                             lastSearchQuery.charAt(lastSearchQuery.length() - 1) != text.charAt(text.length() - 1)) {
-                        timer = 10;
+                        delay = 10;
                     }
-                    search(text, timer);
+                    if (activityRef.get() != null) {
+                        activityRef.get().search(text, delay);
+                    }
                 }
             }
         });
