@@ -1,5 +1,5 @@
 {
-    "version": 5,
+    "version": 6,
     "items": [
         {
             "name": "Webster 1913 English Dictionary",
@@ -31,10 +31,10 @@
         },
         {
             "name": "Matsushita-Dien Indonesian-Japanese Dictionary",
-            "url": "https://googledrive.com/host/0B7-yqP_4DkNZSmY4UTRUN1B4S2M",
-            "size": "328KB",
+            "url": "https://googledrive.com/host/0B5IImzdq-qBKcHlBNHhGYmFEelU",
+            "size": "341KB",
             "english": false,
-            "description": "by Dien\nhttp://www.geocities.jp/indo_ka/bahasa/id_soft.htm"
+            "description": "by Dien\nhttp://www.geocities.jp/indo_ka/bahasa/id_soft.htm\nUpdate: 2014/07/13"
         }
     ]
 }
