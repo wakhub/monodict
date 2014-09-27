@@ -4,6 +4,7 @@
 <string name="action_add_new_card">新しい単語を登録</string>
 <string name="action_add_to_bookmarks">ブックマークに追加</string>
 <string name="action_add_to_flashcard">単語帳に追加</string>
+<string name="action_auto_play">自動再生</string>
 <string name="action_back">戻る</string>
 <string name="action_close">閉じる</string>
 <string name="action_copy_all">全てコピー</string>
@@ -48,6 +49,7 @@
 <string name="message_loading_dictionaries">辞書を読み込んでいます…</string>
 <string name="message_modified">変更しました</string>
 <string name="message_no_result">結果がありません</string>
+<string name="message_settings_open_tts_settings">Text-to-Speech のシステム設定を開く</string>
 <string name="message_success">成功</string>
 <string name="message_unable_to_access">アクセスできません</string>
 <string name="message_url_placeholder">URL 又はキーワード</string>
@@ -79,9 +81,16 @@
 <string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">高速スクロール</string>
 <string name="title_settings_legal">免責事項</string>
+<string name="title_settings_open_tts_settings">Text-to-Speech 設定</string>
+<string name="title_settings_orientation">画面の向き</string>
+<string name="title_settings_orientation_auto">自動</string>
+<string name="title_settings_orientation_landscape">横向き</string>
+<string name="title_settings_orientation_portrait">縦向き</string>
 <string name="title_settings_search">検索</string>
 <string name="title_settings_tts">文章読み上げ (Text to Speech)</string>
 <string name="title_settings_tts_default_language">デフォルトの言語</string>
+<string name="title_settings_tts_language_for_translation">訳文の言語</string>
 <string name="title_settings_version">バージョン</string>
+<string name="title_system_default">システムの標準設定を使う</string>
 <string name="title_welcome">monodict へようこそ!</string>
 </resources>
