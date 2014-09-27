@@ -48,8 +48,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 12
-        versionName '1.3.0b'
+        versionCode 13
+        versionName '2.0.0'
 
         ndk {
             moduleName 'monodict'
