@@ -1,0 +1,10 @@
+Version 2.0.0
+
++ Add Autoplay function for flashcard
++ Highlight search keyword
++ Orientation lock
+* Renew app design
+* Update the version of "Matsushita-Dien Indonesian-Japanese Dictionary"
+* Improve performance
+* Bugfixes
+- Auto detection of TTS language
