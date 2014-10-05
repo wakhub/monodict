@@ -34,7 +34,7 @@
         <layer-list>
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="#ccffffff" />
+                    <solid android:color="#ddffffff" />
                     <padding android:bottom="@dimen/space_well" android:left="@dimen/space_well" android:right="@dimen/space_well" android:top="@dimen/space_well" />
                 </shape>
             </item>

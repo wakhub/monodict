@@ -33,11 +33,18 @@
         style="@style/AppTheme.Main.Nav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:shrinkColumns="3">
+        android:shrinkColumns="4">
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
+            <ImageButton
+                android:id="@+id/search_button"
+                style="@style/AppTheme.Main.Nav.ImageButton"
+                android:layout_weight="1"
+                android:contentDescription="@string/action_search"
+                android:src="@drawable/ic_action_search" />
 
             <ImageButton
                 android:id="@+id/browser_button"

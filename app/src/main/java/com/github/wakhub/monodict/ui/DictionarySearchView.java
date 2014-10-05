@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -39,6 +40,8 @@ public class DictionarySearchView extends SearchView {
     private final TextView textView;
     private final ImageView icon;
     private final ImageView closeButton;
+    private final InputMethodManager inputMethodManager;
+
 
     private final Listener listener;
 
@@ -55,6 +58,8 @@ public class DictionarySearchView extends SearchView {
 
         this.listener = listener;
 
+        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
         Resources resources = getResources();
 
         // http://www.techrepublic.com/blog/software-engineer/pro-tip-customize-the-android-search-view-widget/
@@ -65,6 +70,11 @@ public class DictionarySearchView extends SearchView {
         closeButton = (ImageView) findViewById(resources.getIdentifier("android:id/search_close_btn", null, null));
 
         initViews();
+    }
+
+    public void focus() {
+        textView.requestFocus();
+        inputMethodManager.showSoftInput(textView, InputMethodManager.SHOW_FORCED);
     }
 
     void initViews() {

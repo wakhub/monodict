@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
@@ -112,9 +111,6 @@ public class MainActivity extends Activity implements
 
     @SystemService
     SearchManager searchManager;
-
-    @SystemService
-    InputMethodManager inputMethodManager;
 
     @Bean
     ActivityHelper activityHelper;
@@ -229,6 +225,11 @@ public class MainActivity extends Activity implements
     void search(String text, int timer) {
         resultAdapter.setHighlightKeyword(text);
         dictionaryServiceConnection.search(text);
+    }
+
+    @Click(R.id.search_button)
+    void onClickSearchButton() {
+        searchView.focus();
     }
 
     @Click(R.id.flashcard_button)
