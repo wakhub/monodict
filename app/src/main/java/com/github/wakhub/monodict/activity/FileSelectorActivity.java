@@ -46,12 +46,12 @@ public class FileSelectorActivity extends AbsFileManagerActivity {
 
     @Override
     @AfterViews
-    protected void afterViews() {
+    protected void afterViewsAbsFileManagerActivity() {
         if (extraTitle != null) {
             setTitle(extraTitle);
         }
         currentFullPath = state.getLastPath();
-        super.afterViews();
+        super.afterViewsAbsFileManagerActivity();
 
         commonActivityTrait.initActivity(preferences);
     }

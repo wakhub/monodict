@@ -13,6 +13,9 @@
 *.swp
 *.pyc
 
+# JNI outputs
+app/src/main/libs
+app/src/main/obj
 
 # https://github.com/github/gitignore/blob/master/Android.gitignore
 

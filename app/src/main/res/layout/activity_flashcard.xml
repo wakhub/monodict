@@ -13,19 +13,19 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:background="@color/background">
+    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity">
 
-    <ListView
-        android:id="@android:id/list"
-        style="@style/AppTheme.Flashcard.ListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:clickable="true"
+        android:scrollbars="vertical"/>
 </LinearLayout>

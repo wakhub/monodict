@@ -16,7 +16,6 @@
 
 package com.github.wakhub.monodict.activity;
 
-import android.app.ListActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -46,7 +45,7 @@ import java.util.List;
  * @see com.github.wakhub.monodict.activity.DirectorySelectorActivity
  */
 @EActivity
-public abstract class AbsFileManagerActivity extends ListActivity {
+public abstract class AbsFileManagerActivity extends AbsListActivity {
 
     private static final String TAG = AbsFileManagerActivity.class.getSimpleName();
 
@@ -71,7 +70,7 @@ public abstract class AbsFileManagerActivity extends ListActivity {
     protected String currentFullPath;
 
     @AfterViews
-    protected void afterViews() {
+    protected void afterViewsAbsFileManagerActivity() {
         if (currentFullPath == null || currentFullPath.isEmpty()) {
             currentFullPath = "/";
         }
@@ -195,14 +194,14 @@ public abstract class AbsFileManagerActivity extends ListActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 }

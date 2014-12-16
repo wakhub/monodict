@@ -13,108 +13,137 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/dialog_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@drawable/card_background"
-    android:padding="@dimen/space_relax"
     android:minWidth="300dp"
-    android:id="@+id/dialog_content">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/card_view_content_padding">
 
         <TextView
+            android:id="@+id/display_text"
+            style="@style/AppTheme.DisplayText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/blank_text"
-            android:id="@+id/display_text"
-            style="@style/AppTheme.DisplayText"
-            android:layout_toLeftOf="@+id/speech_button"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/translate_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/speech_button"
-            android:src="@drawable/ic_action_volume_on"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/action_button" />
+            android:layout_margin="@dimen/space_well"
+            android:maxLines="8"
+            android:minHeight="50dp"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            android:text="@string/blank_text"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_medium"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/note_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/action_button"
-            android:src="@drawable/ic_action_overflow"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/space_relax" />
-    </RelativeLayout>
+            android:padding="@dimen/space_well"
+            android:text="@string/blank_text"
+            android:textIsSelectable="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/blank_text"
-        android:id="@+id/translate_text"
-        android:layout_margin="@dimen/space_well"
-        android:textSize="@dimen/text_size_medium"
-        android:minHeight="50dp"
-        android:maxLines="8"
-        android:scrollbars="vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:textIsSelectable="true" />
+        <TextView
+            android:id="@+id/dictionary_text"
+            style="@style/AppTheme.DictionaryNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/blank_text"
+            android:textIsSelectable="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/blank_text"
-        android:id="@+id/note_text"
-        android:padding="@dimen/space_well"
-        android:textIsSelectable="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/blank_text"
-        android:id="@+id/dictionary_text"
-        style="@style/AppTheme.DictionaryNameText"
-        android:textIsSelectable="true" />
+    </LinearLayout>
 
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="@dimen/space_relax">
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
             <ImageButton
+                android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/back_button"
+                android:layout_weight="1"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_bad"
-                android:layout_weight="1" />
+                android:src="@drawable/ic_action_bad"/>
 
             <Button
+                android:id="@+id/keep_button"
+                style="@style/AppTheme.Flashcard.PlainTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/action_keep"
-                android:id="@+id/keep_button"
                 android:layout_weight="1"
-                style="@style/AppTheme.Flashcard.PlainTextButton" />
+                android:text="@string/action_keep"/>
 
             <ImageButton
+                android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/forward_button"
+                android:layout_weight="1"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_good"
-                android:layout_weight="1" />
+                android:src="@drawable/ic_action_good"/>
         </TableRow>
 
     </TableLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_edit"/>
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_discard"/>
+
+        <ImageButton
+            android:id="@+id/speech_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_volume_on"/>
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_search"/>
+
+        <ImageButton
+            android:id="@+id/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_overflow"/>
+    </LinearLayout>
 
 </LinearLayout>

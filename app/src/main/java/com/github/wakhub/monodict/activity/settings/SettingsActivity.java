@@ -15,11 +15,12 @@
  */
 package com.github.wakhub.monodict.activity.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.preferences.Preferences_;
@@ -34,8 +35,8 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
  *
  * @see SettingsActivity_
  */
-@EActivity
-public class SettingsActivity extends Activity {
+@EActivity(R.layout.activity_base)
+public class SettingsActivity extends ActionBarActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
@@ -58,9 +59,12 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        settingsFragment = new SettingsFragment_();
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, settingsFragment).commit();
+        settingsFragment = SettingsFragment_.builder().build();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, settingsFragment)
+                .commit();
         commonActivityTrait.initActivity(preferences);
 
         if (extraOpenDownloads) {
@@ -79,11 +83,12 @@ public class SettingsActivity extends Activity {
         settingsFragment.reload();
     }
 
+
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 }

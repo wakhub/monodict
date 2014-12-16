@@ -15,12 +15,12 @@
  */
 package com.github.wakhub.monodict.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -72,7 +72,7 @@ import java.util.ArrayList;
 
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
-public class BrowserActivity extends Activity
+public class BrowserActivity extends ActionBarActivity
         implements DictionaryService.Listener,
         TranslatePanelFragment.Listener,
         TextView.OnEditorActionListener {
@@ -161,7 +161,7 @@ public class BrowserActivity extends Activity
         }
         for (String protocol : PROTOCOLS) {
             if (url.startsWith(protocol)) {
-                Log.d(TAG, "loadUrl: " + url.toString());
+                Log.d(TAG, "loadUrl: " + url);
                 webView.loadUrl(url);
                 return;
             }
@@ -344,11 +344,11 @@ public class BrowserActivity extends Activity
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -360,6 +360,7 @@ public class BrowserActivity extends Activity
     @Override
     public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
         ActionMode actionMode = super.onWindowStartingActionMode(callback);
+        assert actionMode != null;
         Menu menu = actionMode.getMenu();
 
         for (int i = 0; i < menu.size(); i++) {
@@ -470,7 +471,7 @@ public class BrowserActivity extends Activity
         private final WeakReference<BrowserActivity> activityRef;
 
         private BrowserWebViewClient(BrowserActivity activity) {
-            this.activityRef = new WeakReference<BrowserActivity>(activity);
+            this.activityRef = new WeakReference<>(activity);
         }
 
         @Override

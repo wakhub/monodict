@@ -1,0 +1,6 @@
+[submodule "submodules/android-support-v4-preferencefragment"]
+	path = submodules/android-support-v4-preferencefragment
+	url = https://github.com/wakhub/android-support-v4-preferencefragment.git
+[submodule "submodules/material-design-icons"]
+	path = submodules/material-design-icons
+	url = https://github.com/google/material-design-icons.git

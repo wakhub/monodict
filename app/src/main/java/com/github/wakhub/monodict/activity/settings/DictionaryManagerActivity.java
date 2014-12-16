@@ -16,7 +16,6 @@
 package com.github.wakhub.monodict.activity.settings;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
+import com.github.wakhub.monodict.activity.AbsListActivity;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.dice.DiceFactory;
@@ -58,7 +58,8 @@ import java.util.List;
 
 @EActivity(R.layout.activity_dictionary_manager)
 @OptionsMenu({R.menu.dictionary_manager})
-public class DictionaryManagerActivity extends ListActivity implements DictionaryContextDialogBuilder.OnContextActionListener {
+public class DictionaryManagerActivity extends AbsListActivity
+        implements DictionaryContextDialogBuilder.OnContextActionListener {
 
     private static final String TAG = DictionaryManagerActivity.class.getSimpleName();
 
@@ -199,11 +200,11 @@ public class DictionaryManagerActivity extends ListActivity implements Dictionar
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -13,11 +13,8 @@
  */
 package com.github.wakhub.monodict.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,15 +25,22 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,6 +56,9 @@ import com.github.wakhub.monodict.ui.CardContextDialogBuilder;
 import com.github.wakhub.monodict.ui.CardDialog;
 import com.github.wakhub.monodict.ui.CardEditDialog;
 import com.github.wakhub.monodict.utils.DateTimeUtils;
+import com.google.common.base.Optional;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
@@ -67,16 +74,18 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.Locale;
@@ -87,7 +96,7 @@ import java.util.Map;
  */
 @EActivity(R.layout.activity_flashcard)
 @OptionsMenu({R.menu.flashcard})
-public class FlashcardActivity extends ListActivity
+public class FlashcardActivity extends ActionBarActivity
         implements ActionBar.TabListener,
         CardDialog.OnCardDialogListener,
         CardEditDialog.Listener,
@@ -100,6 +109,9 @@ public class FlashcardActivity extends ListActivity
     private static final int REQUEST_CODE_SELECT_FILE_TO_IMPORT = 10011;
 
     private static final String JSON_KEY_CARDS = "cards";
+
+    @ViewById
+    RecyclerView recyclerView;
 
     @SystemService
     PowerManager powerManager;
@@ -126,6 +138,9 @@ public class FlashcardActivity extends ListActivity
     private TextView autoPlayTranslateText = null;
     private TextView autoPlayDisplayText = null;
 
+    private LinearLayoutManager recyclerLayoutManager;
+    private RecyclerAdapter recyclerAdapter;
+
     private ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, 80);
 
     private static enum AutoPlayProgress {
@@ -144,9 +159,16 @@ public class FlashcardActivity extends ListActivity
     void afterViews() {
         Log.d(TAG, "state: " + state.toString());
         commonActivityTrait.initActivity(preferences);
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        // TODO: Replace by PagerTabStrip
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        recyclerView.setHasFixedSize(false);
+        recyclerLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(recyclerLayoutManager);
+        recyclerAdapter = new RecyclerAdapter(this);
+        recyclerView.setAdapter(recyclerAdapter);
     }
 
     @UiThread
@@ -159,7 +181,7 @@ public class FlashcardActivity extends ListActivity
             return;
         }
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         for (int i = 0; i < Card.BOX_MAX; i++) {
             ActionBar.Tab tab;
             if (actionBar.getTabCount() > i) {
@@ -211,7 +233,11 @@ public class FlashcardActivity extends ListActivity
     void loadContents() {
         Log.d(TAG, "loadContents: box=" + state.getBox());
         activityHelper.showProgressDialog(R.string.message_in_processing);
-        int box = getActionBar().getSelectedTab().getPosition() + 1;
+        ActionBar.Tab tab = getSupportActionBar().getSelectedTab();
+        int box = 0;
+        if (tab != null) {
+            box = tab.getPosition() + 1;
+        }
 
         Cursor cursor;
         try {
@@ -225,19 +251,24 @@ public class FlashcardActivity extends ListActivity
             activityHelper.hideProgressDialog();
             return;
         }
-        if (cursor != null) {
-            onLoadContents(cursor);
-        } else {
-            activityHelper.hideProgressDialog();
-        }
+        onLoadContents(cursor);
     }
 
     @UiThread
     void onLoadContents(Cursor cursor) {
-        Log.d(TAG, "onLoadContents: " + cursor.getCount());
+        Log.d(TAG, String.format("onLoadContents: %s", cursor));
+        if (cursor == null) {
+            activityHelper.hideProgressDialog();
+            return;
+        }
+
+        recyclerAdapter.cursor = Optional.of(cursor);
+        recyclerAdapter.notifyDataSetChanged();
+        activityHelper.hideProgressDialog();
 
         // how to maintain scroll position of listview when it updates
         // http://stackoverflow.com/questions/10196079
+        /*
         ListView listView = getListView();
         int lastPosition = listView.getFirstVisiblePosition();
         int lastTopOffset = 0;
@@ -259,6 +290,7 @@ public class FlashcardActivity extends ListActivity
 
         reloadTabs();
         activityHelper.hideProgressDialog();
+        */
     }
 
     @OnActivityResult(SpeechHelper.REQUEST_CODE_TTS)
@@ -519,7 +551,7 @@ public class FlashcardActivity extends ListActivity
         String json;
         try {
             FileInputStream inputStream = new FileInputStream(jsonPath);
-            json = TextUtils.join("", IOUtils.readLines(inputStream));
+            json = TextUtils.join("", CharStreams.readLines(new InputStreamReader(inputStream)));
         } catch (FileNotFoundException e) {
             activityHelper.showError(e);
             activityHelper.hideProgressDialog();
@@ -594,8 +626,10 @@ public class FlashcardActivity extends ListActivity
         }
 
         try {
-            FileOutputStream outputStream = new FileOutputStream(path);
-            IOUtils.write(jsonObject.toString(), outputStream);
+            // TODO: Make sure it works
+            ByteStreams.copy(
+                    new ByteArrayInputStream(jsonObject.toString().getBytes()),
+                    new FileOutputStream(path));
         } catch (FileNotFoundException e) {
             activityHelper.showError(e);
             activityHelper.hideProgressDialog();
@@ -617,11 +651,11 @@ public class FlashcardActivity extends ListActivity
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, final MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -630,7 +664,7 @@ public class FlashcardActivity extends ListActivity
         Log.d(TAG, "onTabSelected: " + index);
         stopAutoPlay();
         state.setBox(index + 1);
-        getListView().setSelection(0);
+//        getListView().setSelection(0);
         loadContents();
     }
 
@@ -683,6 +717,11 @@ public class FlashcardActivity extends ListActivity
     public void onContextActionSearch(Card card) {
         isReloadRequired = true;
         activityHelper.searchOnMainActivity(card.getDisplay());
+    }
+
+    @Override
+    public void onContextActionSpeech(Card card) {
+        speechHelper.speech(card.getDisplay());
     }
 
     @Override
@@ -791,7 +830,7 @@ public class FlashcardActivity extends ListActivity
 
         ListAdapter(FlashcardActivity activity, Cursor cursor) {
             super(activity, cursor, true);
-            activityRef = new WeakReference<FlashcardActivity>(activity);
+            activityRef = new WeakReference<>(activity);
         }
 
         @Override
@@ -852,6 +891,103 @@ public class FlashcardActivity extends ListActivity
             activity.getLayoutInflater().inflate(R.layout.list_item_card, view);
             bindView(view, context, cursor);
             return view;
+        }
+    }
+
+    private static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+
+        private final WeakReference<FlashcardActivity> activityRef;
+
+        private Optional<Cursor> cursor = Optional.absent();
+
+        private RecyclerAdapter(FlashcardActivity activity) {
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.list_item_card, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Log.d(TAG, "onBindHolder");
+            final FlashcardActivity activity = activityRef.get();
+            Optional<Card> cardOptional = getItem(position);
+            if (activity == null || !cardOptional.isPresent()) {
+                return;
+            }
+            final Card card = cardOptional.get();
+
+            holder.text1.setText(card.getDisplay());
+            holder.spaceTop.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+            holder.spaceBottom.setVisibility(position == getItemCount() - 1 ? View.VISIBLE : View.GONE);
+            String dictionary = card.getDictionary();
+            if (dictionary == null || dictionary.isEmpty()) {
+                holder.text2.setVisibility(View.GONE);
+            } else {
+                holder.text2.setVisibility(View.VISIBLE);
+                holder.text2.setText(dictionary);
+            }
+            holder.actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new CardContextDialogBuilder(activity, null, card)
+                            .setContextActionListener(activity)
+                            .show();
+                }
+            });
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CardDialog dialog = new CardDialog(activity, card);
+                    dialog.setListener(activity);
+                    dialog.setContextActionContext(activity);
+                    dialog.setContextActionListener(activity);
+                    dialog.show();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            Log.d(TAG, "getItemCount");
+            if (cursor.isPresent()) {
+                return cursor.get().getCount();
+            }
+            return 0;
+        }
+
+        private Optional<Card> getItem(int position) {
+            if (!cursor.isPresent()) {
+                return Optional.absent();
+            }
+            cursor.get().moveToPosition(position);
+            return Optional.of(new Card(cursor.get()));
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
+
+            private CardView cardView;
+            private View spaceTop;
+            private View spaceBottom;
+            private TextView text1;
+            private TextView text2;
+            private ImageButton actionButton;
+
+            private ViewHolder(View view) {
+                super(view);
+
+                cardView = (CardView)view.findViewById(R.id.card_view);
+                spaceTop = view.findViewById(R.id.space_top);
+                spaceBottom = view.findViewById(R.id.space_bottom);
+                text1 = (TextView) view.findViewById(android.R.id.text1);
+                text2 = (TextView) view.findViewById(android.R.id.text2);
+                actionButton = (ImageButton) view.findViewById(R.id.action_button);
+            }
         }
     }
 }

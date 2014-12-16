@@ -16,7 +16,6 @@
 package com.github.wakhub.monodict.activity.settings;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.wakhub.monodict.R;
+import com.github.wakhub.monodict.activity.AbsListActivity;
 import com.github.wakhub.monodict.activity.BrowserActivity;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
@@ -40,6 +40,7 @@ import com.github.wakhub.monodict.json.Downloads;
 import com.github.wakhub.monodict.json.DownloadsItem;
 import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.preferences.Preferences_;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 
 import org.androidannotations.annotations.AfterViews;
@@ -53,7 +54,6 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -67,13 +67,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 // TODO: refactoring
 @EActivity(R.layout.activity_downloads)
 @OptionsMenu({R.menu.downloads})
-public class DownloadsActivity extends ListActivity {
+public class DownloadsActivity extends AbsListActivity {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -114,7 +115,7 @@ public class DownloadsActivity extends ListActivity {
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity(preferences);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sdCard = Environment.getExternalStorageDirectory();
 
@@ -141,7 +142,9 @@ public class DownloadsActivity extends ListActivity {
         Downloads downloads = null;
         try {
             InputStream inputStream = getAssets().open("downloads.json");
-            downloads = (new Gson()).fromJson(IOUtils.toString(inputStream), Downloads.class);
+            downloads = (new Gson()).fromJson(
+                    CharStreams.toString(new InputStreamReader(inputStream)),
+                    Downloads.class);
         } catch (IOException e) {
             activityHelper.showError(e);
             return;
@@ -205,11 +208,11 @@ public class DownloadsActivity extends ListActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     class DownloadTask extends AsyncTask<String, Integer, String> {

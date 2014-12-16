@@ -16,8 +16,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Common -->
-
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+    <!--<style name="AppTheme" parent="@style/Theme.AppCompat.Light">-->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="android:buttonStyle">@style/AppTheme.Button</item>
         <item name="android:buttonStyleSmall">@style/AppTheme.ButtonSmall</item>
@@ -27,7 +27,7 @@
         <item name="android:listSelector">@drawable/list_selector</item>
     </style>
 
-    <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
     </style>
 

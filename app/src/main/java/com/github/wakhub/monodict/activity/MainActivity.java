@@ -15,8 +15,6 @@
  */
 package com.github.wakhub.monodict.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
@@ -30,12 +28,20 @@ import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
@@ -47,6 +53,7 @@ import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.dice.DiceFactory;
 import com.github.wakhub.monodict.preferences.Dictionaries;
+import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.preferences.MainActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.search.DictionaryService;
@@ -81,8 +88,8 @@ import java.util.List;
  */
 @EActivity(R.layout.activity_main)
 @OptionsMenu({R.menu.main})
-public class MainActivity extends Activity implements
-        MainActivityRootLayout.Listener,
+public class MainActivity extends ActionBarActivity
+        implements MainActivityRootLayout.Listener,
         DicItemListView.Callback,
         DicContextDialogBuilder.OnContextActionListener,
         DictionaryService.Listener {
@@ -102,6 +109,9 @@ public class MainActivity extends Activity implements
 
     @ViewById
     DicItemListView dicItemListView;
+
+    @ViewById
+    ListView drawerList;
 
     @ViewById
     TableLayout nav;
@@ -159,7 +169,7 @@ public class MainActivity extends Activity implements
     public void afterViews() {
         Log.d(TAG, "afterViews: state=" + state.toString());
 
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main)));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main)));
 
         Resources resources = getResources();
 
@@ -170,7 +180,7 @@ public class MainActivity extends Activity implements
         rootLayout.setListener(this);
 
         dicItemListView.setCallback(this);
-        resultData = new ArrayList<DicItemListView.Data>();
+        resultData = new ArrayList<>();
         resultAdapter = new DicItemListView.ResultAdapter(
                 this,
                 R.layout.list_item_dic,
@@ -179,6 +189,34 @@ public class MainActivity extends Activity implements
         dicItemListView.setAdapter(resultAdapter);
 
         resultAdapter.notifyDataSetChanged();
+
+        List<Dictionary> dictionaryList = new ArrayList<>();
+        for (int i = 0; i < dictionaries.getDictionaryCount(); i++) {
+            dictionaryList.add(dictionaries.getDictionary(i));
+        }
+
+        drawerList.setAdapter(new ArrayAdapter<Dictionary>(
+                this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                dictionaryList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Dictionary dictionary = getItem(position);
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = (TextView)view.findViewById(android.R.id.text1);
+                text1.setText(dictionary.getName());
+                return view;
+            }
+        });
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Dictionary dictionary = (Dictionary)drawerList.getItemAtPosition(position);
+                Toast.makeText(getBaseContext(), dictionary.getName(), Toast.LENGTH_SHORT).show();
+                rootLayout.closeDrawer(drawerList);
+            }
+        });
     }
 
     void initQuery() {
@@ -372,7 +410,7 @@ public class MainActivity extends Activity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        final WeakReference<MainActivity> activityRef = new WeakReference<MainActivity>(this);
+        final WeakReference<MainActivity> activityRef = new WeakReference<>(this);
 
         searchView = new DictionarySearchView(this, new DictionarySearchView.Listener() {
             @Override
@@ -407,7 +445,7 @@ public class MainActivity extends Activity implements
             }
         });
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
 
         RelativeLayout wrapSearchView = new RelativeLayout(this);
@@ -429,11 +467,11 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(featureId, item)) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -527,7 +565,9 @@ public class MainActivity extends Activity implements
                 if (file.isDirectory()) {
                     removeDirectory(file);
                 }
-                file.delete();
+                if (file.delete()) {
+                    Log.d(TAG, String.format("Failed to remove directory: %s", file.getPath()));
+                }
             }
         }
     }

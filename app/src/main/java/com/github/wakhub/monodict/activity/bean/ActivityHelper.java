@@ -40,6 +40,7 @@ import com.github.wakhub.monodict.activity.MainActivity_;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
+import com.google.common.io.CharStreams;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
@@ -47,10 +48,10 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 
 /**
@@ -262,9 +263,9 @@ public class ActivityHelper {
 
     public String getStringFromRaw(int resId) {
         InputStream stream = activity.getResources().openRawResource(resId);
-        String text = "";
+        String text;
         try {
-            text = IOUtils.toString(stream);
+            text = CharStreams.toString(new InputStreamReader(stream));
         } catch (IOException e) {
             return "";
         }

@@ -13,11 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <string name="action_order_alphabetically_short">A-Z</string>
-    <string name="app_name">monodict</string>
-    <string name="blank_text">---</string>
-    <string name="url_alc_co_jp_search">http://eow.alc.co.jp/sp/search.html?q=%s</string>
-    <string name="url_dictionary_com_search">http://dictionary.reference.com/browse/%s</string>
-    <string name="url_google_com_search">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%s</string>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size
+        android:width="1dp"
+        android:height="1dp"/>
+    <solid android:color="#10000000"/>
+</shape>

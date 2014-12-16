@@ -19,7 +19,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.v4.preference.PreferenceFragment;
 import android.text.TextUtils;
 
 import com.github.wakhub.monodict.MonodictApp;
@@ -28,7 +28,6 @@ import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
@@ -76,11 +75,9 @@ public class SettingsFragment extends PreferenceFragment {
         // http://stackoverflow.com/questions/10970068
         getPreferenceManager().setSharedPreferencesName(PREFERENCES_NAME);
         addPreferencesFromResource(R.xml.preferences);
-    }
 
-    @AfterViews
-    void afterViews() {
         reload();
+
     }
 
     private String getOrientationLabel(String value) {

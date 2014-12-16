@@ -39,6 +39,7 @@ public class CardContextDialogBuilder extends AlertDialog.Builder implements Dia
             R.string.action_edit,
             R.string.action_delete,
             R.string.action_search,
+            R.string.action_speech,
             R.string.action_search_by_google_com,
             R.string.action_search_by_dictionary_com,
             R.string.action_search_by_alc_co_jp);
@@ -55,6 +56,7 @@ public class CardContextDialogBuilder extends AlertDialog.Builder implements Dia
         void onContextActionMoveIntoInbox(Card card);
         void onContextActionEdit(Card card);
         void onContextActionDelete(Card card);
+        void onContextActionSpeech(Card card);
         void onContextActionSearch(Card card);
     }
 
@@ -91,6 +93,9 @@ public class CardContextDialogBuilder extends AlertDialog.Builder implements Dia
                 break;
             case R.string.action_delete:
                 contextActionListener.onContextActionDelete(card);
+                break;
+            case R.string.action_speech:
+                contextActionListener.onContextActionSpeech(card);
                 break;
             case R.string.action_search:
                 contextActionListener.onContextActionSearch(card);

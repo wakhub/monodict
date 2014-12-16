@@ -16,7 +16,6 @@
 
 package com.github.wakhub.monodict.activity;
 
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
@@ -31,7 +30,7 @@ import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.db.Bookmark;
 import com.github.wakhub.monodict.preferences.Preferences_;
 
-import org.androidannotations.annotations.AfterInject;
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -47,7 +46,7 @@ import java.util.List;
 
 @EActivity(R.layout.activity_browser_bookmarks)
 @OptionsMenu({R.menu.browser_bookmarks})
-public class BrowserBookmarksActivity extends ListActivity {
+public class BrowserBookmarksActivity extends AbsListActivity {
 
     //private static final int REQUEST_CODE = 10030;
 
@@ -67,8 +66,8 @@ public class BrowserBookmarksActivity extends ListActivity {
 
     private ArrayAdapter<Bookmark> listAdapter;
 
-    @AfterInject
-    void afterInject() {
+    @AfterViews
+    void afterViews() {
         commonActivityTrait.initActivity(preferences);
         listAdapter = new ArrayAdapter<Bookmark>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
             @Override

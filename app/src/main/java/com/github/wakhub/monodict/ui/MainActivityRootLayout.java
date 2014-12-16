@@ -17,8 +17,8 @@
 package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
+import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
 
 import com.github.wakhub.monodict.activity.bean.DimensionHelper;
 
@@ -34,7 +34,7 @@ import java.lang.ref.WeakReference;
  * http://stackoverflow.com/questions/6918364/edittext-does-not-trigger-changes-when-back-is-pressed
  */
 @EView
-public class MainActivityRootLayout extends RelativeLayout {
+public class MainActivityRootLayout extends DrawerLayout {
 
     @Bean
     DimensionHelper dimensionHelper;
@@ -43,14 +43,14 @@ public class MainActivityRootLayout extends RelativeLayout {
         void onSoftKeyboardShown(boolean isShowing);
     }
 
-    private WeakReference<Listener> listenerRef = new WeakReference<Listener>(null);
+    private WeakReference<Listener> listenerRef = new WeakReference<>(null);
 
     public MainActivityRootLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     public void setListener(Listener listener) {
-        this.listenerRef = new WeakReference<Listener>(listener);
+        this.listenerRef = new WeakReference<>(listener);
     }
 
     /**
