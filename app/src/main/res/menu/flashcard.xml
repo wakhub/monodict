@@ -13,37 +13,24 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_shuffle"
-        android:icon="@drawable/ic_action_shuffle"
-        android:showAsAction="always"
-        android:title="Shuffle" />
-    <item
-        android:id="@+id/action_order_alphabetically"
-        android:showAsAction="always"
-        android:title="A-Z" />
-    <item
-        android:id="@+id/action_auto_play"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_action_play"
-        android:title="Auto Play" />
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_new"
-        android:showAsAction="collapseActionView"
-        android:title="@string/action_add_new_card" />
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/action_add_new_card"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_delete_all"
-        android:icon="@drawable/ic_action_discard"
-        android:showAsAction="collapseActionView"
-        android:title="@string/action_delete_all" />
+        android:title="@string/action_delete_all"
+        app:showAsAction="collapseActionView"/>
     <item
         android:id="@+id/action_import"
-        android:showAsAction="collapseActionView"
-        android:title="Import" />
+        android:title="@string/action_import"
+        app:showAsAction="collapseActionView"/>
     <item
         android:id="@+id/action_export"
-        android:showAsAction="collapseActionView"
-        android:title="Export" />
+        android:title="@string/action_export"
+        app:showAsAction="collapseActionView"/>
 </menu>

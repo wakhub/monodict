@@ -15,6 +15,7 @@ limitations under the License.
 """
 from __future__ import print_function
 import os
+import itertools
 
 import json
 import xml.etree
@@ -34,6 +35,37 @@ RELEASE_KEYSTORE = os.path.join(CREDENTIALS_DIR, 'release.keystore')
 DPI = {'xhdpi': 2,
        'xxhdpi': 3,
        'xxxhdpi': 4}
+ICON_DP_LIST = [24, 36]
+ICON_COLORS = ['white', 'gray', 'blak']
+SYSTEM_ICON_NAMES = [
+    'ic_{}_{}_{}dp.png'.format(name, color, dpi)
+    for color, dpi, name in itertools.product(
+        ['white', 'black', 'grey600'],
+        ICON_DP_LIST,
+        ['add',
+         'book',
+         'bookmark',
+         'close',
+         'delete',
+         'edit',
+         'file_download',
+         'folder_open',
+         'help',
+         'list',
+         'navigate_before', 'navigate_next',
+         'more_horiz', 'more_vert',
+         'play_arrow',
+         'public',
+         'queue',
+         'refresh',
+         'search',
+         'settings',
+         'shuffle',
+         'thumb_down', 'thumb_up',
+         'volume_up',
+         ]
+    )
+]
 ACTION_ICON_NAMES = ['ic_action_{}.png'.format(i) for i in
                      ['about', 'accept', 'add_to_queue', 'bad', 'cancel', 'collection',
                       'discard', 'download', 'edit', 'expand', 'favorite', 'forward',
@@ -50,7 +82,7 @@ def init():
     local('mkdir -p ' + DOWNLOADS_DIR)
     local('mkdir -p ' + CREDENTIALS_DIR)
     download_resources()
-    init_action_bar_icons()
+    init_system_icons()
     if not os.path.exists(RELEASE_KEYSTORE) and prompt('Create release.keystore? [y/n]') == 'y':
         generate_keystore(RELEASE_KEYSTORE)
 
@@ -60,7 +92,7 @@ def prepare_for_commit():
     _sort_string_xml(os.path.join(APP_ROOT_DIR, 'src/main/res/values/strings.xml'))
     _sort_string_xml(os.path.join(APP_ROOT_DIR, 'src/main/res/values-ja/strings.xml'))
     _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/icons.svg'))
-    _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/logomark.svg'))
+    _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/logo.svg'))
     local('rm -rf %s' % os.path.join(APP_ROOT_DIR, 'build'))
     validation(False)
 
@@ -103,22 +135,21 @@ def download_resources():
 
 
 @task
-def init_action_bar_icons(theme='holo_light'):
-    """ init_action_bar_icons:{theme='holo_light'} """
-    icons_root_dir = os.path.join(DOWNLOADS_DIR, 'Android Design - Icons 20131120')
+def init_system_icons():
+    """ init_action_bar_icons """
+    icons_root_dir = os.path.join(ROOT_DIR, 'submodules/material-design-icons')
 
-    action_bar_icons_dir = os.path.join(icons_root_dir, 'Action Bar Icons', theme)
-    for root, dirs, files in os.walk(action_bar_icons_dir):
-        group, dpi_dir = root.split('/')[-2:]
-        dpi = dpi_dir.lstrip('drawable-')
-        if dpi not in DPI.keys():
+    for root, dirs, files in os.walk(icons_root_dir):
+        group, size = root.split('/')[-2:]
+        if not size.startswith('drawable-'):
             continue
+        dpi = size.split('-')[-1]
         for filename in files:
-            if filename in ACTION_ICON_NAMES:
-                _copy(os.path.join(root, filename),
-                      os.path.join(APP_RES_DIR, dpi_dir, filename))
-
-
+            if filename in SYSTEM_ICON_NAMES:
+                orig = os.path.join(root, filename)
+                dest = os.path.join(APP_RES_DIR, 'drawable-' + dpi, filename)
+                with settings(warn_only=True):
+                    local("cp -rf '{}' '{}'".format(orig, dest))
 
 @task
 def generate_keystore(keystore):

@@ -13,7 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,12 +23,12 @@
     tools:context="com.github.wakhub.monodict.activity.BrowserActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@id/focus_dummy"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:id="@id/focus_dummy"
         android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +40,7 @@
             android:id="@+id/progress_bar"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/url_text"
@@ -55,18 +57,61 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+        <WebView
             android:id="@+id/web_view"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"/>
 
         <fragment
+            android:id="@+id/translate_panel_fragment"
+            android:name="com.github.wakhub.monodict.ui.TranslatePanelFragment_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.github.wakhub.monodict.ui.TranslatePanelFragment_"
-            android:id="@+id/translate_panel_fragment"
-            tools:layout="@layout/fragment_translate_panel"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            tools:layout="@layout/fragment_translate_panel"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_default"
+                android:layout_marginRight="@dimen/space_default"
+                android:src="@drawable/ic_navigate_before_white_36dp"
+                app:fab_colorNormal="@color/gray"
+                app:fab_colorPressed="@color/light_gray"
+                app:fab_colorRipple="@color/light_gray"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_default"
+                android:layout_marginRight="@dimen/space_default"
+                android:src="@drawable/ic_navigate_next_white_36dp"
+                app:fab_colorNormal="@color/gray"
+                app:fab_colorPressed="@color/light_gray"
+                app:fab_colorRipple="@color/light_gray"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/refresh_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_default"
+                android:layout_marginRight="@dimen/space_default"
+                android:src="@drawable/ic_refresh_white_36dp"
+                app:fab_colorNormal="@color/gray"
+                app:fab_colorPressed="@color/light_gray"
+                app:fab_colorRipple="@color/light_gray"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

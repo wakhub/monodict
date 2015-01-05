@@ -21,6 +21,7 @@ import android.util.Log;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.dice.IIndexCacheFile;
 import com.github.wakhub.monodict.dice.IdicInfo;
+import com.google.common.base.MoreObjects;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -114,8 +115,20 @@ public class Dictionary {
         }
     }
 
-    public boolean equals(Dictionary dictionary) {
-        return dictionary.getPath().equals(path);
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("name", name)
+                .add("path", path)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Dictionary) {
+            return ((Dictionary) o).getPath().equals(path);
+        }
+        return super.equals(o);
     }
 
     public IIndexCacheFile createIndexCacheFile(Context context) {

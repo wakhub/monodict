@@ -22,6 +22,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.dice.DiceFactory;
 import com.github.wakhub.monodict.dice.IdicInfo;
@@ -33,6 +34,7 @@ import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.ui.DicItemListView;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,6 +54,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
     public static final int DISP_MODE_RESULT = 0;
     public static final int DISP_MODE_NORESULT = 3;
     public static final int DISP_MODE_HEADER = 5;
+    public static final int DISP_MODE_END = 10;
 
     private final Idice dice = DiceFactory.getInstance();
 
@@ -86,7 +89,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
 
         public DictionaryServiceBinder(DictionaryService service) {
             super();
-            dictionaryServiceRef = new WeakReference<DictionaryService>(service);
+            dictionaryServiceRef = new WeakReference<>(service);
         }
 
         DictionaryService getService() {
@@ -99,11 +102,30 @@ public final class DictionaryService extends Service implements SearchThread.Lis
             }
         }
 
+        void delete(Dictionary dictionary) {
+            if (dictionaryServiceRef.get() != null) {
+                dictionaryServiceRef.get().delete(dictionary);
+            }
+        }
+
+        void swap(Dictionary dictionary, int direction) {
+            if (dictionaryServiceRef.get() != null) {
+                dictionaryServiceRef.get().swap(dictionary, direction);
+            }
+        }
+
+        void reload() {
+            if (dictionaryServiceRef.get() != null) {
+                dictionaryServiceRef.get().reload();
+            }
+        }
+
         void setListener(Listener listener) {
             DictionaryService service = getService();
-            if (service != null) {
-                service.listenerRef = new WeakReference<Listener>(listener);
+            if (service == null) {
+                return;
             }
+            service.listenerRef = new WeakReference<>(listener);
             if (service.isInitialized) {
                 listener.onDictionaryServiceInitialized();
             }
@@ -228,6 +250,30 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         searchThread.start();
     }
 
+    private void delete(Dictionary dictionary) {
+        final IdicInfo dicInfo = dice.getDicInfo(dictionary.getPath());
+        if (dicInfo != null) {
+            dice.close(dicInfo);
+        }
+        String cacheFilePath = dictionary.getIndexCacheFilePath(this);
+        if (!new File(cacheFilePath).delete()) {
+            Log.d(TAG, String.format("Failed to delete dictionary: %s", cacheFilePath));
+            return;
+        }
+
+        MonodictApp.getEventBus().post(new DictionaryDeletedEvent(dictionary));
+    }
+
+    private void swap(Dictionary dictionary, int direction) {
+        final IdicInfo dicInfo = dice.getDicInfo(dictionary.getPath());
+        dice.swap(dicInfo, direction);
+        MonodictApp.getEventBus().post(new DictionarySwappedEvent(dictionary, direction));
+    }
+
+    private void reload() {
+        initDice();
+    }
+
     // { SearchThread.Interface
 
     @Override
@@ -282,6 +328,11 @@ public final class DictionaryService extends Service implements SearchThread.Lis
                 result.add(data);
                 break;
             }
+            case DISP_MODE_END: {
+                DicItemListView.Data data = new DicItemListView.Data(DicItemListView.Data.END, 0);
+                result.add(data);
+                break;
+            }
         }
     }
 
@@ -308,4 +359,37 @@ public final class DictionaryService extends Service implements SearchThread.Lis
     }
 
     // SearchThread.Interface }
+
+    public static final class DictionaryDeletedEvent {
+
+        private final Dictionary dictionary;
+
+        public DictionaryDeletedEvent(Dictionary dictionary) {
+            this.dictionary = dictionary;
+        }
+
+        public Dictionary getDictionary() {
+            return dictionary;
+        }
+    }
+
+    public static final class DictionarySwappedEvent {
+
+        private final Dictionary dictionary;
+
+        private final int direction;
+
+        public DictionarySwappedEvent(Dictionary dictionary, int direction) {
+            this.dictionary = dictionary;
+            this.direction = direction;
+        }
+
+        public Dictionary getDictionary() {
+            return dictionary;
+        }
+
+        public int getDirection() {
+            return direction;
+        }
+    }
 }

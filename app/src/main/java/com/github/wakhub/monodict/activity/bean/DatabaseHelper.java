@@ -139,8 +139,6 @@ public class DatabaseHelper {
         cardDao.deleteBuilder().delete();
     }
 
-    // Card }
-
     public Map<Integer, Integer> getCountsForBoxes() throws SQLException {
         Map<Integer, Integer> countsForBoxes = new HashMap<Integer, Integer>();
         GenericRawResults results = cardDao.queryBuilder()
@@ -153,6 +151,8 @@ public class DatabaseHelper {
         }
         return countsForBoxes;
     }
+
+    // Card }
 
     // { Bookmark
 

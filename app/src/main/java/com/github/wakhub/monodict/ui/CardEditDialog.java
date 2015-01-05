@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.db.Card;
+import com.github.wakhub.monodict.db.Model;
 import com.mobsandgeeks.saripaar.Rule;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Required;
@@ -41,7 +42,7 @@ public class CardEditDialog extends Dialog implements Validator.ValidationListen
     private final TextView titleText;
 
     @Required(order = 1, messageResId = R.string.message_validation_required)
-    @TextRule(order = 2, trim = true, messageResId =  R.string.message_validation_max_100)
+    @TextRule(order = 2, trim = true, messageResId = R.string.message_validation_max_100)
     private final EditText displayText;
 
     @Required(order = 2, messageResId = R.string.message_validation_required)
@@ -58,12 +59,6 @@ public class CardEditDialog extends Dialog implements Validator.ValidationListen
     private final com.mobsandgeeks.saripaar.Validator validator;
 
     private final Card card;
-
-    private Listener listener;
-
-    public interface Listener {
-        void onCardEditDialogSave(CardEditDialog dialog, Card card);
-    }
 
     public CardEditDialog(Context context, Card card) {
         super(context, R.style.AppTheme_Flashcard_CardDialog);
@@ -126,16 +121,16 @@ public class CardEditDialog extends Dialog implements Validator.ValidationListen
         });
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
-
     private void save() {
         card.setDisplay(displayText.getText().toString());
         card.setTranslate(translateText.getText().toString());
         card.setNote(noteText.getText().toString());
-
-        listener.onCardEditDialogSave(this, card);
+        if (card.getId() == null) {
+            card.notifyChangeRequest(Model.ModelChangeRequestEvent.TYPE_INSERT);
+        } else {
+            card.notifyChangeRequest(Model.ModelChangeRequestEvent.TYPE_UPDATE);
+        }
+        dismiss();
     }
 
     @Override

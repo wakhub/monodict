@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.wakhub.monodict.ui;
+package com.github.wakhub.monodict.activity;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
@@ -29,15 +29,14 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by wak on 9/22/14.
- * <p/>
- * EditText does not trigger changes when back is pressed
- * http://stackoverflow.com/questions/6918364/edittext-does-not-trigger-changes-when-back-is-pressed
  */
 @EView
 public class MainActivityRootLayout extends DrawerLayout {
 
     @Bean
     DimensionHelper dimensionHelper;
+
+    private boolean softKeyboardShown;
 
     public interface Listener {
         void onSoftKeyboardShown(boolean isShowing);
@@ -67,10 +66,15 @@ public class MainActivityRootLayout extends DrawerLayout {
                 - dimensionHelper.getActionBarHeight();
         int diff = displayHeight - height;
         if (listenerRef.get() != null) {
-            listenerRef.get().onSoftKeyboardShown(diff > 128); // assume all soft
+            softKeyboardShown = diff > 128;
+            listenerRef.get().onSoftKeyboardShown(softKeyboardShown); // assume all soft
             // keyboards are at
             // least 128 pixels high
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public boolean isSoftKeyboardShown() {
+        return softKeyboardShown;
     }
 }

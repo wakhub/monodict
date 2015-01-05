@@ -15,11 +15,11 @@
  */
 package com.github.wakhub.monodict.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.BrowserActivity_;
 
@@ -30,11 +30,10 @@ import java.util.List;
 /**
  * Created by wak on 5/25/14.
  */
-public class DicContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
+public class DicContextDialogBuilder extends MaterialDialog.Builder implements MaterialDialog.ListCallback {
 
     private static final String TAG = DicContextDialogBuilder.class.getSimpleName();
     private static final List<Integer> ITEM_IDS = Arrays.asList(
-            R.string.action_add_to_flashcard,
             R.string.action_copy_all,
             R.string.action_search_by_google_com,
             R.string.action_search_by_dictionary_com,
@@ -47,23 +46,21 @@ public class DicContextDialogBuilder extends AlertDialog.Builder implements Dial
 
     private ArrayList<String> itemLabels = new ArrayList<String>();
 
-    public interface OnContextActionListener {
-        void onContextActionAddToFlashcard(DicItemListView.Data data);
+    private final Context context;
 
-        void onContextActionShare(DicItemListView.Data data);
-
-        void onContextActionCopyAll(DicItemListView.Data data);
-    }
 
     public DicContextDialogBuilder(Context context, DicItemListView.Data data) {
         super(context);
+        this.context = context;
         this.data = data;
-        Resources resources = getContext().getResources();
+        Resources resources = context.getResources();
         for (Integer id : ITEM_IDS) {
             itemLabels.add(resources.getString(id));
         }
-        setTitle(data.Index.toString());
-        setItems(itemLabels.toArray(new CharSequence[0]), this);
+        icon(R.drawable.ic_search_black_36dp);
+        title(data.Index.toString());
+        items(itemLabels.toArray(new CharSequence[0]));
+        itemsCallback(this);
     }
 
     public DicContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {
@@ -72,14 +69,10 @@ public class DicContextDialogBuilder extends AlertDialog.Builder implements Dial
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
-        int id = ITEM_IDS.get(which);
-        Context context = getContext();
+    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+        int id = ITEM_IDS.get(i);
         Resources resources = context.getResources();
         switch (id) {
-            case R.string.action_add_to_flashcard:
-                contextActionListener.onContextActionAddToFlashcard(data);
-                break;
             case R.string.action_copy_all:
                 contextActionListener.onContextActionCopyAll(data);
                 break;
@@ -103,4 +96,11 @@ public class DicContextDialogBuilder extends AlertDialog.Builder implements Dial
                 break;
         }
     }
+
+    public interface OnContextActionListener {
+        void onContextActionShare(DicItemListView.Data data);
+
+        void onContextActionCopyAll(DicItemListView.Data data);
+    }
+
 }

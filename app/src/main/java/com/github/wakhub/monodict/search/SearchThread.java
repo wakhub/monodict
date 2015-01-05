@@ -99,6 +99,8 @@ class SearchThread extends Thread {
             if (listenerRef.get() != null) {
                 if (result.size() == 0) {
                     listenerRef.get().generateViewForSearch(DictionaryService.DISP_MODE_NORESULT, -1, null, result, -1);
+                } else {
+                    listenerRef.get().generateViewForSearch(DictionaryService.DISP_MODE_END, -1, null, result, -1);
                 }
 
                 if (!interrupted()) {

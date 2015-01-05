@@ -13,19 +13,65 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
-    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity">
+    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity_">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:scrollbars="vertical"/>
-</LinearLayout>
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/light_gray"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/auto_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/abc_control_padding_material"
+            android:layout_marginRight="@dimen/space_default"
+            android:src="@drawable/ic_play_arrow_white_36dp"
+            app:fab_colorNormal="@color/gray"
+            app:fab_colorPressed="@color/light_gray"
+            app:fab_colorRipple="@color/light_gray"/>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/alphabetical_order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_default"
+            android:layout_marginRight="@dimen/space_default"
+            android:src="@drawable/ic_alphabetical_order_white_36dp"
+            app:fab_colorNormal="@color/gray"
+            app:fab_colorPressed="@color/light_gray"
+            app:fab_colorRipple="@color/light_gray"/>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/shuffle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_default"
+            android:layout_marginRight="@dimen/space_default"
+            android:src="@drawable/ic_shuffle_white_36dp"
+            app:fab_colorNormal="@color/gray"
+            app:fab_colorPressed="@color/light_gray"
+            app:fab_colorRipple="@color/light_gray"/>
+
+    </LinearLayout>
+</RelativeLayout>

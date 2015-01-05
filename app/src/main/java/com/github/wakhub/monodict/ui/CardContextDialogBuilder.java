@@ -15,11 +15,11 @@
  */
 package com.github.wakhub.monodict.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.BrowserActivity_;
 import com.github.wakhub.monodict.db.Card;
@@ -31,74 +31,80 @@ import java.util.List;
 /**
  * Created by wak on 5/29/14.
  */
-public class CardContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
+public class CardContextDialogBuilder extends MaterialDialog.Builder implements MaterialDialog.ListCallback {
 
     private static final String TAG = CardContextDialogBuilder.class.getSimpleName();
-    private static final List<Integer> ITEM_IDS = Arrays.asList(
-            R.string.action_move_into_inbox,
+
+    private static final List<Integer> ALL_ITEM_IDS = Arrays.asList(
+            R.string.action_speech,
             R.string.action_edit,
             R.string.action_delete,
+            R.string.action_move_into_inbox,
             R.string.action_search,
-            R.string.action_speech,
             R.string.action_search_by_google_com,
             R.string.action_search_by_dictionary_com,
             R.string.action_search_by_alc_co_jp);
 
-    private OnContextActionListener contextActionListener;
-
-    private final CardDialog dialog;
+    private CardContextActionListener contextActionListener;
 
     private final Card card;
 
-    private ArrayList<String> itemLabels = new ArrayList<String>();
+    private ArrayList<Integer> itemIds = new ArrayList<>();
 
-    public interface OnContextActionListener {
-        void onContextActionMoveIntoInbox(Card card);
-        void onContextActionEdit(Card card);
-        void onContextActionDelete(Card card);
-        void onContextActionSpeech(Card card);
-        void onContextActionSearch(Card card);
-    }
+    private final Context context;
 
-    public CardContextDialogBuilder(Context context, CardDialog dialog, Card card) {
+    public CardContextDialogBuilder(Context context, Card card, int[] ignoredStringIds) {
         super(context);
-        this.dialog = dialog;
+        this.context = context;
         this.card = card;
-        Resources resources = getContext().getResources();
-        for (Integer id : ITEM_IDS) {
-            itemLabels.add(resources.getString(id));
+        Resources resources = context.getResources();
+        for (Integer id : ALL_ITEM_IDS) {
+            boolean ignored = false;
+            for (int ignoredId : ignoredStringIds) {
+                if (id == ignoredId) {
+                    ignored = true;
+                }
+            }
+            if (!ignored) {
+                itemIds.add(id);
+            }
         }
-        setTitle(card.getDisplay());
-        setItems(itemLabels.toArray(new CharSequence[0]), this);
+        title(card.getDisplay());
+        icon(R.drawable.ic_flashcards_black_36dp);
+        String[] itemLabels = new String[itemIds.size()];
+        for (int i = 0; i < itemIds.size(); i++) {
+            itemLabels[i] = resources.getString(itemIds.get(i));
+        }
+        items(itemLabels);
+        itemsCallback(this);
     }
 
-    public CardContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {
+    public CardContextDialogBuilder setContextActionListener(CardContextActionListener contextActionListener) {
         this.contextActionListener = contextActionListener;
         return this;
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
-        int id = ITEM_IDS.get(which);
-        Context context = getContext();
+    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+        int id = itemIds.get(i);
         Resources resources = context.getResources();
         String display = card.getDisplay();
 
         switch (id) {
-            case R.string.action_move_into_inbox:
-                contextActionListener.onContextActionMoveIntoInbox(card);
+            case R.string.action_speech:
+                contextActionListener.onCardContextActionSpeech(card);
                 break;
             case R.string.action_edit:
-                contextActionListener.onContextActionEdit(card);
+                contextActionListener.onCardContextActionEdit(card);
                 break;
             case R.string.action_delete:
-                contextActionListener.onContextActionDelete(card);
+                contextActionListener.onCardContextActionDelete(card);
                 break;
-            case R.string.action_speech:
-                contextActionListener.onContextActionSpeech(card);
+            case R.string.action_move_into_inbox:
+                contextActionListener.onCardContextActionMoveIntoInbox(card);
                 break;
             case R.string.action_search:
-                contextActionListener.onContextActionSearch(card);
+                contextActionListener.onCardContextActionSearch(card);
                 break;
             case R.string.action_search_by_google_com:
                 BrowserActivity_.intent(context)
@@ -115,9 +121,6 @@ public class CardContextDialogBuilder extends AlertDialog.Builder implements Dia
                         .extraUrlOrKeywords(resources.getString(R.string.url_alc_co_jp_search, display))
                         .start();
                 break;
-        }
-        if (this.dialog != null) {
-            this.dialog.dismiss();
         }
     }
 }

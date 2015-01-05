@@ -13,9 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<com.github.wakhub.monodict.ui.MainActivityRootLayout_
+<com.github.wakhub.monodict.activity.MainActivityRootLayout_
     android:id="@+id/root_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
@@ -37,56 +38,72 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"/>
 
-            <TableLayout
-                android:id="@+id/nav"
-                style="@style/AppTheme.Main.Nav"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="4">
+                android:layout_alignParentBottom="true"
+                android:gravity="left"
+                android:orientation="horizontal">
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/browser_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_default"
+                    android:layout_marginLeft="@dimen/space_default"
+                    android:src="@drawable/ic_public_black_36dp"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/light_gray"
+                    app:fab_colorRipple="@color/light_gray"/>
 
-                    <ImageButton
-                        android:id="@+id/search_button"
-                        style="@style/AppTheme.Main.Nav.ImageButton"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/action_search"
-                        android:src="@drawable/ic_action_search"/>
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/flashcard_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_default"
+                    android:layout_marginLeft="@dimen/space_default"
+                    android:src="@drawable/ic_flashcards_black_36dp"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/light_gray"
+                    app:fab_colorRipple="@color/light_gray"/>
 
-                    <ImageButton
-                        android:id="@+id/browser_button"
-                        style="@style/AppTheme.Main.Nav.ImageButton"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/title_activity_browser"
-                        android:src="@drawable/ic_browser"/>
+            </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/flashcard_button"
-                        style="@style/AppTheme.Main.Nav.ImageButton"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/title_activity_flashcard"
-                        android:src="@drawable/ic_flashcard"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="right"
+                android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/settings_button"
-                        style="@style/AppTheme.Main.Nav.ImageButton"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/title_activity_settings"
-                        android:src="@drawable/ic_settings"/>
-                </TableRow>
-            </TableLayout>
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_default"
+                    android:layout_marginRight="@dimen/space_default"
+                    android:src="@drawable/ic_search_white_36dp"
+                    app:fab_colorNormal="@color/gray"
+                    app:fab_colorPressed="@color/light_gray"
+                    app:fab_colorRipple="@color/light_gray"/>
+
+            </LinearLayout>
         </RelativeLayout>
     </FrameLayout>
 
     <ListView
         android:id="@+id/drawer_list"
-        android:layout_width="@dimen/drawer_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/light_gray"
         android:choiceMode="singleChoice"
-        android:divider="@color/gray"
-        android:dividerHeight="1dp"/>
-</com.github.wakhub.monodict.ui.MainActivityRootLayout_>
+        android:divider="@null"
+        android:paddingTop="@dimen/space_default"
+        android:paddingBottom="@dimen/space_default"
+        android:clipToPadding="false"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:listSelector="@color/transparent"/>
+
+</com.github.wakhub.monodict.activity.MainActivityRootLayout_>

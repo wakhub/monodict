@@ -11,6 +11,17 @@ the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
 `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
 
 
+TODO
+==========
+
+- Refactoring activity state codes by using savedInstanceState
+- Font settings
+- History
+- Refine browser
+- Implement translaion ruby function that is like http://zurukko.jp/
+- Bluetooth integration
+
+
 Setup monodict Project
 ========================
 
@@ -33,16 +44,6 @@ Command::
     $ fab init
 
 Then check `sdk.dir` and `ndk.dir` in your `local.properties`
-
-
-TODO
-==========
-
-- Font settings
-- History
-- Refine browser
-- Implement translaion ruby function that is like http://zurukko.jp/
-- Bluetooth integration
 
 
 LICENSE

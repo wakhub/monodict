@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'com.droidtitan:lint-cleaner-plugin:0.3.0'
     }
 }
 
@@ -12,6 +13,7 @@ allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
+        jcenter()
         maven {
             url 'http://repo.spring.io/milestone'
         }

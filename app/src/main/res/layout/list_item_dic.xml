@@ -13,8 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:id="@id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -23,120 +24,115 @@
         android:id="@id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/header_background"
+        android:background="@color/grey_300"
         android:fontFamily="sans-serif-condensed"
-        android:paddingBottom="@dimen/space_well"
-        android:paddingLeft="@dimen/space_relax"
-        android:paddingRight="@dimen/space_relax"
-        android:paddingTop="@dimen/space_well"
-        android:shadowColor="@color/light_gray"
+        android:padding="@dimen/space_cozy"
+        android:shadowColor="@color/grey_100"
         android:shadowDx="-1"
         android:shadowDy="-1"
         android:shadowRadius="1"
-        android:text="New Text"
-        android:textColor="#333333"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:text="@null"
+        android:textColor="@color/grey_900"
+        android:textSize="@dimen/text_size_body"
+        android:textStyle="bold"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@id/content"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:paddingLeft="@dimen/space_relax"
-        android:paddingRight="@dimen/space_relax"
-        android:paddingTop="@dimen/space_relax">
+        android:paddingRight="@dimen/space_relax">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/actions_layout"
+            android:layout_toStartOf="@+id/actions_layout"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/ListIndex"
                 style="@style/AppTheme.DisplayText"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/add_to_flashcard_button"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Index"
-                android:textIsSelectable="true"></TextView>
+                android:text="@null"
+                android:textIsSelectable="true"/>
 
-            <ImageButton
-                android:id="@+id/add_to_flashcard_button"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/ListPhone"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/speech_button"
-                android:src="@drawable/ic_action_add_to_queue" />
+                android:text="@null"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_body"/>
 
-            <ImageButton
-                android:id="@+id/speech_button"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/ListTrans"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="@dimen/space_relax"
-                android:layout_toLeftOf="@+id/action_button"
-                android:layout_weight="1"
-                android:src="@drawable/ic_action_volume_on" />
+                android:text="@null"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_body"/>
+
+            <TextView
+                android:id="@+id/ListSample"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@null"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="italic"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actions_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="@dimen/space_relax_half"
-                android:src="@drawable/ic_action_overflow" />
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_more"
+                android:src="@drawable/ic_more_horiz_grey600_24dp"/>
 
-        </RelativeLayout>
+            <ImageButton
+                android:id="@+id/speech_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_speech"
+                android:src="@drawable/ic_volume_up_grey600_24dp"/>
 
-        <TextView
-            android:id="@+id/ListPhone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Phone"
-            android:textIsSelectable="true"></TextView>
+            <ImageButton
+                android:id="@+id/add_to_flashcard_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_add_to_flashcard"
+                android:src="@drawable/ic_add_flashcard_gray600_24dp"/>
 
-        <TextView
-            android:id="@+id/ListTrans"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Trans"
-            android:textIsSelectable="true"
-            android:textSize="16dp"></TextView>
+        </LinearLayout>
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/ListSample"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="ListSample"
-            android:textIsSelectable="true"
-            android:textSize="16dp"
-            android:textStyle="italic"></TextView>
+    <View
+        android:id="@+id/hr"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="@dimen/space_well"
+        android:layout_marginRight="@dimen/space_well"
+        android:layout_marginTop="@dimen/space_default"
+        android:background="@drawable/dotted_border"
+        android:layerType="software"/>
 
-        <Button
-            android:id="@+id/ListMoreButton"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/space_relax"
-            android:visibility="gone"></Button>
-
-        <View
-            android:id="@+id/space_for_last_item"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="gone" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_super_relax" />
-
-        <View
-            android:id="@+id/hr"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/dotted_border"
-            android:layerType="software" />
-    </LinearLayout>
+    <View
+        android:id="@+id/end"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fab_size_normal"
+        android:layout_marginBottom="@dimen/space_default"
+        android:layout_marginTop="@dimen/space_default"
+        android:visibility="gone"/>
 
 </LinearLayout>

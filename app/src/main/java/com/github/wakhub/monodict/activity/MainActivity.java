@@ -23,25 +23,22 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
@@ -51,6 +48,7 @@ import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.activity.bean.SpeechHelper;
 import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
 import com.github.wakhub.monodict.db.Card;
+import com.github.wakhub.monodict.db.Model;
 import com.github.wakhub.monodict.dice.DiceFactory;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Dictionary;
@@ -60,8 +58,17 @@ import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
+import com.github.wakhub.monodict.ui.DictionaryContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
-import com.github.wakhub.monodict.ui.MainActivityRootLayout;
+import com.github.wakhub.monodict.utils.StringUtils;
+import com.github.wakhub.monodict.utils.ViewUtils;
+import com.google.common.eventbus.Subscribe;
+import com.melnykov.fab.FloatingActionButton;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.enums.SnackbarType;
+import com.nispok.snackbar.listeners.ActionClickListener;
+import com.nispok.snackbar.listeners.EventListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.App;
@@ -88,11 +95,12 @@ import java.util.List;
  */
 @EActivity(R.layout.activity_main)
 @OptionsMenu({R.menu.main})
-public class MainActivity extends ActionBarActivity
-        implements MainActivityRootLayout.Listener,
+public class MainActivity extends ActionBarActivity implements
+        MainActivityRootLayout.Listener,
         DicItemListView.Callback,
         DicContextDialogBuilder.OnContextActionListener,
-        DictionaryService.Listener {
+        DictionaryService.Listener,
+        DictionaryContextDialogBuilder.OnContextActionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -114,7 +122,13 @@ public class MainActivity extends ActionBarActivity
     ListView drawerList;
 
     @ViewById
-    TableLayout nav;
+    FloatingActionButton browserButton;
+
+    @ViewById
+    FloatingActionButton flashcardButton;
+
+    @ViewById
+    FloatingActionButton searchButton;
 
     @SystemService
     ClipboardManager clipboardManager;
@@ -171,7 +185,7 @@ public class MainActivity extends ActionBarActivity
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main)));
 
-        Resources resources = getResources();
+        final Resources resources = getResources();
 
         setTitle(String.format("%s %s", resources.getString(R.string.app_name), MonodictApp.getPackageInfo(this).versionName));
 
@@ -187,36 +201,64 @@ public class MainActivity extends ActionBarActivity
                 R.id.dic_item_list_view,
                 resultData);
         dicItemListView.setAdapter(resultAdapter);
-
         resultAdapter.notifyDataSetChanged();
 
-        List<Dictionary> dictionaryList = new ArrayList<>();
-        for (int i = 0; i < dictionaries.getDictionaryCount(); i++) {
-            dictionaryList.add(dictionaries.getDictionary(i));
-        }
-
-        drawerList.setAdapter(new ArrayAdapter<Dictionary>(
-                this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                dictionaryList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                Dictionary dictionary = getItem(position);
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView)view.findViewById(android.R.id.text1);
-                text1.setText(dictionary.getName());
-                return view;
-            }
-        });
+        final MainActivity activity = this;
+        drawerList.setAdapter(new MainActivityDrawerListAdapter(this));
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Dictionary dictionary = (Dictionary)drawerList.getItemAtPosition(position);
-                Toast.makeText(getBaseContext(), dictionary.getName(), Toast.LENGTH_SHORT).show();
-                rootLayout.closeDrawer(drawerList);
+                MainActivityDrawerListAdapter.Item item =
+                        (MainActivityDrawerListAdapter.Item) drawerList.getItemAtPosition(position);
+                MainActivityDrawerListAdapter.ItemType itemType = item.getType();
+                if (itemType.equals(MainActivityDrawerListAdapter.ItemType.DICTIONARY)) {
+                    Dictionary dictionary =
+                            ((MainActivityDrawerListAdapter.DictionaryItem) item).getDictionary();
+                    new DictionaryContextDialogBuilder(activity, dictionary)
+                            .setContextActionListener(activity)
+                            .show();
+                }
+                if (itemType.equals(MainActivityDrawerListAdapter.ItemType.SETTINGS)) {
+                    SettingsActivity_.intent(activity).start();
+                    rootLayout.closeDrawer(drawerList);
+                }
             }
         });
+    }
+
+    @Subscribe
+    public void onEvent(DictionaryService.DictionaryDeletedEvent event) {
+        Log.d(TAG, "DictionaryDeleted: " + event.getDictionary());
+        dictionaries.removeDictionary(event.getDictionary());
+        reloadDictionaries();
+    }
+
+    @Subscribe
+    public void onEvent(DictionaryService.DictionarySwappedEvent event) {
+        Log.d(TAG, "DictionarySwapped: " + event.getDictionary());
+        dictionaries.swap(event.getDictionary(), event.getDirection());
+        reloadDictionaries();
+    }
+
+    @Subscribe
+    public void onEvent(Model.ModelChangeRequestEvent event) {
+        Log.d(TAG, "onEvent: " + event);
+        Card card = (Card) event.getModel();
+        if (event.getType().equals(Model.ModelChangeRequestEvent.TYPE_UPDATE)) {
+            try {
+                databaseHelper.updateCard(card);
+            } catch (SQLException e) {
+                activityHelper.showError(e);
+                return;
+            }
+            SnackbarManager.show(createSnackbar().text(
+                    getResources().getString(R.string.message_item_modified, card.getDisplay())), this);
+        }
+    }
+
+    void reloadDictionaries() {
+        dictionaries.reload();
+        ((MainActivityDrawerListAdapter) drawerList.getAdapter()).reload();
     }
 
     void initQuery() {
@@ -267,22 +309,28 @@ public class MainActivity extends ActionBarActivity
 
     @Click(R.id.search_button)
     void onClickSearchButton() {
+        searchView.clear();
         searchView.focus();
     }
 
+    private void startActivityFromNav(View view, Intent intent) {
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(
+                view,
+                0,
+                0,
+                view.getWidth(),
+                view.getHeight());
+        ActivityCompat.startActivity(this, intent, options.toBundle());
+    }
+
     @Click(R.id.flashcard_button)
-    void onClickFlashcardButton() {
-        FlashcardActivity_.intent(this).start();
+    void onClickFlashcardButton(View view) {
+        startActivityFromNav(view, FlashcardActivity_.intent(this).get());
     }
 
     @Click(R.id.browser_button)
-    void onClickBrowserButton() {
-        BrowserActivity_.intent(this).start();
-    }
-
-    @Click(R.id.settings_button)
-    void onClickSettingsButton() {
-        SettingsActivity_.intent(this).start();
+    void onClickBrowserButton(View view) {
+        startActivityFromNav(view, BrowserActivity_.intent(this).get());
     }
 
     @OptionsItem({
@@ -308,6 +356,21 @@ public class MainActivity extends ActionBarActivity
             return;
         }
         BrowserActivity_.intent(this).extraUrlOrKeywords(url).start();
+    }
+
+    private void showNavButtons(boolean animate) {
+        if (rootLayout.isSoftKeyboardShown()) {
+            return;
+        }
+        browserButton.show(animate);
+        flashcardButton.show(animate);
+        searchButton.show(animate);
+    }
+
+    private void hideNavButtons(boolean animate) {
+        browserButton.hide(animate);
+        flashcardButton.hide(animate);
+        searchButton.hide(animate);
     }
 
     @Override
@@ -373,15 +436,15 @@ public class MainActivity extends ActionBarActivity
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+        MonodictApp.getEventBus().register(this);
         commonActivityTrait.setOrientation(preferences.orientation().get());
-
-        nav.requestLayout();
     }
 
     @Override
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
+        MonodictApp.getEventBus().unregister(this);
     }
 
     @Override
@@ -452,6 +515,7 @@ public class MainActivity extends ActionBarActivity
         wrapSearchView.addView(searchView);
         actionBar.setCustomView(wrapSearchView);
 
+        /*
         Configuration configuration = getResources().getConfiguration();
 
         int screenSize = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -460,6 +524,7 @@ public class MainActivity extends ActionBarActivity
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
         }
+        */
 
         initQuery();
 
@@ -511,8 +576,39 @@ public class MainActivity extends ActionBarActivity
         speechHelper.speech(selectedText);
     }
 
-    void addFlashcard(DicItemListView.Data data) {
-        Card card;
+    private Snackbar createSnackbar() {
+        return Snackbar.with(getApplicationContext())
+                .swipeToDismiss(true)
+                .eventListener(new EventListener() {
+                    @Override
+                    public void onShow(Snackbar snackbar) {
+                        int snackbarHeight = snackbar.getHeight();
+                        ViewUtils.addMarginBottom(browserButton, snackbarHeight);
+                        ViewUtils.addMarginBottom(flashcardButton, snackbarHeight);
+                        ViewUtils.addMarginBottom(searchButton, snackbarHeight);
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+                        snackbar.animation(false);
+                    }
+
+                    @Override
+                    public void onDismiss(Snackbar snackbar) {
+                        int snackbarHeight = snackbar.getHeight();
+                        ViewUtils.addMarginBottom(browserButton, -snackbarHeight);
+                        ViewUtils.addMarginBottom(flashcardButton, -snackbarHeight);
+                        ViewUtils.addMarginBottom(searchButton, -snackbarHeight);
+                    }
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar) {
+                    }
+                });
+    }
+
+    private void addFlashcard(DicItemListView.Data data) {
+        final Card card;
         try {
             Card duplicate = databaseHelper.getCardByDisplay(data.Index.toString());
             if (duplicate != null) {
@@ -527,16 +623,38 @@ public class MainActivity extends ActionBarActivity
             return;
         }
         Resources resources = getResources();
+        final String shortText = StringUtils.ellipse(card.getDisplay(), 10);
         String message = resources.getString(R.string.message_item_added_to,
-                card.getDisplay(),
+                shortText,
                 resources.getString(R.string.title_activity_flashcard));
 
-        activityHelper.showToast(message);
-    }
-
-    @Override
-    public void onContextActionAddToFlashcard(DicItemListView.Data data) {
-        addFlashcard(data);
+        SnackbarManager.show(
+                createSnackbar()
+                        .text(message)
+                        .type(SnackbarType.MULTI_LINE)
+                        .actionLabel("Undo")
+                        .actionListener(new ActionClickListener() {
+                            @Override
+                            public void onActionClicked(Snackbar snackbar) {
+                                String message = getResources().getString(
+                                        R.string.message_item_removed,
+                                        shortText);
+                                try {
+                                    databaseHelper.deleteCard(card);
+                                } catch (SQLException e) {
+                                    activityHelper.showError(e);
+                                    return;
+                                }
+                                SnackbarManager.show(
+                                        createSnackbar()
+                                                .text(message)
+                                                .type(SnackbarType.MULTI_LINE)
+                                                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT),
+                                        MainActivity.this);
+                            }
+                        })
+                ,
+                this);
     }
 
     @Override
@@ -555,7 +673,7 @@ public class MainActivity extends ActionBarActivity
     public void onContextActionCopyAll(DicItemListView.Data data) {
         Log.d(TAG, "onContextActionCopyAll");
         clipboardManager.setPrimaryClip(ClipData.newPlainText("all", data.toSummaryString()));
-        activityHelper.showToast(R.string.message_success);
+        SnackbarManager.show(createSnackbar().text(R.string.message_copy_succeeded), this);
     }
 
     private static void removeDirectory(File path) {
@@ -631,6 +749,69 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onSoftKeyboardShown(boolean isShowing) {
-        nav.setVisibility(isShowing ? View.GONE : View.VISIBLE);
+        if (isShowing) {
+            hideNavButtons(false);
+        } else {
+            showNavButtons(false);
+        }
+    }
+
+    @Override
+    public void onContextActionDelete(final Dictionary dictionary) {
+        activityHelper
+                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dictionaryServiceConnection.deleteDictionary(dictionary);
+                    }
+                })
+                .setTitle(dictionary.getNameWithEmoji())
+                .setMessage(R.string.message_confirm_delete)
+                .setIcon(R.drawable.ic_action_discard)
+                .show();
+    }
+
+    @Override
+    public void onContextActionToggleEnabled(Dictionary dictionary) {
+        dictionary.setEnabled(!dictionary.isEnabled());
+        if (dictionaries.updateDictionary(dictionary)) {
+            dictionaryServiceConnection.reload();
+            reloadDictionaries();
+        }
+    }
+
+    @Override
+    public void onContextActionRename(final Dictionary dictionary) {
+        activityHelper
+                .buildInputDialog(
+                        dictionary.getName(),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                TextView textView = (TextView) ((AlertDialog) dialogInterface).findViewById(android.R.id.text1);
+                                String dictionaryName = textView.getText().toString().trim();
+                                if (dictionaryName.isEmpty()) {
+                                    return;
+                                }
+                                dictionary.setName(dictionaryName);
+                                dictionaries.updateDictionary(dictionary);
+                                dictionaryServiceConnection.reload();
+                                reloadDictionaries();
+                            }
+                        }
+                )
+                .setIcon(R.drawable.ic_action_edit)
+                .setTitle(R.string.action_rename)
+                .show();
+    }
+
+    @Override
+    public void onContextActionUp(Dictionary dictionary) {
+        dictionaryServiceConnection.swap(dictionary, -1);
+    }
+
+    @Override
+    public void onContextActionDown(Dictionary dictionary) {
+        dictionaryServiceConnection.swap(dictionary, 1);
     }
 }

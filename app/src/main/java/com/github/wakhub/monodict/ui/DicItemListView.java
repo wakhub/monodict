@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -56,6 +55,7 @@ public class DicItemListView extends ListView {
         public static final int NONE = 2;
         public static final int NORESULT = 3;
         public static final int FOOTER = 4;
+        public static final int END = 10;
 
         private int mDic;
         private int mMode;
@@ -266,9 +266,8 @@ public class DicItemListView extends ListView {
             ImageButton speechButton;
             ImageButton actionButton;
             TextView Sample;
-            Button moreButton;
-            View spaceForLastItem;
             View hr;
+            View end;
         }
 
         private String highlightKeyword = null;
@@ -324,8 +323,6 @@ public class DicItemListView extends ListView {
                 holder.Sample = (TextView) view.findViewById(R.id.ListSample);
                 holder.Sample.setCustomSelectionActionModeCallback(new ActionModeCallback(context, holder.Sample));
 
-                holder.moreButton = (Button) view.findViewById(R.id.ListMoreButton);
-
                 holder.addToFlashcardButton = (ImageButton) view.findViewById(R.id.add_to_flashcard_button);
                 holder.addToFlashcardButton.setOnClickListener(new OnClickListener() {
                     @Override
@@ -359,8 +356,8 @@ public class DicItemListView extends ListView {
                         }
                     }
                 });
-                holder.spaceForLastItem = view.findViewById(R.id.space_for_last_item);
                 holder.hr = view.findViewById(R.id.hr);
+                holder.end = view.findViewById(R.id.end);
 
                 holder.Index.setTextColor(Color.BLACK);
                 holder.Phone.setTextColor(Color.BLACK);
@@ -375,7 +372,7 @@ public class DicItemListView extends ListView {
             holder.speechButton.setVisibility(View.GONE);
             holder.actionButton.setVisibility(View.GONE);
             holder.hr.setVisibility(View.VISIBLE);
-            holder.spaceForLastItem.setVisibility(View.GONE);
+            holder.end.setVisibility(View.GONE);
             TextView header = (TextView) view.findViewById(R.id.header);
             header.setVisibility(View.GONE);
             View content = view.findViewById(R.id.content);
@@ -392,10 +389,8 @@ public class DicItemListView extends ListView {
                     holder.addToFlashcardButton.setVisibility(View.VISIBLE);
                     holder.speechButton.setVisibility(View.VISIBLE);
                     holder.actionButton.setVisibility(View.VISIBLE);
-                    holder.moreButton.setVisibility(View.GONE);
                     if (d.LastItem) {
                         holder.hr.setVisibility(View.GONE);
-                        holder.spaceForLastItem.setVisibility(View.VISIBLE);
                     }
                     break;
                 case Data.MORE:
@@ -403,8 +398,6 @@ public class DicItemListView extends ListView {
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
                     holder.Sample.setVisibility(View.GONE);
-                    holder.moreButton.setVisibility(View.VISIBLE);
-                    holder.moreButton.setText(d.Index);
                     break;
                 case Data.NORESULT:
                 case Data.NONE:
@@ -412,7 +405,6 @@ public class DicItemListView extends ListView {
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
                     holder.Sample.setVisibility(View.GONE);
-                    holder.moreButton.setVisibility(View.GONE);
                     break;
                 case Data.FOOTER:
                     header.setVisibility(View.VISIBLE);
@@ -424,15 +416,16 @@ public class DicItemListView extends ListView {
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
                     holder.Sample.setVisibility(View.GONE);
-                    holder.moreButton.setVisibility(View.GONE);
-                    holder.hr.setVisibility(View.INVISIBLE);
+                    holder.hr.setVisibility(View.GONE);
                     break;
+                case Data.END:
+                    content.setVisibility(View.GONE);
+                    holder.end.setVisibility(View.VISIBLE);
                 default:
                     holder.Index.setVisibility(View.GONE);
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
                     holder.Sample.setVisibility(View.GONE);
-                    holder.moreButton.setVisibility(View.GONE);
             }
             return view;
         }

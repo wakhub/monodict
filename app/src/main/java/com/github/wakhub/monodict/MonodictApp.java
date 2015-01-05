@@ -22,6 +22,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
+import com.google.common.eventbus.EventBus;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EApplication;
 
@@ -34,6 +36,12 @@ import java.util.Locale;
 public class MonodictApp extends Application {
 
     private static final String TAG = MonodictApp.class.getSimpleName();
+
+    private static final EventBus eventBus = new EventBus();
+
+    public static final EventBus getEventBus() {
+        return eventBus;
+    }
 
     @AfterInject
     void afterInject() {

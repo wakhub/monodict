@@ -17,6 +17,7 @@ package com.github.wakhub.monodict.db;
 
 import android.database.Cursor;
 
+import com.github.wakhub.monodict.MonodictApp;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.field.DatabaseField;
 
@@ -144,5 +145,31 @@ public abstract class Model {
 
     public void renewUpdatedAt() {
         this.updatedAt = Calendar.getInstance().getTime();
+    }
+
+    public void notifyChangeRequest(String type) {
+        MonodictApp.getEventBus().post(new ModelChangeRequestEvent(this, type));
+    }
+
+    public static final class ModelChangeRequestEvent {
+        public static final String TYPE_INSERT = "INSERT";
+        public static final String TYPE_UPDATE = "UPDATE";
+        public static final String TYPE_DELETE = "DELETE";
+
+        private final Model model;
+        private final String type;
+
+        public ModelChangeRequestEvent(Model model, String type) {
+            this.model = model;
+            this.type = type;
+        }
+
+        public Model getModel() {
+            return model;
+        }
+
+        public String getType() {
+            return type;
+        }
     }
 }

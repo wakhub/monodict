@@ -16,14 +16,34 @@
 <resources>
 
     <dimen name="space_well">3dp</dimen>
-    <dimen name="space_relax">10dp</dimen>
-    <dimen name="space_relax_half">5dp</dimen>
+    <dimen name="space_relax">@dimen/space_default</dimen>
+    <dimen name="space_relax_half">@dimen/space_default_half</dimen>
     <dimen name="space_super_relax">20dp</dimen>
-    <dimen name="card_view_content_padding">16dp</dimen>
-    <dimen name="card_view_margin">6dp</dimen>
-    <dimen name="text_size_medium">16sp</dimen>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="drawer_width">250dp</dimen>
+    <!-- 56dp (R.dimen.fab_size_normal) + 16dp (R.dimen.space_default) -->
+    <dimen name="space_for_floating_buttons">72dp</dimen>
 
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="image_button_small_size">36dp</dimen>
+    <dimen name="image_button_size">@dimen/button_size</dimen>
+
+    <!--
+        Material Design components
+
+        http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing
+    -->
+    <dimen name="text_size_headline">@dimen/abc_text_size_headline_material</dimen>
+    <dimen name="text_size_title">@dimen/abc_text_size_title_material</dimen>
+    <dimen name="text_size_subhead">@dimen/abc_text_size_subhead_material</dimen>
+    <dimen name="text_size_body">@dimen/abc_text_size_body_1_material</dimen>
+    <dimen name="text_size_caption">@dimen/abc_text_size_caption_material</dimen>
+    <dimen name="text_size_button">@dimen/abc_text_size_button_material</dimen>
+    <dimen name="space_cozy">8dp</dimen>
+    <dimen name="space_default">16dp</dimen>
+    <dimen name="space_default_half">8dp</dimen>
+    <dimen name="button_size">48dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="card_view_content_padding">@dimen/space_default</dimen>
+    <dimen name="card_view_margin">@dimen/space_cozy</dimen>
+    <dimen name="card_view_divider">4dp</dimen>
 </resources>

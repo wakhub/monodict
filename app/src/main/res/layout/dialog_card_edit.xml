@@ -19,40 +19,56 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/card_background"
-    android:padding="@dimen/space_relax"
     android:minWidth="300dp"
     android:id="@+id/dialog_content">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/blank_text"
-        android:id="@+id/title_text"
-        android:layout_margin="@dimen/space_well"
-        android:textSize="14dp"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:textIsSelectable="false"
-        android:textStyle="bold"
-        android:textColor="@color/dark_gray"
-        android:gravity="center_horizontal" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="@dimen/space_default">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/display_text" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/translate_text"
-        android:lines="5"
-        android:textSize="@dimen/text_size_medium"
-        android:gravity="top" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/blank_text"
+                android:id="@+id/title_text"
+                android:layout_margin="@dimen/space_well"
+                android:textSize="14dp"
+                android:scrollbarAlwaysDrawVerticalTrack="false"
+                android:textIsSelectable="false"
+                android:textStyle="bold"
+                android:textColor="@color/dark_gray"
+                android:gravity="center_horizontal" />
 
-    <EditText
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/display_text" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/translate_text"
+                android:lines="5"
+                android:textSize="@dimen/text_size_medium"
+                android:gravity="top" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/note_text" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/note_text" />
+        android:background="@drawable/divider"
+        android:layout_height="1dp" />
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -66,13 +82,15 @@
                 android:text="@android:string/cancel"
                 android:id="@+id/cancel_button"
                 android:layout_weight="1"
-                style="@style/AppTheme.Flashcard.PlainTextButton" />
+                style="@style/AppTheme.Flashcard.PlainTextButton"
+                android:layout_height="@dimen/button_size"/>
 
             <Button
                 android:text="@android:string/ok"
                 android:id="@+id/save_button"
                 android:layout_weight="1"
-                style="@style/AppTheme.Flashcard.PlainTextButton" />
+                style="@style/AppTheme.Flashcard.PlainTextButton"
+                android:layout_height="@dimen/button_size"/>
         </TableRow>
 
     </TableLayout>

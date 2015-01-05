@@ -15,11 +15,11 @@
  */
 package com.github.wakhub.monodict.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.preferences.Dictionary;
 
@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by wak on 6/10/14.
  */
-public class DictionaryContextDialogBuilder extends AlertDialog.Builder implements DialogInterface.OnClickListener {
+public class DictionaryContextDialogBuilder extends MaterialDialog.Builder implements DialogInterface.OnClickListener {
 
     private static final String TAG = DictionaryContextDialogBuilder.class.getSimpleName();
 
@@ -51,16 +51,16 @@ public class DictionaryContextDialogBuilder extends AlertDialog.Builder implemen
     public DictionaryContextDialogBuilder(Context context, Dictionary dictionary) {
         super(context);
         this.dictionary = dictionary;
-        Resources resources = getContext().getResources();
+        Resources resources = context.getResources();
         for (Integer id : ITEM_IDS) {
             if (id == R.string.action_enable && dictionary.isEnabled()) {
                 id = R.string.action_disable;
             }
             itemLabels.add(resources.getString(id));
         }
-        setTitle(dictionary.getNameWithEmoji());
-        setItems(itemLabels.toArray(new CharSequence[0]), this);
-        setCancelable(true);
+        title(dictionary.getNameWithEmoji());
+        items(itemLabels.toArray(new CharSequence[0]));
+        cancelable(true);
     }
 
     public DictionaryContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {

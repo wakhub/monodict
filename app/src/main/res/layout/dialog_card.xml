@@ -22,56 +22,116 @@
     android:minWidth="300dp"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/card_view_content_padding">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/display_text"
-            style="@style/AppTheme.DisplayText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/blank_text"
-            android:textIsSelectable="true"/>
+            android:layout_toLeftOf="@+id/actions_layout"
+            android:layout_toStartOf="@+id/actions_layout"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/card_view_content_padding"
+            android:paddingLeft="@dimen/card_view_content_padding"
+            android:paddingTop="@dimen/card_view_content_padding">
 
-        <TextView
-            android:id="@+id/translate_text"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:id="@+id/display_text"
+                    style="@style/AppTheme.DisplayText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank_text"
+                    android:textIsSelectable="true"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/translate_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_well"
+                android:maxLines="8"
+                android:minHeight="50dp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical"
+                android:text="@string/blank_text"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_medium"/>
+
+            <TextView
+                android:id="@+id/note_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/space_well"
+                android:text="@string/blank_text"
+                android:textIsSelectable="true"/>
+
+            <TextView
+                android:id="@+id/dictionary_text"
+                style="@style/AppTheme.DictionaryNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/blank_text"
+                android:textIsSelectable="true"/>
+
+
+        </LinearLayout>
+
+        <View
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider"/>
+
+        <LinearLayout
+            android:id="@+id/actions_layout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/space_well"
-            android:maxLines="8"
-            android:minHeight="50dp"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbars="vertical"
-            android:text="@string/blank_text"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/text_size_medium"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/note_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/space_well"
-            android:text="@string/blank_text"
-            android:textIsSelectable="true"/>
+            <ImageButton
+                android:id="@+id/action_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:src="@drawable/ic_more_horiz_grey600_24dp"/>
 
-        <TextView
-            android:id="@+id/dictionary_text"
-            style="@style/AppTheme.DictionaryNameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/blank_text"
-            android:textIsSelectable="true"/>
+            <ImageButton
+                android:id="@+id/speech_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:src="@drawable/ic_volume_up_grey600_24dp"/>
 
+            <ImageButton
+                android:id="@+id/edit_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:src="@drawable/ic_edit_grey600_24dp"/>
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:src="@drawable/ic_delete_grey600_24dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_gray"/>
 
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="@dimen/space_relax">
+        android:layout_height="fill_parent">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -80,10 +140,10 @@
             <ImageButton
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/image_button_size"
                 android:layout_weight="1"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_bad"/>
+                android:src="@drawable/ic_thumb_down_black_24dp"/>
 
             <Button
                 android:id="@+id/keep_button"
@@ -96,54 +156,11 @@
             <ImageButton
                 android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/image_button_size"
                 android:layout_weight="1"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ic_action_good"/>
+                android:src="@drawable/ic_thumb_up_black_24dp"/>
         </TableRow>
 
     </TableLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_edit"/>
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_discard"/>
-
-        <ImageButton
-            android:id="@+id/speech_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_volume_on"/>
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_search"/>
-
-        <ImageButton
-            android:id="@+id/action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_overflow"/>
-    </LinearLayout>
-
 </LinearLayout>

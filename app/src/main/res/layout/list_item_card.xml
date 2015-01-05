@@ -20,64 +20,73 @@
     android:background="@color/transparent"
     android:orientation="vertical">
 
-    <Space
-        android:id="@id/space_top"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_relax"/>
-
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_relax_half"
-        android:layout_marginLeft="@dimen/space_relax"
-        android:layout_marginRight="@dimen/space_relax"
+        android:layout_marginBottom="@dimen/card_view_margin"
+        android:layout_marginLeft="@dimen/card_view_margin"
+        android:layout_marginRight="@dimen/card_view_margin"
         android:foreground="?android:attr/selectableItemBackground">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/search_button"
-            android:orientation="vertical"
-            android:padding="@dimen/card_view_content_padding">
-
-
-            <TextView
-                android:id="@android:id/text1"
-                style="@style/AppTheme.DisplayText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/blank_text"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@android:id/text2"
-                style="@style/AppTheme.DictionaryNameText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/blank_text"/>
-
-        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/action_button"
-                style="@style/AppTheme.Flashcard.ImageButton"
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/actions_layout"
+                android:layout_toStartOf="@+id/actions_layout"
+                android:orientation="vertical"
+                android:padding="@dimen/card_view_content_padding">
+
+
+                <TextView
+                    android:id="@android:id/text1"
+                    style="@style/AppTheme.DisplayText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank_text"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@android:id/text2"
+                    style="@style/AppTheme.DictionaryNameText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank_text"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/actions_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:contentDescription="@string/action_speech"
-                android:src="@drawable/ic_action_overflow"/>
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/action_button"
+                    style="@style/AppTheme.ImageButtonStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/action_speech"
+                    android:src="@drawable/ic_more_horiz_grey600_24dp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/speech_button"
+                    style="@style/AppTheme.Flashcard.ImageButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/action_speech"
+                    android:src="@drawable/ic_volume_up_grey600_24dp"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-    <Space
-        android:id="@id/space_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_relax_half"/>
 </LinearLayout>

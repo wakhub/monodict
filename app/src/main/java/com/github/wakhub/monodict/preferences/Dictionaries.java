@@ -15,6 +15,8 @@
  */
 package com.github.wakhub.monodict.preferences;
 
+import android.util.Log;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -41,7 +43,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
         adapter = new JsonPreferencesFieldAdapter(this, Data.class);
         Data data = getData();
         if (data.dictionaries == null) {
-            data.dictionaries = new ArrayList<Dictionary>();
+            data.dictionaries = new ArrayList<>();
             adapter.saveData(data);
         }
     }
@@ -61,6 +63,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
 
     public void swap(Dictionary dictionary, int direction) {
         int current = getDictionaryIndex(dictionary);
+        Log.d(TAG, String.format("swap: %s %d %d", dictionary, direction, current));
         Data data = getData();
         if (direction == 0) {
             return;

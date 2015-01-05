@@ -21,6 +21,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.github.wakhub.monodict.preferences.Dictionary;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -46,6 +48,28 @@ public final class DictionaryServiceConnection implements ServiceConnection {
         }
         binder.search(query);
     }
+
+    public void deleteDictionary(Dictionary dictionary) {
+        if (!isConnected) {
+            return;
+        }
+        binder.delete(dictionary);
+    }
+
+    public void swap(Dictionary dictionary, int direction) {
+        if (!isConnected) {
+            return;
+        }
+        binder.swap(dictionary, direction);
+    }
+
+    public void reload() {
+        if (!isConnected) {
+            return;
+        }
+        binder.reload();
+    }
+
 
     public boolean isConnected() {
         return isConnected;

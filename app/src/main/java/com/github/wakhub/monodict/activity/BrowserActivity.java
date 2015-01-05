@@ -55,13 +55,13 @@ import com.github.wakhub.monodict.ui.TranslatePanelFragment;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -72,8 +72,8 @@ import java.util.ArrayList;
 
 @EActivity(R.layout.activity_browser)
 @OptionsMenu({R.menu.browser})
-public class BrowserActivity extends ActionBarActivity
-        implements DictionaryService.Listener,
+public class BrowserActivity extends ActionBarActivity implements
+        DictionaryService.Listener,
         TranslatePanelFragment.Listener,
         TextView.OnEditorActionListener {
 
@@ -81,10 +81,13 @@ public class BrowserActivity extends ActionBarActivity
 
     private static final int REQUEST_CODE_BOOKMARKS = 10020;
     private static final int REQUEST_CODE_OPEN_LOCAL_FILE = 10021;
+
     private static final String ENCODING = "utf-8";
+
     private static final String JAVASCRIPT_CALLBACK_SEARCH = "search";
     private static final String JAVASCRIPT_CALLBACK_SPEECH = "speech";
-    private static final String[] PROTOCOLS = new String[]{"http://", "https://", "ftp://", "file://"};
+
+    private static final String[] PROTOCOLS = new String[]{"http://", "https://", "ftp://", "sftp://", "file://"};
 
     @Extra
     String extraUrlOrKeywords = "";
@@ -100,12 +103,6 @@ public class BrowserActivity extends ActionBarActivity
 
     @FragmentById
     TranslatePanelFragment translatePanelFragment;
-
-    @OptionsMenuItem
-    MenuItem actionBack;
-
-    @OptionsMenuItem
-    MenuItem actionForward;
 
     @Pref
     Preferences_ preferences;
@@ -171,12 +168,16 @@ public class BrowserActivity extends ActionBarActivity
 
     @UiThread
     void reloadViews() {
+        /*
+        TODO: replace by switching visibility
+
         if (actionBack != null) {
             actionBack.setEnabled(webView.canGoBack());
         }
         if (actionForward != null) {
             actionForward.setEnabled(webView.canGoForward());
         }
+        */
         if (translatePanelFragment != null) {
             translatePanelFragment.hide();
         }
@@ -203,25 +204,22 @@ public class BrowserActivity extends ActionBarActivity
         loadUrl(String.format("file://%s/%s", path, filename));
     }
 
-    @OptionsItem(R.id.action_back)
-    void onActionBack() {
-        Log.d(TAG, "onActionBack");
+    @Click(R.id.back_button)
+    void onClickBackButton() {
         if (webView.canGoBack()) {
             webView.goBack();
         }
     }
 
-    @OptionsItem(R.id.action_forward)
-    void onActionForward() {
-        Log.d(TAG, "onActionForward");
+    @Click(R.id.next_button)
+    void onClickNextButton() {
         if (webView.canGoForward()) {
             webView.goForward();
         }
     }
 
-    @OptionsItem(R.id.action_reload)
-    void onActionReload() {
-        Log.d(TAG, "onActionReload");
+    @Click(R.id.refresh_button)
+    void onClickRefreshButton() {
         webView.reload();
     }
 
@@ -319,19 +317,6 @@ public class BrowserActivity extends ActionBarActivity
         translatePanelFragment.setListener(null);
 
         super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (commonActivityTrait.isGoingBack()) {
-            super.onBackPressed();
-            return;
-        }
-        if (webView.canGoBack()) {
-            webView.goBack();
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override
@@ -511,7 +496,7 @@ public class BrowserActivity extends ActionBarActivity
         private final WeakReference<BrowserActivity> activityRef;
 
         private BrowserJavaScriptInterface(BrowserActivity activity) {
-            this.activityRef = new WeakReference<BrowserActivity>(activity);
+            this.activityRef = new WeakReference<>(activity);
         }
 
         @JavascriptInterface

@@ -1,6 +1,7 @@
 // https://github.com/excilys/androidannotations/wiki/Building-Project-Gradle
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'com.droidtitan.lintcleaner'
 
 // http://forums.gradle.org/gradle/topics/how_can_i_store_the_git_revision_for_use_in_the_project
 def getVersionSuffixForDebug() {
@@ -88,6 +89,11 @@ if (signingPropertiesFile.exists()) {
     android.signingConfigs.release.keyPassword = props.keyPassword
 }
 
+// https://github.com/marcoRS/lint-cleaner-plugin
+lintCleaner {
+    ignoreResFiles = true
+}
+
 dependencies {
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
 
@@ -99,11 +105,15 @@ dependencies {
     compile project(':android-support-v4-preferencefragment')
     apt 'org.androidannotations:androidannotations:3.2'
     compile 'org.androidannotations:androidannotations-api:3.2'
+    compile 'com.afollestad:material-dialogs:0.4.6'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.google.code.gson:gson:2.3@jar'
     compile 'com.google.guava:guava:18.0'
     compile 'com.j256.ormlite:ormlite-core:4.48@jar'
     compile 'com.j256.ormlite:ormlite-android:4.48@jar'
+    compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.mobsandgeeks:android-saripaar:1.0.3'
+    compile 'com.nispok:snackbar:2.7.0'
     compile 'com.timehop.stickyheadersrecyclerview:library:0.3.5@aar'
 }
 

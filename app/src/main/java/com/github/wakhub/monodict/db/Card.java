@@ -71,6 +71,7 @@ public class Card extends Model {
     public Card() {
         init();
     }
+
     public Card(String display, String translate, String dictionary) {
         init();
         this.display = display;

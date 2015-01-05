@@ -77,6 +77,10 @@ public class DictionarySearchView extends SearchView {
         inputMethodManager.showSoftInput(textView, InputMethodManager.SHOW_FORCED);
     }
 
+    public void clear() {
+        textView.setText("");
+    }
+
     void initViews() {
         setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

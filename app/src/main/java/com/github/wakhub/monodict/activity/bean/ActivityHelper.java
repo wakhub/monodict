@@ -23,6 +23,7 @@ import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.util.Linkify;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.MainActivity_;
 import com.github.wakhub.monodict.db.Card;
+import com.github.wakhub.monodict.db.Model;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.google.common.io.CharStreams;
@@ -52,7 +54,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 /**
  * Created by wak on 5/19/14.
@@ -113,7 +114,7 @@ public class ActivityHelper {
     @UiThread
     public void showToastLong(String message) {
         Toast toast = Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 
@@ -184,14 +185,9 @@ public class ActivityHelper {
                 duplicateCard.setBox(1);
                 duplicateCard.setTranslate(newTranslate);
                 duplicateCard.setDictionary(newDictionary);
-                try {
-                    databaseHelper.updateCard(duplicateCard);
-                    showToast(R.string.message_modified);
-                } catch (SQLException e) {
-                    showError(e);
-                }
+                duplicateCard.notifyChangeRequest(Model.ModelChangeRequestEvent.TYPE_UPDATE);
             }
-        }).setTitle(duplicateCard.getDisplay().toString()).setMessage(message).show();
+        }).setTitle(duplicateCard.getDisplay()).setMessage(message).show();
     }
 
     /**
@@ -255,6 +251,15 @@ public class ActivityHelper {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+    public void hideProgressBar(int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideProgressBar();
+            }
+        }, delay);
     }
 
     public Spanned getHtmlFromRaw(int resId) {

@@ -41,20 +41,18 @@
     </style>
 
     <style name="AppTheme.Button" parent="@android:style/Widget.Button">
-        <item name="android:textSize">18dp</item>
-        <item name="android:padding">@dimen/space_well</item>
+        <item name="android:textSize">@dimen/text_size_button</item>
+        <item name="android:padding">@dimen/space_default</item>
     </style>
 
     <style name="AppTheme.ButtonSmall" parent="@android:style/Widget.Button.Small">
-        <item name="android:textSize">12dp</item>
-        <item name="android:padding">@dimen/space_well</item>
+        <item name="android:textSize">@dimen/text_size_button</item>
+        <item name="android:padding">@dimen/space_cozy</item>
     </style>
 
     <style name="AppTheme.ImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:padding">@dimen/space_well</item>
         <item name="android:background">@drawable/clickable_background</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:layout_width">48dp</item>
     </style>
 
     <style name="AppTheme.ListView" parent="@android:style/Widget.ListView">
@@ -72,7 +70,7 @@
     <style name="AppTheme.DisplayText">
         <item name="android:padding">@dimen/space_well</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">24dp</item>
+        <item name="android:textSize">@dimen/text_size_headline</item>
         <item name="android:typeface">serif</item>
     </style>
 
@@ -80,7 +78,7 @@
         <item name="android:padding">@dimen/space_well</item>
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">@dimen/text_size_caption</item>
     </style>
 
 
@@ -89,7 +87,7 @@
     <style name="AppTheme.Main"></style>
 
     <style name="AppTheme.Main.ListView" parent="@android:style/Widget.ListView">
-        <item name="android:dividerHeight">1dp</item>
+        <item name="android:dividerHeight">@dimen/space_default</item>
         <item name="android:divider">@color/transparent</item>
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
@@ -102,15 +100,6 @@
         <item name="android:layout_marginBottom">@dimen/space_well</item>
     </style>
 
-    <style name="AppTheme.Main.Nav.ImageButton" parent="@android:style/Widget.ImageButton">
-        <item name="android:layout_marginLeft">7dp</item>
-        <item name="android:layout_marginRight">7dp</item>
-        <item name="android:background">@drawable/circle_button</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:layout_width">60dp</item>
-    </style>
-
     <!-- FlashcardActivity -->
 
     <style name="AppTheme.Flashcard.ImageButton" parent="@android:style/Widget.ImageButton">
@@ -119,7 +108,7 @@
 
     <style name="AppTheme.Flashcard.PlainTextButton" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/clickable_background</item>
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_height">32dp</item>
     </style>

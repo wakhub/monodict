@@ -96,7 +96,7 @@
         android:layout_marginTop="@dimen/space_relax"
         android:layout_toRightOf="@+id/linearLayout"
         android:contentDescription="@string/action_add_to_flashcard"
-        android:src="@drawable/ic_action_add_to_queue" />
+        android:src="@drawable/ic_add_flashcard_gray600_24dp" />
 
     <ImageButton
         android:id="@+id/speech_button"

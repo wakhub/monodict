@@ -17,6 +17,7 @@
 package com.github.wakhub.monodict.utils;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 
 /**
@@ -49,12 +50,22 @@ public class ViewUtils {
             if (parentView == null) {
                 return null;
             }
-            if (((View)parentView).getId() == viewId) {
+            if (((View) parentView).getId() == viewId) {
                 return parentView;
             }
             currentView = (View) parentView;
         }
 
         return null;
+    }
+
+    public static void addMarginBottom(View view, int marginBottom) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        params.setMargins(
+                params.leftMargin,
+                params.topMargin,
+                params.rightMargin,
+                params.bottomMargin + marginBottom);
+        view.requestLayout();
     }
 }
