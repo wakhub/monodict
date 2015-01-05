@@ -428,7 +428,7 @@ public class FlashcardActivity extends ActionBarActivity implements
 
         autoPlayDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.action_auto_play)
-                .setIcon(R.drawable.ic_action_play)
+                .setIcon(R.drawable.ic_play_arrow_black_24dp)
                 .setView(layout)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -569,7 +569,7 @@ public class FlashcardActivity extends ActionBarActivity implements
                     }
                 })
                 .setTitle(R.string.action_delete_all)
-                .setIcon(R.drawable.ic_action_discard)
+                .setIcon(R.drawable.ic_delete_black_36dp)
                 .setMessage(R.string.message_confirm_delete)
                 .show();
 
@@ -751,7 +751,7 @@ public class FlashcardActivity extends ActionBarActivity implements
                         refreshPager();
                     }
                 })
-                .setIcon(R.drawable.ic_action_discard)
+                .setIcon(R.drawable.ic_delete_black_36dp)
                 .setTitle(R.string.action_delete)
                 .setMessage(R.string.message_confirm_delete)
                 .show();

@@ -767,7 +767,7 @@ public class MainActivity extends ActionBarActivity implements
                 })
                 .setTitle(dictionary.getNameWithEmoji())
                 .setMessage(R.string.message_confirm_delete)
-                .setIcon(R.drawable.ic_action_discard)
+                .setIcon(R.drawable.ic_delete_black_36dp)
                 .show();
     }
 
@@ -800,7 +800,7 @@ public class MainActivity extends ActionBarActivity implements
                             }
                         }
                 )
-                .setIcon(R.drawable.ic_action_edit)
+                .setIcon(R.drawable.ic_edit_black_36dp)
                 .setTitle(R.string.action_rename)
                 .show();
     }

@@ -61,17 +61,14 @@
         <activity
             android:name="com.github.wakhub.monodict.activity.FlashcardActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_flashcard"
             android:label="@string/title_activity_flashcard" />
         <activity
             android:name="com.github.wakhub.monodict.activity.BrowserActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_browser"
             android:label="@string/title_activity_browser" />
         <activity
             android:name="com.github.wakhub.monodict.activity.BrowserBookmarksActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_action_favorite"
             android:label="@string/title_activity_browser_bookmarks">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -93,33 +90,27 @@
         <activity
             android:name="com.github.wakhub.monodict.activity.FileSelectorActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_action_collection"
             android:label="@string/action_open_local_file"/>
         <activity
             android:name="com.github.wakhub.monodict.activity.DirectorySelectorActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_action_collection"
             android:label="@string/title_activity_directory_selector"/>
         <!-- Settings -->
         <activity
             android:name="com.github.wakhub.monodict.activity.settings.SettingsActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_settings"
             android:label="@string/title_activity_settings" />
         <activity
             android:name="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_settings"
             android:label="@string/title_activity_dictionary_manager" />
         <activity
             android:name="com.github.wakhub.monodict.activity.settings.DictionaryFileSelectorActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_action_collection"
             android:label="@string/action_add_dictionary" />
         <activity
             android:name="com.github.wakhub.monodict.activity.settings.DownloadsActivity_"
             android:configChanges="orientation|screenSize"
-            android:icon="@drawable/ic_action_download"
             android:label="@string/title_activity_downloads" />
 
         <service android:name=".search.DictionaryService"/>

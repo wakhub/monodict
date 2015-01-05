@@ -191,7 +191,7 @@ public class DownloadsActivity extends AbsListActivity {
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
-                .setIcon(R.drawable.ic_action_download)
+                .setIcon(R.drawable.ic_file_download_black_36dp)
                 .setTitle(item.getName())
                 .setView(scrollView)
                 .show();

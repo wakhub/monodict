@@ -219,7 +219,7 @@ public class DictionaryManagerActivity extends AbsListActivity
                 })
                 .setTitle(dictionary.getNameWithEmoji())
                 .setMessage(R.string.message_confirm_delete)
-                .setIcon(R.drawable.ic_action_discard)
+                .setIcon(R.drawable.ic_delete_black_36dp)
                 .show();
     }
 
@@ -249,7 +249,7 @@ public class DictionaryManagerActivity extends AbsListActivity
                             }
                         }
                 )
-                .setIcon(R.drawable.ic_action_edit)
+                .setIcon(R.drawable.ic_edit_black_36dp)
                 .setTitle(R.string.action_rename)
                 .show();
     }

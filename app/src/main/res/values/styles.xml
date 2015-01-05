@@ -36,7 +36,7 @@
     </style>
 
     <style name="AppTheme.ActionBar.Overflow">
-        <item name="android:src">@drawable/ic_action_overflow</item>
+        <item name="android:src">@drawable/ic_more_vert_black_24dp</item>
         <item name="android:background">@drawable/clickable_background</item>
     </style>
 

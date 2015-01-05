@@ -86,7 +86,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/action_close"
-        android:src="@drawable/ic_action_cancel" />
+        android:src="@drawable/ic_close_grey600_24dp" />
 
     <ImageButton
         android:id="@+id/add_to_flashcard_button"
@@ -107,5 +107,5 @@
         android:layout_below="@+id/add_to_flashcard_button"
         android:layout_marginTop="@dimen/space_relax"
         android:contentDescription="@string/action_speech"
-        android:src="@drawable/ic_action_volume_on" />
+        android:src="@drawable/ic_volume_up_grey600_24dp" />
 </RelativeLayout>

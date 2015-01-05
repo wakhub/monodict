@@ -20,6 +20,6 @@
     tools:context="com.github.wakhub.monodict.activity.DirectorySelectorActivity" >
     <item android:id="@+id/action_ok"
         android:title="@android:string/ok"
-        android:icon="@drawable/ic_action_accept"
-        android:showAsAction="always" />
+        android:icon="@drawable/ic_done_black_24dp"
+        app:showAsAction="always" />
 </menu>

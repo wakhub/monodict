@@ -94,14 +94,14 @@ public class DictionarySearchView extends SearchView {
         setIconifiedByDefault(false);
         setQueryHint(resources.getString(R.string.title_keyword));
 
-        icon.setImageDrawable(resources.getDrawable(R.drawable.ic_loupe));
+        icon.setImageDrawable(resources.getDrawable(R.drawable.ic_search_white_24dp));
 
         searchPlate.setBackgroundResource(R.drawable.search_view_background);
 
         textView.setOnFocusChangeListener(new OnFocusChangeListener(this.listener));
         setOnQueryTextListener(new OnQueryTextListener(this));
 
-        closeButton.setImageDrawable(resources.getDrawable(R.drawable.ic_action_cancel));
+        closeButton.setImageDrawable(resources.getDrawable(R.drawable.ic_close_grey600_24dp));
     }
 
     private static class OnFocusChangeListener implements SearchView.OnFocusChangeListener {

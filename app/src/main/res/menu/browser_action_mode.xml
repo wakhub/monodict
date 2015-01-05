@@ -19,13 +19,13 @@
     tools:context="com.github.wakhub.monodict.activity.BrowserActivity" >
 
     <item android:id="@+id/action_search"
-        android:icon="@drawable/ic_action_search"
+        android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/action_search"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 
     <item android:id="@+id/action_speech"
-        android:icon="@drawable/ic_action_volume_on"
+        android:icon="@drawable/ic_volume_up_black_24dp"
         android:title="@string/action_speech"
-        android:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>

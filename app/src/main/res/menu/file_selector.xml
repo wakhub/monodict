@@ -18,7 +18,7 @@
     tools:context="com.github.wakhub.monodict.activity.FileSelectorActivity">
     <item
         android:id="@+id/action_help"
-        android:icon="@drawable/ic_action_help"
+        android:icon="@drawable/ic_help_black_24dp"
         android:title="@string/title_help"
         android:showAsAction="always" />
 </menu>

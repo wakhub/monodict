@@ -19,13 +19,13 @@
 
     <item
         android:id="@+id/action_download_dictionary"
-        android:icon="@drawable/ic_action_download"
+        android:icon="@drawable/ic_file_download_black_24dp"
         android:showAsAction="always"
         android:title="@string/title_activity_downloads" />
 
     <item
         android:id="@+id/action_add_dictionary"
-        android:icon="@drawable/ic_action_collection"
+        android:icon="@drawable/ic_folder_open_black_24dp"
         android:showAsAction="always"
         android:title="@string/action_add_dictionary" />
 

@@ -46,6 +46,7 @@ SYSTEM_ICON_NAMES = [
          'book',
          'bookmark',
          'close',
+         'done',
          'delete',
          'edit',
          'file_download',
