@@ -28,7 +28,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -228,8 +227,6 @@ public class FlashcardActivity extends ActionBarActivity implements
         Log.d(TAG, "state: " + state.toString());
 
         commonActivityTrait.initActivity(preferences);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), this, getTabLabels()));
         pager.setCurrentItem(state.getBox() - 1);

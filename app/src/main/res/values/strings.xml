@@ -35,6 +35,7 @@
 <string name="action_shuffle">Shuffle</string>
 <string name="action_speech">Speech</string>
 <string name="action_up">Up</string>
+<string name="action_undo">Undo</string>
 <string name="app_name" translatable="false">monodict</string>
 <string name="blank_text" translatable="false">---</string>
 <string name="message_confirm_delete">Are you sure you want to delete?</string>

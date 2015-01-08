@@ -115,7 +115,6 @@ public class DownloadsActivity extends AbsListActivity {
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity(preferences);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sdCard = Environment.getExternalStorageDirectory();
 

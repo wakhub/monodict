@@ -57,19 +57,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <WebView
+        <com.github.wakhub.monodict.activity.BrowserActivityWebView
             android:id="@+id/web_view"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
-
-        <fragment
-            android:id="@+id/translate_panel_fragment"
-            android:name="com.github.wakhub.monodict.ui.TranslatePanelFragment_"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            tools:layout="@layout/fragment_translate_panel"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,6 +103,14 @@
                 app:fab_colorRipple="@color/light_gray"/>
 
         </LinearLayout>
+
+        <fragment
+            android:id="@+id/translate_panel_fragment"
+            android:name="com.github.wakhub.monodict.ui.TranslatePanelFragment_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:layout="@layout/fragment_translate_panel"/>
 
     </RelativeLayout>
 

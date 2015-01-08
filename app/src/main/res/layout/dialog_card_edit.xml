@@ -15,12 +15,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/card_background"
-    android:minWidth="300dp"
-    android:id="@+id/dialog_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@drawable/card_background"
+              android:minWidth="300dp"
+              android:id="@+id/dialog_content">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -43,12 +43,12 @@
                 android:textIsSelectable="false"
                 android:textStyle="bold"
                 android:textColor="@color/dark_gray"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/display_text" />
+                android:id="@+id/display_text"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -56,19 +56,19 @@
                 android:id="@+id/translate_text"
                 android:lines="5"
                 android:textSize="@dimen/text_size_medium"
-                android:gravity="top" />
+                android:gravity="top"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/note_text" />
+                android:id="@+id/note_text"/>
         </LinearLayout>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:background="@drawable/divider"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"/>
 
     <TableLayout
         android:layout_width="fill_parent"

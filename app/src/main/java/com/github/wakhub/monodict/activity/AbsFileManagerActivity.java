@@ -25,9 +25,11 @@ import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.preferences.Preferences_;
+import com.melnykov.fab.FloatingActionButton;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
@@ -54,6 +56,12 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
     @ViewById
     protected TextView pathText;
 
+    @ViewById
+    protected FloatingActionButton backButton;
+
+    @ViewById
+    protected FloatingActionButton nextButton;
+
     @Pref
     protected Preferences_ preferences;
 
@@ -65,22 +73,29 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
 
     protected ArrayAdapter<String> listAdapter;
 
-    protected String lastFullPath;
+    protected String lastFullPath = "";
 
-    protected String currentFullPath;
+    protected String currentFullPath = "";
 
     @AfterViews
     protected void afterViewsAbsFileManagerActivity() {
-        if (currentFullPath == null || currentFullPath.isEmpty()) {
+        if (currentFullPath.isEmpty()) {
             currentFullPath = "/";
         }
 
+        backButton.attachToListView(getListView());
+
         setResult(RESULT_CANCELED);
 
-        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         setListAdapter(listAdapter);
 
         loadContents();
+    }
+
+    @Click(R.id.back_button)
+    protected void onClickBackButton() {
+        goUp();
     }
 
     protected boolean isDirectory(String path) {
@@ -182,15 +197,6 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
         pathText.setText(currentFullPath);
         listAdapter.clear();
         listAdapter.addAll(items);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!isRoot()) {
-            goUp();
-            return;
-        }
-        super.onBackPressed();
     }
 
     @Override

@@ -60,7 +60,6 @@ import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
 import com.github.wakhub.monodict.ui.DictionaryContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
-import com.github.wakhub.monodict.utils.StringUtils;
 import com.github.wakhub.monodict.utils.ViewUtils;
 import com.google.common.eventbus.Subscribe;
 import com.melnykov.fab.FloatingActionButton;
@@ -251,8 +250,12 @@ public class MainActivity extends ActionBarActivity implements
                 activityHelper.showError(e);
                 return;
             }
-            SnackbarManager.show(createSnackbar().text(
-                    getResources().getString(R.string.message_item_modified, card.getDisplay())), this);
+            SnackbarManager.show(
+                    createSnackbar().text(
+                            getResources().getString(
+                                    R.string.message_item_modified,
+                                    card.getShortDisplay())),
+                    this);
         }
     }
 
@@ -623,9 +626,8 @@ public class MainActivity extends ActionBarActivity implements
             return;
         }
         Resources resources = getResources();
-        final String shortText = StringUtils.ellipse(card.getDisplay(), 10);
         String message = resources.getString(R.string.message_item_added_to,
-                shortText,
+                card.getShortDisplay(),
                 resources.getString(R.string.title_activity_flashcard));
 
         SnackbarManager.show(
@@ -638,7 +640,7 @@ public class MainActivity extends ActionBarActivity implements
                             public void onActionClicked(Snackbar snackbar) {
                                 String message = getResources().getString(
                                         R.string.message_item_removed,
-                                        shortText);
+                                        card.getShortDisplay());
                                 try {
                                     databaseHelper.deleteCard(card);
                                 } catch (SQLException e) {

@@ -13,27 +13,46 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-	<TextView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:singleLine="true"
-        android:id="@+id/path_text"
-        android:padding="@dimen/space_well"
-        android:background="@color/white" />
+    android:orientation="vertical">
 
-    <ListView
-		android:id="@android:id/list"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:scrollbars="vertical"
-		android:layout_weight="1"
-		android:clickable="true"
-		android:focusableInTouchMode="true"
-	/>
-	
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/path_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_well"
+            android:singleLine="true"/>
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/space_default"
+        android:layout_marginRight="@dimen/space_default"
+        android:src="@drawable/ic_navigate_before_white_36dp"
+        app:fab_colorNormal="@color/gray"
+        app:fab_colorPressed="@color/light_gray"
+        app:fab_colorRipple="@color/light_gray"/>
+
+</RelativeLayout>

@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.text.TextUtils;
 
+import com.github.wakhub.monodict.utils.StringUtils;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
@@ -101,6 +102,10 @@ public class Card extends Model {
     @Override
     public String toString() {
         return String.format("Card(id=%d, display=%s)", getId(), display);
+    }
+
+    public String getShortDisplay() {
+        return StringUtils.ellipse(display, 10);
     }
 
     public String getDisplay() {

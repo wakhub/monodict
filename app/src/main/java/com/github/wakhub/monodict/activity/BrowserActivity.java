@@ -51,6 +51,13 @@ import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
 import com.github.wakhub.monodict.ui.DicItemListView;
 import com.github.wakhub.monodict.ui.TranslatePanelFragment;
+import com.github.wakhub.monodict.utils.ViewUtils;
+import com.melnykov.fab.FloatingActionButton;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.enums.SnackbarType;
+import com.nispok.snackbar.listeners.ActionClickListener;
+import com.nispok.snackbar.listeners.EventListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -75,7 +82,8 @@ import java.util.ArrayList;
 public class BrowserActivity extends ActionBarActivity implements
         DictionaryService.Listener,
         TranslatePanelFragment.Listener,
-        TextView.OnEditorActionListener {
+        TextView.OnEditorActionListener,
+        BrowserActivityWebView.ActionModeListener {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -96,7 +104,16 @@ public class BrowserActivity extends ActionBarActivity implements
     EditText urlText;
 
     @ViewById
-    WebView webView;
+    BrowserActivityWebView webView;
+
+    @ViewById
+    FloatingActionButton backButton;
+
+    @ViewById
+    FloatingActionButton nextButton;
+
+    @ViewById
+    FloatingActionButton refreshButton;
 
     @ViewById
     ProgressBar progressBar;
@@ -138,6 +155,7 @@ public class BrowserActivity extends ActionBarActivity implements
 
         webView.setWebViewClient(new BrowserWebViewClient(this));
         webView.addJavascriptInterface(new BrowserJavaScriptInterface(this), BrowserJavaScriptInterface.NAME);
+        webView.setActionModeListener(this);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName(ENCODING);
@@ -150,6 +168,38 @@ public class BrowserActivity extends ActionBarActivity implements
         } else {
             loadUrl(extraUrlOrKeywords);
         }
+    }
+
+
+    private Snackbar createSnackbar() {
+        return Snackbar.with(getApplicationContext())
+                .swipeToDismiss(true)
+                .eventListener(new EventListener() {
+                    @Override
+                    public void onShow(Snackbar snackbar) {
+                        int snackbarHeight = snackbar.getHeight();
+                        ViewUtils.addMarginBottom(backButton, snackbarHeight);
+                        ViewUtils.addMarginBottom(nextButton, snackbarHeight);
+                        ViewUtils.addMarginBottom(refreshButton, snackbarHeight);
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+                        snackbar.animation(false);
+                    }
+
+                    @Override
+                    public void onDismiss(Snackbar snackbar) {
+                        int snackbarHeight = snackbar.getHeight();
+                        ViewUtils.addMarginBottom(backButton, -snackbarHeight);
+                        ViewUtils.addMarginBottom(nextButton, -snackbarHeight);
+                        ViewUtils.addMarginBottom(refreshButton, -snackbarHeight);
+                    }
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar) {
+                    }
+                });
     }
 
     private void loadUrl(String url) {
@@ -168,16 +218,6 @@ public class BrowserActivity extends ActionBarActivity implements
 
     @UiThread
     void reloadViews() {
-        /*
-        TODO: replace by switching visibility
-
-        if (actionBack != null) {
-            actionBack.setEnabled(webView.canGoBack());
-        }
-        if (actionForward != null) {
-            actionForward.setEnabled(webView.canGoForward());
-        }
-        */
         if (translatePanelFragment != null) {
             translatePanelFragment.hide();
         }
@@ -249,7 +289,7 @@ public class BrowserActivity extends ActionBarActivity implements
         String message = resources.getString(R.string.message_item_added_to,
                 bookmark.getTitle(),
                 resources.getString(R.string.title_activity_browser_bookmarks));
-        activityHelper.showToastLong(message);
+        SnackbarManager.show(createSnackbar().text(message), this);
     }
 
     @OptionsItem(R.id.action_show_bookmarks)
@@ -336,45 +376,6 @@ public class BrowserActivity extends ActionBarActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * https://android.googlesource.com/platform/frameworks/base/+/cd92588/core/java/android/webkit/SelectActionModeCallback.java
-     *
-     * @param callback
-     * @return
-     */
-    @Override
-    public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
-        ActionMode actionMode = super.onWindowStartingActionMode(callback);
-        assert actionMode != null;
-        Menu menu = actionMode.getMenu();
-
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        }
-
-        MenuInflater inflater = actionMode.getMenuInflater();
-        inflater.inflate(R.menu.browser_action_mode, menu);
-        translatePanelFragment.hide();
-
-        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                startGettingSelectionInBrowser(JAVASCRIPT_CALLBACK_SEARCH);
-                return false;
-            }
-        });
-        menu.findItem(R.id.action_speech).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                startGettingSelectionInBrowser(JAVASCRIPT_CALLBACK_SPEECH);
-                return false;
-            }
-        });
-
-        return actionMode;
-    }
-
     @Override
     public void onDictionaryServiceInitialized() {
         // pass
@@ -416,7 +417,7 @@ public class BrowserActivity extends ActionBarActivity implements
 
     @Override
     public void onClickTranslatePanelAddToFlashcardButton(DicItemListView.Data data) {
-        Card card;
+        final Card card;
         try {
             final Card duplicate = databaseHelper.getCardByDisplay(data.Index.toString());
             if (duplicate != null) {
@@ -431,11 +432,37 @@ public class BrowserActivity extends ActionBarActivity implements
             return;
         }
         Resources resources = getResources();
-        String message = resources.getString(
-                R.string.message_item_added_to,
-                card.getDisplay(),
+        String message = resources.getString(R.string.message_item_added_to,
+                card.getShortDisplay(),
                 resources.getString(R.string.title_activity_flashcard));
-        activityHelper.showToast(message);
+
+        SnackbarManager.show(
+                createSnackbar()
+                        .text(message)
+                        .type(SnackbarType.MULTI_LINE)
+                        .actionLabel(R.string.action_undo)
+                        .actionListener(new ActionClickListener() {
+                            @Override
+                            public void onActionClicked(Snackbar snackbar) {
+                                String message = getResources().getString(
+                                        R.string.message_item_removed,
+                                        card.getShortDisplay());
+                                try {
+                                    databaseHelper.deleteCard(card);
+                                } catch (SQLException e) {
+                                    activityHelper.showError(e);
+                                    return;
+                                }
+                                SnackbarManager.show(
+                                        createSnackbar()
+                                                .text(message)
+                                                .type(SnackbarType.MULTI_LINE)
+                                                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT),
+                                        BrowserActivity.this);
+                            }
+                        })
+                ,
+                this);
     }
 
     @Override
@@ -449,6 +476,43 @@ public class BrowserActivity extends ActionBarActivity implements
             loadUrl(v.getText().toString());
         }
         return false;
+    }
+
+    /**
+     * https://android.googlesource.com/platform/frameworks/base/+/cd92588/core/java/android/webkit/SelectActionModeCallback.java
+     *
+     * @param actionMode
+     * @return ActionMode
+     */
+    @Override
+    public ActionMode onWebViewStartActionMode(ActionMode actionMode) {
+        Menu menu = actionMode.getMenu();
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        }
+
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate(R.menu.browser_action_mode, menu);
+        translatePanelFragment.hide();
+
+        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                startGettingSelectionInBrowser(JAVASCRIPT_CALLBACK_SEARCH);
+                return false;
+            }
+        });
+        menu.findItem(R.id.action_speech).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                startGettingSelectionInBrowser(JAVASCRIPT_CALLBACK_SPEECH);
+                return false;
+            }
+        });
+
+        return actionMode;
     }
 
     private static final class BrowserWebViewClient extends WebViewClient {

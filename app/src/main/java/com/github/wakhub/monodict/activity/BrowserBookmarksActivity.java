@@ -69,6 +69,7 @@ public class BrowserBookmarksActivity extends AbsListActivity {
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity(preferences);
+
         listAdapter = new ArrayAdapter<Bookmark>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {

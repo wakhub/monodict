@@ -15,10 +15,10 @@
  */
 package com.github.wakhub.monodict.activity.bean;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -49,11 +49,9 @@ public class CommonActivityTrait {
         if (activity instanceof MainActivity) {
             return;
         }
-        ActionBar actionBar = activity.getActionBar();
-        if (actionBar == null) {
-            return;
+        if (activity instanceof ActionBarActivity) {
+            ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
 

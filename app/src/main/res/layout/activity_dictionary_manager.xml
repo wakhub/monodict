@@ -14,10 +14,10 @@
   ~ limitations under the License.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity">
 
     <ListView
         android:layout_width="wrap_content"
@@ -25,5 +25,5 @@
         android:id="@android:id/list"
         android:layout_alignParentRight="false"
         android:layout_alignParentEnd="false"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 </RelativeLayout>
