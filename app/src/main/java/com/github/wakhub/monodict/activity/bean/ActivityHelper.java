@@ -16,11 +16,9 @@
 package com.github.wakhub.monodict.activity.bean;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -36,6 +34,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.MainActivity_;
 import com.github.wakhub.monodict.db.Card;
@@ -126,43 +125,45 @@ public class ActivityHelper {
     /**
      * Build dialog with user input
      *
+     * @param text
      * @param onClickListener
-     * @return AlertDialog.Builder
+     * @return MaterialDialog.Builder
      */
-    public AlertDialog.Builder buildInputDialog(DialogInterface.OnClickListener onClickListener) {
-        return buildInputDialog(null, onClickListener);
-    }
-
-    public AlertDialog.Builder buildInputDialog(CharSequence text, DialogInterface.OnClickListener onClickListener) {
+    public MaterialDialog.Builder buildInputDialog(CharSequence text, MaterialDialog.SimpleCallback callback) {
         final EditText editText = new EditText(activity);
         if (text != null) {
             editText.setText(text);
         }
         editText.setId(android.R.id.text1);
-        return new AlertDialog.Builder(activity).setView(editText)
-                .setPositiveButton(android.R.string.ok, onClickListener)
-                .setNegativeButton(android.R.string.cancel, null);
+        return new MaterialDialog.Builder(activity)
+                .customView(editText)
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .callback(callback);
     }
 
     /**
      * Build confirm dialog
      *
-     * @param onClickListener
-     * @return AlertDialog.Builder
+     * @param callback
+     * @return MaterialDialog.Builder
      */
-    public AlertDialog.Builder buildConfirmDialog(DialogInterface.OnClickListener onClickListener) {
-        return new AlertDialog.Builder(activity).setPositiveButton(android.R.string.ok,
-                onClickListener).setNegativeButton(android.R.string.cancel, null);
+    public MaterialDialog.Builder buildConfirmDialog(MaterialDialog.SimpleCallback callback) {
+        return new MaterialDialog.Builder(activity)
+                .positiveText(android.R.string.ok)
+                .callback(callback)
+                .negativeText(android.R.string.cancel);
     }
 
-    public AlertDialog.Builder buildNoticeDialog(CharSequence text) {
+    public MaterialDialog.Builder buildNoticeDialog(CharSequence text) {
         TextView textView = new TextView(activity);
         textView.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-        textView.setPadding((int) spaceSuperRelax, (int) spaceSuperRelax, (int) spaceSuperRelax, (int) spaceSuperRelax);
         textView.setText(text);
         ScrollView scrollView = new ScrollView(activity);
         scrollView.addView(textView);
-        return new AlertDialog.Builder(activity).setView(scrollView).setPositiveButton(android.R.string.ok, null);
+        return new MaterialDialog.Builder(activity)
+                .customView(scrollView)
+                .positiveText(android.R.string.ok);
     }
 
     public void onDuplicatedCardFound(final Card duplicateCard, final String newTranslate, final String newDictionary) {
@@ -179,15 +180,15 @@ public class ActivityHelper {
                 boxName);
         final DatabaseHelper databaseHelper = DatabaseHelper_.getInstance_(activity);
 
-        buildConfirmDialog(new DialogInterface.OnClickListener() {
+        buildConfirmDialog(new MaterialDialog.SimpleCallback() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onPositive(MaterialDialog materialDialog) {
                 duplicateCard.setBox(1);
                 duplicateCard.setTranslate(newTranslate);
                 duplicateCard.setDictionary(newDictionary);
                 duplicateCard.notifyChangeRequest(Model.ModelChangeRequestEvent.TYPE_UPDATE);
             }
-        }).setTitle(duplicateCard.getDisplay()).setMessage(message).show();
+        }).title(duplicateCard.getDisplay()).content(message).show();
     }
 
     /**

@@ -15,7 +15,6 @@
  */
 package com.github.wakhub.monodict.activity;
 
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
@@ -24,32 +23,31 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.activity.bean.DatabaseHelper;
 import com.github.wakhub.monodict.activity.bean.SpeechHelper;
-import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.db.Model;
 import com.github.wakhub.monodict.dice.DiceFactory;
+import com.github.wakhub.monodict.dice.IdicInfo;
+import com.github.wakhub.monodict.dice.Idice;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.preferences.MainActivityState;
@@ -75,8 +73,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
@@ -84,7 +81,6 @@ import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,17 +89,21 @@ import java.util.List;
  * @see com.github.wakhub.monodict.activity.MainActivity_
  */
 @EActivity(R.layout.activity_main)
-@OptionsMenu({R.menu.main})
+//@OptionsMenu({R.menu.main})
 public class MainActivity extends ActionBarActivity implements
         MainActivityRootLayout.Listener,
+        MainActivityDrawerListAdapter.Listener,
         DicItemListView.Callback,
         DicContextDialogBuilder.OnContextActionListener,
         DictionaryService.Listener,
-        DictionaryContextDialogBuilder.OnContextActionListener {
+        DictionaryContextDialogBuilder.OnContextActionListener,
+        DictionarySearchView.Listener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    //private static final int REQUEST_CODE = 10000;
+    private static final int REQUEST_CODE_DOWNLOAD_DICTIONARY = 10000;
+
+    private static final int REQUEST_CODE_SELECT_LOCAL_DICTIONARY = 10001;
 
     @App
     MonodictApp app;
@@ -115,10 +115,16 @@ public class MainActivity extends ActionBarActivity implements
     MainActivityRootLayout rootLayout;
 
     @ViewById
-    DicItemListView dicItemListView;
+    Toolbar toolbar;
+
+    @ViewById
+    DictionarySearchView searchView;
 
     @ViewById
     ListView drawerList;
+
+    @ViewById
+    DicItemListView dicItemListView;
 
     @ViewById
     FloatingActionButton browserButton;
@@ -159,13 +165,13 @@ public class MainActivity extends ActionBarActivity implements
     @DimensionRes
     float spaceWell;
 
+    private ActionBarDrawerToggle drawerToggle;
+
     private boolean queryInitialized = false;
 
     private String extraActionSearchQuery = null;
 
     private String extraActionSendText = null;
-
-    private DictionarySearchView searchView = null;
 
     private DicItemListView.ResultAdapter resultAdapter;
 
@@ -182,15 +188,19 @@ public class MainActivity extends ActionBarActivity implements
     public void afterViews() {
         Log.d(TAG, "afterViews: state=" + state.toString());
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.main)));
-
-        final Resources resources = getResources();
-
-        setTitle(String.format("%s %s", resources.getString(R.string.app_name), MonodictApp.getPackageInfo(this).versionName));
-
         commonActivityTrait.initActivity(preferences);
 
         rootLayout.setListener(this);
+
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        drawerToggle = new ActionBarDrawerToggle(this, rootLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        rootLayout.setDrawerListener(drawerToggle);
+        drawerList.setAdapter(new MainActivityDrawerListAdapter(this, this));
+
+        searchView.setListener(this);
+        searchView.onActionViewExpanded();
 
         dicItemListView.setCallback(this);
         resultData = new ArrayList<>();
@@ -201,28 +211,6 @@ public class MainActivity extends ActionBarActivity implements
                 resultData);
         dicItemListView.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
-
-        final MainActivity activity = this;
-        drawerList.setAdapter(new MainActivityDrawerListAdapter(this));
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MainActivityDrawerListAdapter.Item item =
-                        (MainActivityDrawerListAdapter.Item) drawerList.getItemAtPosition(position);
-                MainActivityDrawerListAdapter.ItemType itemType = item.getType();
-                if (itemType.equals(MainActivityDrawerListAdapter.ItemType.DICTIONARY)) {
-                    Dictionary dictionary =
-                            ((MainActivityDrawerListAdapter.DictionaryItem) item).getDictionary();
-                    new DictionaryContextDialogBuilder(activity, dictionary)
-                            .setContextActionListener(activity)
-                            .show();
-                }
-                if (itemType.equals(MainActivityDrawerListAdapter.ItemType.SETTINGS)) {
-                    SettingsActivity_.intent(activity).start();
-                    rootLayout.closeDrawer(drawerList);
-                }
-            }
-        });
     }
 
     @Subscribe
@@ -336,31 +324,6 @@ public class MainActivity extends ActionBarActivity implements
         startActivityFromNav(view, BrowserActivity_.intent(this).get());
     }
 
-    @OptionsItem({
-            R.id.action_search_by_google_com,
-            R.id.action_search_by_alc_co_jp,
-            R.id.action_search_by_dictionary_com})
-    void onActionSearchByWeb(MenuItem item) {
-        String url = null;
-        String query = searchView.getQuery().toString().trim();
-        Resources resources = getResources();
-        switch (item.getItemId()) {
-            case R.id.action_search_by_google_com:
-                url = resources.getString(R.string.url_google_com_search, query);
-                break;
-            case R.id.action_search_by_dictionary_com:
-                url = resources.getString(R.string.url_dictionary_com_search, query);
-                break;
-            case R.id.action_search_by_alc_co_jp:
-                url = resources.getString(R.string.url_alc_co_jp_search, query);
-                break;
-        }
-        if (url == null) {
-            return;
-        }
-        BrowserActivity_.intent(this).extraUrlOrKeywords(url).start();
-    }
-
     private void showNavButtons(boolean animate) {
         if (rootLayout.isSoftKeyboardShown()) {
             return;
@@ -380,6 +343,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
         if (speechHelper != null && speechHelper.isProcessing()) {
             return;
         }
@@ -441,6 +405,8 @@ public class MainActivity extends ActionBarActivity implements
         super.onResume();
         MonodictApp.getEventBus().register(this);
         commonActivityTrait.setOrientation(preferences.orientation().get());
+
+        initQuery();
     }
 
     @Override
@@ -470,68 +436,6 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        final WeakReference<MainActivity> activityRef = new WeakReference<>(this);
-
-        searchView = new DictionarySearchView(this, new DictionarySearchView.Listener() {
-            @Override
-            public void onSearchViewFocusChange(boolean b) {
-                // TODO: can be removed?
-            }
-
-            @Override
-            public void onSearchViewQueryTextSubmit(String query) {
-                if (activityRef.get() != null) {
-                    activityRef.get().search(query, 0);
-                }
-            }
-
-            @Override
-            public void onSearchViewQueryTextChange(String s) {
-                String text = DiceFactory.convert(s);
-                String lastSearchQuery = "";
-                if (activityRef.get() != null) {
-                    lastSearchQuery = activityRef.get().state.getLastSearchQuery();
-                }
-                if (text.length() > 0 && !lastSearchQuery.equals(text)) {
-                    int delay = 0;
-                    if (lastSearchQuery.length() > 0 &&
-                            lastSearchQuery.charAt(lastSearchQuery.length() - 1) != text.charAt(text.length() - 1)) {
-                        delay = 10;
-                    }
-                    if (activityRef.get() != null) {
-                        activityRef.get().search(text, delay);
-                    }
-                }
-            }
-        });
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-
-        RelativeLayout wrapSearchView = new RelativeLayout(this);
-        wrapSearchView.addView(searchView);
-        actionBar.setCustomView(wrapSearchView);
-
-        /*
-        Configuration configuration = getResources().getConfiguration();
-
-        int screenSize = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
-        if (screenSize == Configuration.SCREENLAYOUT_SIZE_SMALL
-                || screenSize == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
-        */
-
-        initQuery();
-
-        return true;
     }
 
     @Override
@@ -702,20 +606,23 @@ public class MainActivity extends ActionBarActivity implements
             preferences.lastVersionCode().put(currentVersionCode);
             removeDirectory(getCacheDir());
 
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle(R.string.title_welcome)
-                    .setMessage(activityHelper.getStringFromRaw(R.raw.welcome))
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+            new MaterialDialog.Builder(this)
+                    .title(R.string.title_welcome)
+                    .content(activityHelper.getStringFromRaw(R.raw.welcome))
+                    .positiveText(R.string.action_download_now)
+                    .callback(new MaterialDialog.SimpleCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog materialDialog) {
+                            materialDialog.dismiss();
+                            DownloadsActivity_.intent(MainActivity.this)
+                                    .startForResult(REQUEST_CODE_DOWNLOAD_DICTIONARY);
                         }
                     })
-                    .setPositiveButton(R.string.action_download_now, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                    .negativeText(android.R.string.cancel)
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
                             dialog.dismiss();
-                            SettingsActivity_.intent(MainActivity.this)
-                                    .extraOpenDownloads(true)
-                                    .start();
                         }
                     })
                     .show();
@@ -760,16 +667,18 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onContextActionDelete(final Dictionary dictionary) {
+        Log.d(TAG, "onContextActionDelete");
         activityHelper
-                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onPositive(MaterialDialog materialDialog) {
+
                         dictionaryServiceConnection.deleteDictionary(dictionary);
                     }
                 })
-                .setTitle(dictionary.getNameWithEmoji())
-                .setMessage(R.string.message_confirm_delete)
-                .setIcon(R.drawable.ic_delete_black_36dp)
+                .icon(R.drawable.ic_delete_black_36dp)
+                .title(dictionary.getName())
+                .content(R.string.message_confirm_delete)
                 .show();
     }
 
@@ -785,25 +694,22 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onContextActionRename(final Dictionary dictionary) {
         activityHelper
-                .buildInputDialog(
-                        dictionary.getName(),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                TextView textView = (TextView) ((AlertDialog) dialogInterface).findViewById(android.R.id.text1);
-                                String dictionaryName = textView.getText().toString().trim();
-                                if (dictionaryName.isEmpty()) {
-                                    return;
-                                }
-                                dictionary.setName(dictionaryName);
-                                dictionaries.updateDictionary(dictionary);
-                                dictionaryServiceConnection.reload();
-                                reloadDictionaries();
-                            }
+                .buildInputDialog(dictionary.getName(), new MaterialDialog.SimpleCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog materialDialog) {
+                        TextView textView = (TextView) materialDialog.findViewById(android.R.id.text1);
+                        String dictionaryName = textView.getText().toString().trim();
+                        if (dictionaryName.isEmpty()) {
+                            return;
                         }
-                )
-                .setIcon(R.drawable.ic_edit_black_36dp)
-                .setTitle(R.string.action_rename)
+                        dictionary.setName(dictionaryName);
+                        dictionaries.updateDictionary(dictionary);
+                        dictionaryServiceConnection.reload();
+                        reloadDictionaries();
+                    }
+                })
+                .icon(R.drawable.ic_edit_black_36dp)
+                .title(R.string.action_rename)
                 .show();
     }
 
@@ -815,5 +721,115 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onContextActionDown(Dictionary dictionary) {
         dictionaryServiceConnection.swap(dictionary, 1);
+    }
+
+    @Override
+    public void onDrawerClickDictionaryItem(Dictionary dictionary) {
+        Log.d(TAG, "onDrawerClickDicitonaryItem: " + dictionary);
+        new DictionaryContextDialogBuilder(this, dictionary)
+                .setContextActionListener(this)
+                .show();
+    }
+
+    @Override
+    public void onDrawerChangeDictionaryItemCheckbox(Dictionary dictionary, boolean isChecked) {
+        Log.d(TAG, String.format("onDrawerChangeDictionaryItemCheckbox: %s %s", dictionary, isChecked ? "Y" : "N"));
+        dictionary.setEnabled(isChecked);
+        if (dictionaries.updateDictionary(dictionary)) {
+            dictionaryServiceConnection.reload();
+            reloadDictionaries();
+        }
+    }
+
+    @Override
+    public void onDrawerClickDownloadButton() {
+        Log.d(TAG, "onDrawerClickDownloadButton");
+        DownloadsActivity_.intent(this).startForResult(REQUEST_CODE_DOWNLOAD_DICTIONARY);
+    }
+
+    @OnActivityResult(REQUEST_CODE_DOWNLOAD_DICTIONARY)
+    void onActivityResultDownloadDictionary(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        String path = data.getExtras().getString(DownloadsActivity.RESULT_INTENT_PATH);
+        if (path != null) {
+            activityHelper.showProgressDialog(R.string.message_creating_index);
+            addDictionary(path);
+        }
+    }
+
+    @Override
+    public void onDrawerClickAddLocalPdicButton() {
+        Log.d(TAG, "onDrawerClickAddLocalPdicButton");
+        DictionaryFileSelectorActivity_.intent(this).startForResult(REQUEST_CODE_SELECT_LOCAL_DICTIONARY);
+    }
+
+    @OnActivityResult(REQUEST_CODE_SELECT_LOCAL_DICTIONARY)
+    void onActivityResultSelectLocalDictionary(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        String path = data.getStringExtra(DownloadsActivity.RESULT_INTENT_PATH);
+        String filename = data.getStringExtra(DownloadsActivity.RESULT_INTENT_FILENAME);
+        if (path != null) {
+            activityHelper.showProgressDialog(R.string.message_creating_index);
+            addDictionary(path + "/" + filename);
+        }
+    }
+
+    @Override
+    public void onDrawerClickSettingsButton() {
+        Log.d(TAG, "onDrawerClickSettingsButton");
+        SettingsActivity_.intent(this).start();
+    }
+
+
+    private void addDictionary(final String path) {
+        Log.d(TAG, "addDictionary: " + path);
+        Idice dice = DiceFactory.getInstance();
+        final IdicInfo dicInfo = dice.open(path);
+        if (dicInfo == null) {
+            activityHelper.showToastLong(getResources().getString(R.string.message_item_loading_failed, path));
+            activityHelper.hideProgressDialog();
+            return;
+        }
+
+        if (dicInfo.readIndexBlock(Dictionary.createIndexCacheFile(this, path))) {
+            for (int i = 0; i < dice.getDicNum(); i++) {
+                Dictionary dictionary = new Dictionary(this, dice.getDicInfo(i));
+                dictionaries.addDictionary(dictionary);
+            }
+            activityHelper.showToastLong(getResources().getString(R.string.message_item_added, path));
+            reloadDictionaries();
+        } else {
+            dice.close(dicInfo);
+            activityHelper.showToastLong(getResources().getString(R.string.message_item_loading_failed, path));
+        }
+        activityHelper.hideProgressDialog();
+    }
+
+    @Override
+    public void onSearchViewFocusChange(boolean b) {
+        //
+    }
+
+    @Override
+    public void onSearchViewQueryTextSubmit(String query) {
+        search(query, 0);
+    }
+
+    @Override
+    public void onSearchViewQueryTextChange(String s) {
+        String text = DiceFactory.convert(s);
+        String lastSearchQuery = state.getLastSearchQuery();
+        if (text.length() > 0 && !lastSearchQuery.equals(text)) {
+            int delay = 0;
+            if (lastSearchQuery.length() > 0 &&
+                    lastSearchQuery.charAt(lastSearchQuery.length() - 1) != text.charAt(text.length() - 1)) {
+                delay = 10;
+            }
+            search(text, delay);
+        }
     }
 }

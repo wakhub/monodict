@@ -16,13 +16,13 @@
 
 package com.github.wakhub.monodict.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
@@ -117,9 +117,9 @@ public class BrowserBookmarksActivity extends AbsListActivity {
     void onListItemLongClick(int position) {
         final Bookmark bookmark = listAdapter.getItem(position);
         activityHelper
-                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onPositive(MaterialDialog materialDialog) {
                         try {
                             databaseHelper.deleteBookmark(bookmark);
                         } catch (SQLException e) {
@@ -130,7 +130,8 @@ public class BrowserBookmarksActivity extends AbsListActivity {
                         loadBookmarks();
                     }
                 })
-                .setTitle(R.string.action_delete)
-                .setMessage(R.string.message_confirm_delete).show();
+                .title(R.string.action_delete)
+                .content(R.string.message_confirm_delete)
+                .show();
     }
 }

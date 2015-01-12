@@ -51,7 +51,13 @@
             android:imeOptions="actionGo"
             android:inputType="textUri"/>
 
+
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:background="@color/drop_shadow_edge"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -61,6 +67,11 @@
             android:id="@+id/web_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/drop_shadow_size"
+            android:background="@drawable/drop_shadow_bottom"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -29,14 +29,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/main">
+
+                <com.github.wakhub.monodict.ui.DictionarySearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/more_button"/>
+
+            </android.support.v7.widget.Toolbar>
+
             <com.github.wakhub.monodict.ui.DicItemListView
                 android:id="@+id/dic_item_list_view"
                 style="@style/AppTheme.Main.ListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_below="@id/toolbar"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drop_shadow_size_action_bar"
+                android:layout_below="@id/toolbar"
+                android:background="@drawable/drop_shadow_action_bar"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -88,7 +113,9 @@
                     app:fab_colorRipple="@color/light_gray"/>
 
             </LinearLayout>
+
         </RelativeLayout>
+
     </FrameLayout>
 
     <ListView
@@ -98,12 +125,11 @@
         android:layout_gravity="start"
         android:background="@color/light_gray"
         android:choiceMode="singleChoice"
-        android:divider="@null"
-        android:paddingTop="@dimen/space_default"
-        android:paddingBottom="@dimen/space_default"
         android:clipToPadding="false"
+        android:divider="@null"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
-        android:listSelector="@color/transparent"/>
-
+        android:listSelector="@color/transparent"
+        android:paddingBottom="@dimen/space_default"
+        android:paddingTop="@dimen/space_default"/>
 </com.github.wakhub.monodict.activity.MainActivityRootLayout_>

@@ -14,18 +14,21 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.github.wakhub.monodict.activity.MainActivity_">
 
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white_36dp"
-        android:showAsAction="always"
-        android:title="@string/action_search" />
+        android:title="@string/action_search"
+        app:showAsAction="always"/>
 
-    <item android:id="@+id/action_speech"
+    <item
+        android:id="@+id/action_speech"
         android:icon="@drawable/ic_volume_up_grey600_24dp"
         android:title="@string/action_speech"
-        android:showAsAction="always" />
+        app:showAsAction="ifRoom"/>
 </menu>

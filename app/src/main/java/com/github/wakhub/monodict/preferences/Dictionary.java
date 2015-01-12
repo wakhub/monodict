@@ -36,8 +36,6 @@ public class Dictionary {
 
     private static final String TAG = Dictionary.class.getSimpleName();
 
-    public static final String EMOJI = "📔";
-
     private String name;
     private String path;
     private boolean isEnglishIndex;
@@ -141,10 +139,6 @@ public class Dictionary {
 
     public String getName() {
         return name;
-    }
-
-    public String getNameWithEmoji() {
-        return EMOJI + name;
     }
 
     public void setName(String name) {

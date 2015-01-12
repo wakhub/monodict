@@ -16,8 +16,9 @@
 package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.util.Log;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * Created by wak on 6/10/14.
  */
-public class DictionaryContextDialogBuilder extends MaterialDialog.Builder implements DialogInterface.OnClickListener {
+public class DictionaryContextDialogBuilder extends MaterialDialog.Builder implements MaterialDialog.ListCallback {
 
     private static final String TAG = DictionaryContextDialogBuilder.class.getSimpleName();
 
@@ -58,8 +59,10 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
             }
             itemLabels.add(resources.getString(id));
         }
-        title(dictionary.getNameWithEmoji());
+        icon(R.drawable.ic_dictionary_black_36dp);
+        title(dictionary.getName());
         items(itemLabels.toArray(new CharSequence[0]));
+        itemsCallback(this);
         cancelable(true);
     }
 
@@ -69,8 +72,9 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
         int id = ITEM_IDS.get(i);
+        Log.d(TAG, "click" + i);
         switch (id) {
             case R.string.action_delete:
                 contextActionListener.onContextActionDelete(dictionary);

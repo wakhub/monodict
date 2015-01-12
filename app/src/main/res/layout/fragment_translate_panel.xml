@@ -13,97 +13,111 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/solid_background">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
 
-    <LinearLayout
-        android:id="@+id/contents_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/actions_layout"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/space_relax"
-        android:layout_marginTop="@dimen/space_relax"
-        android:layout_marginRight="@dimen/space_cozy">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drop_shadow_size"
+        android:background="@drawable/drop_shadow_top"/>
 
-        <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/display_text"
-                    style="@style/AppTheme.DisplayText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/blank_text"/>
-
-                <TextView
-                    android:id="@+id/translate_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/space_well"
-                    android:text="@string/blank_text"
-                    android:textIsSelectable="false"/>
-
-
-                <TextView
-                    android:id="@+id/dictionary_name_text"
-                    style="@style/AppTheme.DictionaryNameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/blank_text"/>
-            </LinearLayout>
-        </ScrollView>
-
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/more_button"
-        style="@style/AppTheme.PlainTextButton"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_more"
-        android:layout_below="@+id/contents_layout"
-        android:layout_toLeftOf="@+id/actions_layout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:background="@drawable/solid_background">
 
-    <LinearLayout
-        android:id="@+id/actions_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/contents_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_relax"
+            android:layout_marginRight="@dimen/space_cozy"
+            android:layout_marginTop="@dimen/space_relax"
+            android:layout_toLeftOf="@+id/actions_layout"
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/close_button"
-            android:layout_width="@dimen/image_button_small_size"
-            android:layout_height="@dimen/image_button_small_size"
-            android:contentDescription="@string/action_close"
-            android:src="@drawable/ic_close_grey600_24dp"/>
+            <ScrollView
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
 
-        <ImageButton
-            android:id="@+id/add_to_flashcard_button"
-            android:layout_width="@dimen/image_button_small_size"
-            android:layout_height="@dimen/image_button_small_size"
-            android:contentDescription="@string/action_add_to_flashcard"
-            android:src="@drawable/ic_add_flashcard_gray600_24dp"/>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/speech_button"
-            android:layout_width="@dimen/image_button_small_size"
-            android:layout_height="@dimen/image_button_small_size"
-            android:contentDescription="@string/action_speech"
-            android:src="@drawable/ic_volume_up_grey600_24dp"/>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/display_text"
+                        style="@style/AppTheme.DisplayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/blank_text"/>
 
-</RelativeLayout>
+                    <TextView
+                        android:id="@+id/translate_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space_well"
+                        android:text="@string/blank_text"
+                        android:textIsSelectable="false"
+                        android:textColor="@color/black"/>
+
+
+                    <TextView
+                        android:id="@+id/dictionary_name_text"
+                        style="@style/AppTheme.DictionaryNameText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/blank_text"/>
+                </LinearLayout>
+            </ScrollView>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/more_button"
+            style="@style/AppTheme.PlainTextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/contents_layout"
+            android:layout_toLeftOf="@+id/actions_layout"
+            android:text="@string/action_more"/>
+
+        <LinearLayout
+            android:id="@+id/actions_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_close"
+                android:src="@drawable/ic_close_grey600_24dp"/>
+
+            <ImageButton
+                android:id="@+id/add_to_flashcard_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_add_to_flashcard"
+                android:src="@drawable/ic_add_flashcard_gray600_24dp"/>
+
+            <ImageButton
+                android:id="@+id/speech_button"
+                android:layout_width="@dimen/image_button_small_size"
+                android:layout_height="@dimen/image_button_small_size"
+                android:contentDescription="@string/action_speech"
+                android:src="@drawable/ic_volume_up_grey600_24dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -31,6 +31,7 @@ Requirements
 - `Python <https://www.python.org/>`_,
   `Fabric <http://www.fabfile.org/>`_,
   `Requests <http://docs.python-requests.org/en/latest/>`_
+  `Wand <http://docs.wand-py.org/en/0.3.9/>`_
 
 Optionals
 
@@ -40,7 +41,7 @@ Command::
 
     $ git clone https://github.com/wakhub/monodict.git
     $ cd monodict
-    $ pip install fabric requests
+    $ pip install fabric requests wand
     $ fab init
 
 Then check `sdk.dir` and `ndk.dir` in your `local.properties`

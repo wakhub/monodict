@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wakhub.monodict.activity.settings;
+package com.github.wakhub.monodict.activity;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -31,14 +29,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
-import com.github.wakhub.monodict.activity.AbsListActivity;
-import com.github.wakhub.monodict.activity.BrowserActivity;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.json.Downloads;
 import com.github.wakhub.monodict.json.DownloadsItem;
-import com.github.wakhub.monodict.preferences.Dictionary;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
@@ -51,7 +47,6 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.res.DimensionRes;
 import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.apache.http.HttpResponse;
@@ -96,9 +91,6 @@ public class DownloadsActivity extends AbsListActivity {
     @HttpsClient
     HttpClient httpsClient;
 
-    @DimensionRes
-    float spaceRelax;
-
     @StringRes
     String appName;
 
@@ -128,7 +120,7 @@ public class DownloadsActivity extends AbsListActivity {
                 DownloadsItem item = getItem(position);
 
                 TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setText(Dictionary.EMOJI + item.getName());
+                text1.setText(item.getName());
 
                 TextView text2 = (TextView) view.findViewById(android.R.id.text2);
                 text2.setText(String.format("%s\nsize: %s", item.getDescription(), item.getSize()));
@@ -163,7 +155,7 @@ public class DownloadsActivity extends AbsListActivity {
     @OptionsItem(R.id.action_help)
     void onActionHelp() {
         activityHelper.buildNoticeDialog(activityHelper.getStringFromRaw(R.raw.downloads_help))
-                .setTitle(R.string.title_help)
+                .title(R.string.title_help)
                 .show();
     }
 
@@ -172,7 +164,6 @@ public class DownloadsActivity extends AbsListActivity {
         final DownloadsItem item = listAdapter.getItem(position);
         TextView textView = new TextView(this);
         textView.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-        textView.setPadding((int) spaceRelax, (int) spaceRelax, (int) spaceRelax, (int) spaceRelax);
         textView.setText(String.format(
                 "%s\nsize: %s",
                 item.getDescription(),
@@ -180,19 +171,20 @@ public class DownloadsActivity extends AbsListActivity {
         ScrollView scrollView = new ScrollView(this);
         scrollView.addView(textView);
 
-        new AlertDialog.Builder(this)
-                .setPositiveButton(R.string.action_download, new AlertDialog.OnClickListener() {
+        new MaterialDialog.Builder(this)
+                .icon(R.drawable.ic_file_download_black_36dp)
+                .title(item.getName())
+                .customView(scrollView)
+                .positiveText(R.string.action_download)
+                .callback(new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onPositive(MaterialDialog materialDialog) {
                         resultIntent.putExtra(RESULT_INTENT_ENGLISH, item.isEnglish());
                         resultIntent.putExtra(RESULT_INTENT_FILENAME, item.getName());
                         startDownload(item);
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null)
-                .setIcon(R.drawable.ic_file_download_black_36dp)
-                .setTitle(item.getName())
-                .setView(scrollView)
+                .negativeText(android.R.string.cancel)
                 .show();
     }
 

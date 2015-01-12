@@ -26,6 +26,8 @@
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="image_button_small_size">36dp</dimen>
     <dimen name="image_button_size">@dimen/button_size</dimen>
+    <dimen name="drop_shadow_size_action_bar">10dp</dimen>
+    <dimen name="drop_shadow_size">4dp</dimen>
 
     <!--
         Material Design components
@@ -43,7 +45,38 @@
     <dimen name="space_default_half">8dp</dimen>
     <dimen name="button_size">48dp</dimen>
     <dimen name="toolbar_height">48dp</dimen>
-    <dimen name="card_view_content_padding">@dimen/space_default</dimen>
-    <dimen name="card_view_margin">@dimen/space_cozy</dimen>
-    <dimen name="card_view_divider">4dp</dimen>
+    <!--
+        Cards - Components - Google design guidelines
+        http://www.google.com/design/spec/components/cards.html
+
+        > Before L, CardView adds padding to its content and draws shadows to that area.
+        > This padding amount is equal to
+        >
+        >   maxCardElevation + (1 - cos45) * cornerRadius
+        >
+        > on the sides and
+        >
+        >   maxCardElevation * 1.5 + (1 - cos45) * cornerRadius
+        >
+        > on top and bottom.
+        https://developer.android.com/reference/android/support/v7/widget/CardView.html
+
+        default dimensions are defined in::
+
+            intermediates/exploded-arr/com.android.support/cardview-v7/21.03/res/values/values.xml
+    -->
+    <dimen name="card_view_content_padding">16dp</dimen>
+    <dimen name="card_view_margin">8dp</dimen>
+    <!-- card_view_margin - round(2 + (1 - math.cos(45)) * 2) -->
+    <!--<dimen name="card_view_divider_horizontal">3dp</dimen>-->
+    <!-- card_view_margin - round(2 * 1.5 + (1 - math.cos(45)) * 2) -->
+    <!--<dimen name="card_view_divider_vertical">2dp</dimen>-->
+    <!--
+        Actual margin for support library CardView which refer to google play store app layout
+    -->
+    <dimen name="card_view_divider_vertical">3dp</dimen>
+    <dimen name="card_view_divider_horizontal">4dp</dimen>
+    <dimen name="card_view_margin_vertical">5dp</dimen>
+    <dimen name="card_view_margin_horizontal">6dp</dimen>
+
 </resources>

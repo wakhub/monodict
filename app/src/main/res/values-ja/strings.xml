@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-<string name="action_add_dictionary">辞書を追加する</string>
+<string name="action_add_local_pdic">ローカルファイル登録</string>
 <string name="action_add_new_card">新しい単語を登録</string>
 <string name="action_add_to_bookmarks">ブックマークに追加</string>
 <string name="action_add_to_flashcard">単語帳に追加</string>

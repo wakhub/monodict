@@ -34,8 +34,12 @@
     <color name="gray">@color/grey_400</color>
     <color name="dark_gray">@color/grey_500</color>
     <color name="transparent">#00000000</color>
-    <color name="frosted_black">#99000000</color>
+    <color name="frosted_black">#a0a0a0</color>
     <color name="shadow">#22000000</color>
+    <color name="drop_shadow_action_bar">#30000000</color>
+    <color name="drop_shadow_action_bar_edge">#909090</color>
+    <color name="drop_shadow">#18000000</color>
+    <color name="drop_shadow_edge">#cccccc</color>
     <color name="frosted_white">#eeffffff</color>
 
     <color name="nav_background">@color/frosted_black</color>

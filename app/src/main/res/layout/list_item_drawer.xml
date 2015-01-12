@@ -13,52 +13,118 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<RelativeLayout
-    android:id="@+id/dictionary_content"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    android:clickable="false">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:paddingLeft="@dimen/space_default"
-        android:paddingRight="@dimen/space_default"
-        android:id="@+id/clickable_view"
+    <RelativeLayout
+        android:id="@+id/dictionary_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/check_box"
-        android:layout_toStartOf="@+id/check_box"
-        android:background="@drawable/clickable_background"
-        android:minHeight="@dimen/button_size"
-        android:orientation="horizontal">
+        android:background="@color/transparent"
+        android:clickable="false">
 
-        <ImageView
-            android:id="@+id/image"
+        <LinearLayout
+            android:id="@+id/clickable_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/check_box"
+            android:layout_toStartOf="@+id/check_box"
+            android:background="@drawable/clickable_background"
+            android:minHeight="@dimen/button_size"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/space_cozy"
+            android:paddingRight="@dimen/space_cozy"
+            android:layout_marginLeft="@dimen/space_default">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_dictionary_black_24dp"/>
+
+            <TextView
+                android:id="@android:id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/space_cozy"
+                android:gravity="center_vertical"
+                android:text="@null"
+                android:textSize="@dimen/text_size_body"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/check_box"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="@null"
-            android:scaleType="center"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/space_default"/>
 
-        <TextView
-            android:id="@android:id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_cozy"
-            android:gravity="center_vertical"
-            android:text="@null"
-            android:textSize="@dimen/text_size_body"/>
+    </RelativeLayout>
 
-    </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/check_box"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/space_default"
-        android:layout_centerVertical="true"/>
+        android:id="@+id/dictionary_actions_layout"
+        >
 
-</RelativeLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider_transparent_space_cozy"
+            android:showDividers="middle"
+            android:layout_marginTop="@dimen/space_cozy">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_file_download_black_24dp"
+                android:text="@string/action_download"
+                android:id="@+id/download_button"
+                android:layout_weight="1"
+                android:background="@drawable/flat_button_background"
+                android:layout_marginLeft="@dimen/space_default"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/space_cozy"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_folder_open_black_24dp"
+                android:text="@string/action_add_local_pdic"
+                android:id="@+id/add_local_pdic_button"
+                android:layout_weight="1"
+                android:background="@drawable/flat_button_background"
+                android:layout_marginRight="@dimen/space_default"
+                android:clickable="false"
+                android:padding="@dimen/space_cozy"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/settings_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_settings_black_24dp"
+            android:text="@string/title_activity_settings"
+            android:id="@+id/settings_button"
+            android:layout_marginRight="@dimen/space_default"
+            android:layout_marginLeft="@dimen/space_default"
+            android:background="@drawable/flat_button_background"
+            android:layout_marginTop="@dimen/space_cozy"/>
+    </RelativeLayout>
+</LinearLayout>

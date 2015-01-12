@@ -15,14 +15,17 @@
  */
 package com.github.wakhub.monodict.activity;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,6 @@ public class FlashcardActivityPagerFragment extends Fragment {
     private static final String TAG = FlashcardActivityPagerFragment.class.getSimpleName();
 
     static final String ARG_BOX = "box";
-
 
     private static abstract class FlashcardItemEvent {
 
@@ -86,6 +88,8 @@ public class FlashcardActivityPagerFragment extends Fragment {
 
     private List<Card> dataSet = new ArrayList<>();
 
+    private int gridSpanCount = 1;
+
     public interface Listener {
         void onInitPage(FlashcardActivityPagerFragment fragment, int box);
     }
@@ -119,6 +123,14 @@ public class FlashcardActivityPagerFragment extends Fragment {
     }
 
     public void notifyDataSetChanged() {
+        int orientation = getFlashcardActivity().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            gridSpanCount = 2;
+            recyclerView.setLayoutManager(new GridLayoutManager(getFlashcardActivity(), gridSpanCount));
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            gridSpanCount = 1;
+            recyclerView.setLayoutManager(new LinearLayoutManager(getFlashcardActivity()));
+        }
         if (recyclerAdapter != null) recyclerAdapter.notifyDataSetChanged();
     }
 
@@ -131,11 +143,18 @@ public class FlashcardActivityPagerFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
         FlashcardActivity activity = getFlashcardActivity();
         recyclerAdapter = new RecyclerAdapter(this);
         recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, gridSpanCount));
+
+        Resources res = getResources();
+        final int dividerHorizontal = res.getDimensionPixelOffset(R.dimen.card_view_divider_horizontal);
+        final int dividerVertical = res.getDimensionPixelOffset(R.dimen.card_view_divider_vertical);
+        final int marginVertical = res.getDimensionPixelOffset(R.dimen.card_view_margin_vertical);
+        final int marginHorizontal = res.getDimensionPixelOffset(R.dimen.card_view_margin_horizontal);
 
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -144,11 +163,25 @@ public class FlashcardActivityPagerFragment extends Fragment {
                 Resources res = getResources();
                 int itemCount = parent.getAdapter().getItemCount();
                 int position = parent.getChildPosition(view);
-                if (position == 0) {
-                    outRect.top = res.getDimensionPixelSize(R.dimen.card_view_margin);
+                if (gridSpanCount == 1) {
+                    outRect.bottom = dividerVertical;
+                    outRect.right = marginHorizontal;
+                    outRect.left = marginHorizontal;
+                } else {
+                    outRect.bottom = dividerVertical;
+                    outRect.right = dividerHorizontal;
+                    if (position == 0 || position % gridSpanCount == 0) {
+                        outRect.left = marginHorizontal;
+                    } else {
+                        outRect.right = marginHorizontal;
+                    }
                 }
-                if (position == itemCount - 1) {
-                    outRect.bottom = res.getDimensionPixelSize(R.dimen.fab_size_normal) + res.getDimensionPixelSize(R.dimen.space_default);
+                if (position == 0 || position <= gridSpanCount - 1) {
+                    outRect.top = marginVertical;
+                }
+                if (position > itemCount - gridSpanCount) {
+                    outRect.bottom = res.getDimensionPixelSize(R.dimen.fab_size_normal)
+                            + (res.getDimensionPixelSize(R.dimen.card_view_margin) * 2);
                 }
             }
         });

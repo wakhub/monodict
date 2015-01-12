@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wakhub.monodict.activity.settings;
+package com.github.wakhub.monodict.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.github.wakhub.monodict.R;
@@ -27,13 +26,12 @@ import com.github.wakhub.monodict.preferences.Preferences_;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Created by wak on 6/8/14.
  *
- * @see SettingsActivity_
+ * @see com.github.wakhub.monodict.activity.SettingsActivity_
  */
 @EActivity(R.layout.activity_base)
 public class SettingsActivity extends ActionBarActivity {
@@ -41,9 +39,6 @@ public class SettingsActivity extends ActionBarActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     //private static final int REQUEST_CODE = 10100;
-
-    @Extra
-    boolean extraOpenDownloads = false;
 
     @Pref
     Preferences_ preferences;
@@ -66,11 +61,6 @@ public class SettingsActivity extends ActionBarActivity {
                 .replace(android.R.id.content, settingsFragment)
                 .commit();
         commonActivityTrait.initActivity(preferences);
-
-        if (extraOpenDownloads) {
-            Log.d(TAG, "EXTRA: openDownloads");
-            DictionaryManagerActivity_.intent(this).extraOpenDownloads(true).start();
-        }
     }
 
     void setOrientation(String orientation) {

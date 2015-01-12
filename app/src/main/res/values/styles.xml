@@ -27,6 +27,16 @@
         <item name="android:listSelector">@drawable/list_selector</item>
     </style>
 
+    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+        <item name="android:buttonStyle">@style/AppTheme.Button</item>
+        <item name="android:buttonStyleSmall">@style/AppTheme.ButtonSmall</item>
+        <item name="android:imageButtonStyle">@style/AppTheme.ImageButtonStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/AppTheme.ActionBar.Overflow</item>
+        <!-- TODO: Does it working well? -->
+        <item name="android:listSelector">@drawable/list_selector</item>
+    </style>
+
     <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
     </style>
@@ -99,6 +109,7 @@
         <item name="android:divider">@color/transparent</item>
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
+        <item name="android:background">@color/grey_100</item>
     </style>
 
     <style name="AppTheme.Main.Nav">

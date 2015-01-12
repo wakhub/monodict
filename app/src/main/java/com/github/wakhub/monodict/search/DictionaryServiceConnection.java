@@ -39,7 +39,7 @@ public final class DictionaryServiceConnection implements ServiceConnection {
     private boolean isConnected = false;
 
     public DictionaryServiceConnection(DictionaryService.Listener listener) {
-        this.listenerRef = new WeakReference<DictionaryService.Listener>(listener);
+        this.listenerRef = new WeakReference<>(listener);
     }
 
     public void search(String query) {

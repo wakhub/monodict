@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wakhub.monodict.activity.settings;
+package com.github.wakhub.monodict.activity;
 
 import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v4.preference.PreferenceFragment;
-import android.text.TextUtils;
 
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
@@ -34,9 +33,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by wak on 6/8/14.
  */
@@ -46,7 +42,6 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private static final String PREFERENCES_NAME = "Preferences";
-    private static final String KEY_DICTIONARY_MANAGER = "dictionaryManager";
     private static final String KEY_ORIENTATION = "orientation";
     private static final String KEY_TTS_DEFAULT_LOCALE = "ttsDefaultLocale";
     private static final String KEY_TTS_LANGUAGE_FOR_TRANSLATE = "ttsLanguageForTranslate";
@@ -156,25 +151,6 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 activityHelper.buildNoticeDialog(activityHelper.getStringFromRaw(R.raw.legal)).show();
-                return false;
-            }
-        });
-
-        prefItem = findPreference(KEY_DICTIONARY_MANAGER);
-        List<String> dictionaryNames = new ArrayList<String>();
-        int size = dictionaries.getDictionaryCount();
-        for (int i = 0; i < size; i++) {
-            dictionaryNames.add(dictionaries.getDictionary(i).getNameWithEmoji());
-        }
-        if (dictionaryNames.isEmpty()) {
-            prefItem.setSummary(getResources().getString(R.string.action_add_dictionary));
-        } else {
-            prefItem.setSummary(TextUtils.join("\n", dictionaryNames));
-        }
-        prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                DictionaryManagerActivity_.intent(getActivity()).start();
                 return false;
             }
         });

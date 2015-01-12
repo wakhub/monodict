@@ -16,11 +16,12 @@ limitations under the License.
 from __future__ import print_function
 import os
 import itertools
-
 import json
 import xml.etree
 from xml.etree.ElementTree import ElementTree, Element
+import shutil
 
+from wand.image import Image
 from fabric.api import *
 from fabric.colors import *
 
@@ -32,9 +33,8 @@ APP_RES_DIR = os.path.join(APP_ROOT_DIR, 'src/main/res')
 DOWNLOADS_DIR = os.path.join(ROOT_DIR, 'downloads')
 CREDENTIALS_DIR = os.path.join(ROOT_DIR, 'credentials')
 RELEASE_KEYSTORE = os.path.join(CREDENTIALS_DIR, 'release.keystore')
-DPI = {'xhdpi': 2,
-       'xxhdpi': 3,
-       'xxxhdpi': 4}
+DPI = {'xhdpi': 2, 'xxhdpi': 3, 'xxxhdpi': 4}
+ICON_DPI = {'xhdpi': 2, 'xxhdpi': 3}
 ICON_DP_LIST = [24, 36]
 ICON_COLORS = ['white', 'gray', 'blak']
 SYSTEM_ICON_NAMES = [
@@ -53,8 +53,9 @@ SYSTEM_ICON_NAMES = [
          'folder_open',
          'help',
          'list',
-         'navigate_before', 'navigate_next',
+         'menu',
          'more_horiz', 'more_vert',
+         'navigate_before', 'navigate_next',
          'play_arrow',
          'public',
          'queue',
@@ -121,10 +122,11 @@ def validation(verbose=False):
 @task
 def download_resources():
     downloads = [
-        'https://developer.android.com/downloads/design/Android_Design_Icons_20131106.zip',
+        'https://proxy.piratenpartij.nl/github.com/asystat/Final-Android-Resizer/blob/master/Executable%20Jar/Final%20Android%20Resizer.jar?raw=true',
     ]
     for url in downloads:
-        filename = url.split('/')[-1]
+        filename = url.split('/')[-1].split('?')[0]
+        print(filename)
         dest = os.path.join(DOWNLOADS_DIR, filename)
         if os.path.isfile(dest):
             print('{} already exists'.format(dest))
@@ -145,12 +147,49 @@ def init_system_icons():
         if not size.startswith('drawable-'):
             continue
         dpi = size.split('-')[-1]
+        if dpi == 'xxxhdpi':
+            continue
         for filename in files:
             if filename in SYSTEM_ICON_NAMES:
                 orig = os.path.join(root, filename)
                 dest = os.path.join(APP_RES_DIR, 'drawable-' + dpi, filename)
                 with settings(warn_only=True):
                     local("cp -rf '{}' '{}'".format(orig, dest))
+
+
+@task
+def init_custom_icons():
+    icons_src_dir = os.path.join(ROOT_DIR, 'files/drawable-xxhdpi')
+
+    for root, dirs, files in os.walk(icons_src_dir):
+        for filename in files:
+            name, ext = os.path.splitext(filename)
+            if ext != '.png':
+                continue
+            _generate_multiple_images(os.path.join(root, filename))
+
+
+def _generate_multiple_images(src_path, src_dpi='xxhdpi'):
+    assert src_dpi in ICON_DPI.keys()
+
+    src_power = ICON_DPI[src_dpi]
+
+    with Image(filename=src_path) as src_image:
+        for dpi in ICON_DPI.keys():
+            dest_path = os.path.join(APP_RES_DIR,
+                                     'drawable-' + dpi,
+                                     os.path.basename(src_path))
+            if dpi == src_dpi:
+                print('Copying to {}...'.format(dest_path))
+                shutil.copy(src_path, dest_path)
+            else:
+                with src_image.clone() as clone_image:
+                    print('Generating {}...'.format(dest_path))
+                    power = float(ICON_DPI[dpi]) / float(src_power)
+                    clone_image.resize(int(power * clone_image.width),
+                                       int(power * clone_image.height))
+                    clone_image.save(filename=dest_path)
+
 
 @task
 def generate_keystore(keystore):
@@ -235,7 +274,6 @@ def _clean_gradle_caches():
 
 def _download(url, dest):
     import requests
-    import shutil
     print('Downloading {} => {}'.format(url, dest))
     result = requests.get(url, stream=True)
     with open(dest, 'wb') as f:
@@ -293,9 +331,9 @@ def _cleanup_inkscape_svg(svg_path):
 
     tree = ElementTree()
     svg = tree.parse(svg_path)
-    filename_attr = '{%s}export-filename' % ns_dict['inkscape']
-    for g in svg.findall('{%s}g' % ns_dict['svg']):
-        for element in g.findall('*'):
-            if filename_attr in element.attrib:
-                element.attrib[filename_attr] = ''
+    filename_attr = '{}export-filename'.format('{' + ns_dict['inkscape'] + '}')
+    for element in svg.iter('*'):
+        if filename_attr in element.attrib:
+            element.attrib[filename_attr] = ''
     tree.write(svg_path, encoding=ENCODING)
+

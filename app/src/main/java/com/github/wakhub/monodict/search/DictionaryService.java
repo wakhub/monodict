@@ -97,24 +97,28 @@ public final class DictionaryService extends Service implements SearchThread.Lis
         }
 
         void search(String query) {
+            Log.d(TAG, "search");
             if (dictionaryServiceRef.get() != null) {
                 dictionaryServiceRef.get().searchInThread(query);
             }
         }
 
         void delete(Dictionary dictionary) {
+            Log.d(TAG, "delete");
             if (dictionaryServiceRef.get() != null) {
                 dictionaryServiceRef.get().delete(dictionary);
             }
         }
 
         void swap(Dictionary dictionary, int direction) {
+            Log.d(TAG, "swap");
             if (dictionaryServiceRef.get() != null) {
                 dictionaryServiceRef.get().swap(dictionary, direction);
             }
         }
 
         void reload() {
+            Log.d(TAG, "reload");
             if (dictionaryServiceRef.get() != null) {
                 dictionaryServiceRef.get().reload();
             }

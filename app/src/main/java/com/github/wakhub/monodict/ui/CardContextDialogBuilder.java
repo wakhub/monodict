@@ -70,7 +70,7 @@ public class CardContextDialogBuilder extends MaterialDialog.Builder implements 
             }
         }
         title(card.getDisplay());
-        icon(R.drawable.ic_flashcards_black_36dp);
+        icon(R.drawable.ic_flashcard_black_36dp);
         String[] itemLabels = new String[itemIds.size()];
         for (int i = 0; i < itemIds.size(); i++) {
             itemLabels[i] = resources.getString(itemIds.get(i));

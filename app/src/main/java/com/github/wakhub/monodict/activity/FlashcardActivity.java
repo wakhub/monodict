@@ -14,9 +14,9 @@
 package com.github.wakhub.monodict.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Typeface;
@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
@@ -326,7 +327,6 @@ public class FlashcardActivity extends ActionBarActivity implements
     protected void onResume() {
         super.onResume();
         MonodictApp.getEventBus().register(this);
-
         if (isReloadRequired) {
             refreshPager();
         }
@@ -336,6 +336,12 @@ public class FlashcardActivity extends ActionBarActivity implements
     protected void onPause() {
         super.onPause();
         MonodictApp.getEventBus().unregister(this);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getCurrentFragment().notifyDataSetChanged();
     }
 
     @OnActivityResult(SpeechHelper.REQUEST_CODE_TTS)
@@ -355,15 +361,16 @@ public class FlashcardActivity extends ActionBarActivity implements
                 getResources().getString(R.string.app_name),
                 DateTimeUtils.getInstance().getCurrentDateTimeString());
         activityHelper
-                .buildInputDialog(defaultPath, new DialogInterface.OnClickListener() {
+                .buildInputDialog(defaultPath, new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        TextView textView = (TextView) ((Dialog) dialogInterface).findViewById(android.R.id.text1);
+                    public void onPositive(MaterialDialog materialDialog) {
+
+                        TextView textView = (TextView) materialDialog.findViewById(android.R.id.text1);
                         String outputPath = textView.getText().toString();
                         exportCardsTo(outputPath);
                     }
                 })
-                .setTitle(R.string.action_export)
+                .title(R.string.action_export)
                 .show();
     }
 
@@ -414,8 +421,6 @@ public class FlashcardActivity extends ActionBarActivity implements
         layout.setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        int padding = getResources().getDimensionPixelSize(R.dimen.space_default);
-        layout.setPadding(padding, padding, padding, padding);
         autoPlayDisplayText = new TextView(this);
         autoPlayDisplayText.setTypeface(Typeface.DEFAULT_BOLD);
         layout.addView(autoPlayDisplayText);
@@ -423,22 +428,24 @@ public class FlashcardActivity extends ActionBarActivity implements
         autoPlayTranslateText.setText(R.string.message_in_processing);
         layout.addView(autoPlayTranslateText);
 
-        autoPlayDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.action_auto_play)
-                .setIcon(R.drawable.ic_play_arrow_black_24dp)
-                .setView(layout)
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+        autoPlayDialog = new MaterialDialog.Builder(this)
+                .title(R.string.action_auto_play)
+                .icon(R.drawable.ic_play_arrow_black_24dp)
+                .customView(layout)
+                .negativeText(android.R.string.cancel)
+                .cancelListener(new DialogInterface.OnCancelListener() {
                     @Override
-                    public void onCancel(DialogInterface dialogInterface) {
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.cancel();
+                    }
+                })
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
                         autoPlayDisplayText = null;
                         autoPlayTranslateText = null;
                         stopAutoPlay();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
                     }
                 })
                 .show();
@@ -559,15 +566,16 @@ public class FlashcardActivity extends ActionBarActivity implements
     @OptionsItem(R.id.action_delete_all)
     void onActionDeleteAll() {
         activityHelper
-                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onPositive(MaterialDialog materialDialog) {
+
                         deleteAllCards();
                     }
                 })
-                .setTitle(R.string.action_delete_all)
-                .setIcon(R.drawable.ic_delete_black_36dp)
-                .setMessage(R.string.message_confirm_delete)
+                .icon(R.drawable.ic_delete_black_36dp)
+                .title(R.string.action_delete_all)
+                .content(R.string.message_confirm_delete)
                 .show();
 
     }
@@ -728,9 +736,9 @@ public class FlashcardActivity extends ActionBarActivity implements
         Log.d(TAG, "onCardContextActionDelete: " + card);
         final Card finalCard = card;
         activityHelper
-                .buildConfirmDialog(new DialogInterface.OnClickListener() {
+                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int buttonPosition) {
+                    public void onPositive(MaterialDialog materialDialog) {
                         try {
                             databaseHelper.deleteCard(finalCard);
                         } catch (SQLException e) {
@@ -748,9 +756,9 @@ public class FlashcardActivity extends ActionBarActivity implements
                         refreshPager();
                     }
                 })
-                .setIcon(R.drawable.ic_delete_black_36dp)
-                .setTitle(R.string.action_delete)
-                .setMessage(R.string.message_confirm_delete)
+                .icon(R.drawable.ic_delete_black_36dp)
+                .title(R.string.action_delete)
+                .content(R.string.message_confirm_delete)
                 .show();
         return true;
     }

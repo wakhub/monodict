@@ -16,9 +16,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.wakhub.monodict.activity.settings.DownloadsActivity" >
+    tools:context="com.github.wakhub.monodict.activity.DownloadsActivity" >
     <item android:id="@+id/action_help"
         android:icon="@drawable/ic_help_black_24dp"
         android:title="@string/title_help"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 </menu>

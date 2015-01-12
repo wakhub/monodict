@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.github.wakhub.monodict.activity.settings;
+package com.github.wakhub.monodict.activity;
 
 import android.content.Intent;
 
 import com.github.wakhub.monodict.R;
-import com.github.wakhub.monodict.activity.AbsFileManagerActivity;
 import com.github.wakhub.monodict.preferences.DictionaryFileSelectorActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 
@@ -62,7 +61,7 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
     void onActionHelp() {
         activityHelper
                 .buildNoticeDialog(activityHelper.getStringFromRaw(R.raw.file_selector_help))
-                .setTitle(R.string.title_help)
+                .title(R.string.title_help)
                 .show();
     }
 

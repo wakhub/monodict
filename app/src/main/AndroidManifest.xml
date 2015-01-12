@@ -29,15 +29,16 @@
 
     <application
         android:name="com.github.wakhub.monodict.MonodictApp_"
+        android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:allowBackup="true"
         android:theme="@style/AppTheme">
         <activity
             android:name="com.github.wakhub.monodict.activity.MainActivity_"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -61,11 +62,11 @@
         <activity
             android:name="com.github.wakhub.monodict.activity.FlashcardActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_flashcard" />
+            android:label="@string/title_activity_flashcard"/>
         <activity
             android:name="com.github.wakhub.monodict.activity.BrowserActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_browser" />
+            android:label="@string/title_activity_browser"/>
         <activity
             android:name="com.github.wakhub.monodict.activity.BrowserBookmarksActivity_"
             android:configChanges="orientation|screenSize"
@@ -95,23 +96,18 @@
             android:name="com.github.wakhub.monodict.activity.DirectorySelectorActivity_"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_directory_selector"/>
-        <!-- Settings -->
         <activity
-            android:name="com.github.wakhub.monodict.activity.settings.SettingsActivity_"
+            android:name="com.github.wakhub.monodict.activity.SettingsActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"/>
         <activity
-            android:name="com.github.wakhub.monodict.activity.settings.DictionaryManagerActivity_"
+            android:name="com.github.wakhub.monodict.activity.DictionaryFileSelectorActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_dictionary_manager" />
+            android:label="@string/action_add_local_pdic"/>
         <activity
-            android:name="com.github.wakhub.monodict.activity.settings.DictionaryFileSelectorActivity_"
+            android:name="com.github.wakhub.monodict.activity.DownloadsActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/action_add_dictionary" />
-        <activity
-            android:name="com.github.wakhub.monodict.activity.settings.DownloadsActivity_"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_downloads" />
+            android:label="@string/title_activity_downloads"/>
 
         <service android:name=".search.DictionaryService"/>
     </application>

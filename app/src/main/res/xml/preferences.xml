@@ -15,9 +15,6 @@
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/title_settings_dictionary_manager">
-        <Preference android:key="dictionaryManager" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_search">
         <CheckBoxPreference
             android:defaultValue="false"
