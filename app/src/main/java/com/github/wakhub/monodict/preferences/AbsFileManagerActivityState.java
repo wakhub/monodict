@@ -16,6 +16,8 @@
 
 package com.github.wakhub.monodict.preferences;
 
+import com.google.gson.annotations.Expose;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
@@ -57,6 +59,7 @@ public abstract class AbsFileManagerActivityState implements JsonPreferencesFiel
     }
 
     static class Data {
+        @Expose
         String lastPath = "";
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.github.wakhub.monodict.preferences;
 
+import com.google.gson.annotations.Expose;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -105,8 +107,14 @@ public class FlashcardActivityState implements JsonPreferencesFieldAdapter.Deleg
     }
 
     static class Data {
+
+        @Expose
         int box = 1;
+
+        @Expose
         int order = ORDER_SHUFFLE;
+
+        @Expose
         int randomSeed = 0;
     }
 }

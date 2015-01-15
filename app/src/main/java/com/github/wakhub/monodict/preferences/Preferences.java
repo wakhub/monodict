@@ -102,5 +102,13 @@ public interface Preferences {
     @DefaultString("{}")
     String dictionaryFileSelectorActivityState();
 
+    /**
+     * @see com.github.wakhub.monodict.preferences.FontFileSelectorActivityState
+     */
+    @DefaultString("{}")
+    String fontFileSelectorActivityState();
+
+
+
     // Activity state }
 }

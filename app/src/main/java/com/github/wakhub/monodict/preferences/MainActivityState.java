@@ -15,6 +15,8 @@
  */
 package com.github.wakhub.monodict.preferences;
 
+import com.google.gson.annotations.Expose;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -73,6 +75,7 @@ public class MainActivityState implements JsonPreferencesFieldAdapter.Delegate {
     }
 
     static class Data {
+        @Expose
         String lastSearchQuery;
     }
 }

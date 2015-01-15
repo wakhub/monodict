@@ -20,21 +20,39 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@id/header"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey_300"
-        android:fontFamily="sans-serif-condensed"
-        android:padding="@dimen/space_cozy"
-        android:shadowColor="@color/grey_100"
-        android:shadowDx="-1"
-        android:shadowDy="-1"
-        android:shadowRadius="1"
-        android:text="@null"
-        android:textColor="@color/grey_900"
-        android:textSize="@dimen/text_size_body"
-        android:textStyle="bold"/>
+        android:orientation="horizontal"
+        android:id="@+id/header"
+        android:paddingLeft="@dimen/space_cozy"
+        android:paddingRight="@dimen/space_cozy">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dictionary_black_24dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:padding="@dimen/space_cozy"
+            android:shadowColor="@color/grey_100"
+            android:shadowDx="-1"
+            android:shadowDy="-1"
+            android:shadowRadius="1"
+            android:text="@null"
+            android:textColor="@color/grey_900"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@id/content"
@@ -65,7 +83,9 @@
                 android:layout_height="wrap_content"
                 android:text="@null"
                 android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_body"/>
+                android:textSize="@dimen/text_size_body"
+                android:typeface="serif"
+                android:layout_marginLeft="@dimen/space_cozy"/>
 
             <TextView
                 android:id="@+id/ListTrans"
@@ -73,7 +93,9 @@
                 android:layout_height="wrap_content"
                 android:text="@null"
                 android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_body"/>
+                android:textSize="@dimen/text_size_body"
+                android:typeface="serif"
+                android:layout_marginLeft="@dimen/space_cozy"/>
 
             <TextView
                 android:id="@+id/ListSample"
@@ -82,7 +104,9 @@
                 android:text="@null"
                 android:textIsSelectable="true"
                 android:textSize="@dimen/text_size_body"
-                android:textStyle="italic"/>
+                android:textStyle="italic"
+                android:typeface="serif"
+                android:layout_marginLeft="@dimen/space_cozy"/>
 
         </LinearLayout>
 
@@ -120,11 +144,11 @@
     <View
         android:id="@+id/hr"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="@dimen/space_well"
-        android:layout_marginRight="@dimen/space_well"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/space_default"
+        android:layout_marginRight="@dimen/space_default"
         android:layout_marginTop="@dimen/space_default"
-        android:background="@drawable/dotted_border"
+        android:background="@color/grey_300"
         android:layerType="software"/>
 
     <View

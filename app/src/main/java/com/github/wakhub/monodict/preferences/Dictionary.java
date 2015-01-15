@@ -22,6 +22,7 @@ import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.dice.IIndexCacheFile;
 import com.github.wakhub.monodict.dice.IdicInfo;
 import com.google.common.base.MoreObjects;
+import com.google.gson.annotations.Expose;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,10 +37,32 @@ public class Dictionary {
 
     private static final String TAG = Dictionary.class.getSimpleName();
 
+    @Expose
     private String name;
+
+    @Expose
     private String path;
+
+    @Expose
     private boolean isEnglishIndex;
+
+    @Expose
     private boolean enabled;
+
+    @Expose
+    private int maxResults = 10;
+
+    @Expose
+    private DictionaryFont indexFont;
+
+    @Expose
+    private DictionaryFont phoneFont;
+
+    @Expose
+    private DictionaryFont transFont;
+
+    @Expose
+    private DictionaryFont sampleFont;
 
     static class Template {
         public String pattern;
@@ -157,7 +180,63 @@ public class Dictionary {
         return enabled;
     }
 
+    public int getMaxResults() {
+        return maxResults;
+    }
+
+    public void setMaxResults(int maxResults) {
+        this.maxResults = maxResults;
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public DictionaryFont getIndexFont() {
+        if (indexFont == null) {
+            indexFont = DictionaryFont.getDefaultIndexFont();
+        }
+        return indexFont;
+    }
+
+    public void setSampleFont(DictionaryFont sampleFont) {
+        this.sampleFont = sampleFont;
+    }
+
+    public void setTransFont(DictionaryFont transFont) {
+        this.transFont = transFont;
+    }
+
+    public void setPhoneFont(DictionaryFont phoneFont) {
+        this.phoneFont = phoneFont;
+    }
+
+    public void setIndexFont(DictionaryFont indexFont) {
+        this.indexFont = indexFont;
+    }
+
+    public DictionaryFont getPhoneFont() {
+        if (phoneFont == null) {
+            phoneFont = DictionaryFont.getDefaultPhoneFont();
+        }
+        return phoneFont;
+    }
+
+    public DictionaryFont getTransFont() {
+        if (transFont == null) {
+            transFont = DictionaryFont.getDefaultTransFont();
+        }
+        return transFont;
+    }
+
+    public DictionaryFont getSampleFont() {
+        if (sampleFont == null) {
+            sampleFont = DictionaryFont.getDefaultSampleFont();
+        }
+        return sampleFont;
     }
 }

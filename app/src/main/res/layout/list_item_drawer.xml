@@ -19,112 +19,155 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/navigation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main"
+        android:paddingLeft="@dimen/space_default"
+        android:paddingRight="@dimen/space_default"
+        android:paddingTop="@dimen/space_default">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_cozy"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_default"
+                android:orientation="horizontal"
+                >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/settings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_settings_black_36dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/browser_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_public_black_36dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/flashcards_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_flashcards_black_36dp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
         android:id="@+id/dictionary_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:clickable="false">
+        android:background="@drawable/clickable_background"
+        android:clickable="false"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/space_cozy"
+        android:paddingLeft="@dimen/space_default"
+        android:paddingRight="@dimen/space_default"
+        android:paddingTop="@dimen/space_cozy">
 
-        <LinearLayout
-            android:id="@+id/clickable_view"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/check_box"
-            android:layout_toStartOf="@+id/check_box"
-            android:background="@drawable/clickable_background"
-            android:minHeight="@dimen/button_size"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/space_cozy"
-            android:paddingRight="@dimen/space_cozy"
-            android:layout_marginLeft="@dimen/space_default">
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_dictionary_black_24dp"
+            android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@null"
-                android:scaleType="center"
-                android:src="@drawable/ic_dictionary_black_24dp"/>
-
-            <TextView
-                android:id="@android:id/text1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/space_cozy"
-                android:gravity="center_vertical"
-                android:text="@null"
-                android:textSize="@dimen/text_size_body"
-                android:textColor="@color/black"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@null"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/space_cozy"/>
 
         <CheckBox
             android:id="@+id/check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/space_default"/>
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/dictionary_actions_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dictionary_actions_layout"
-        >
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@drawable/divider_transparent_space_cozy"
-            android:showDividers="middle"
-            android:layout_marginTop="@dimen/space_cozy">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_file_download_black_24dp"
-                android:text="@string/action_download"
-                android:id="@+id/download_button"
-                android:layout_weight="1"
-                android:background="@drawable/flat_button_background"
-                android:layout_marginLeft="@dimen/space_default"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/space_cozy"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_folder_open_black_24dp"
-                android:text="@string/action_add_local_pdic"
-                android:id="@+id/add_local_pdic_button"
-                android:layout_weight="1"
-                android:background="@drawable/flat_button_background"
-                android:layout_marginRight="@dimen/space_default"
-                android:clickable="false"
-                android:padding="@dimen/space_cozy"/>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/settings_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_marginBottom="@dimen/space_default"
+        android:layout_marginLeft="@dimen/space_default"
+        android:layout_marginRight="@dimen/space_default"
+        android:layout_marginTop="@dimen/space_cozy"
+        android:divider="@drawable/divider_transparent_space_cozy"
+        android:orientation="horizontal"
+        android:showDividers="middle">
 
         <Button
-            android:layout_width="match_parent"
+            android:id="@+id/download_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_settings_black_24dp"
-            android:text="@string/title_activity_settings"
-            android:id="@+id/settings_button"
-            android:layout_marginRight="@dimen/space_default"
-            android:layout_marginLeft="@dimen/space_default"
-            android:background="@drawable/flat_button_background"
-            android:layout_marginTop="@dimen/space_cozy"/>
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:background="@drawable/clickable_background"
+            android:clickable="true"
+            android:drawableTop="@drawable/ic_file_download_black_24dp"
+            android:focusable="true"
+            android:padding="@dimen/space_cozy"
+            android:text="@string/action_download"/>
+
+        <Button
+            android:id="@+id/add_local_pdic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/clickable_background"
+            android:clickable="false"
+            android:drawableTop="@drawable/ic_folder_open_black_24dp"
+            android:padding="@dimen/space_cozy"
+            android:text="@string/action_add_local_pdic"/>
+    </LinearLayout>
+
 </LinearLayout>

@@ -22,12 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.preferences.Dictionaries;
-import com.github.wakhub.monodict.preferences.Dictionaries_;
 import com.github.wakhub.monodict.preferences.Dictionary;
 import com.google.common.base.MoreObjects;
 
@@ -45,17 +44,32 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
 
     static interface Listener {
         void onDrawerClickDictionaryItem(Dictionary dictionary);
+
         void onDrawerChangeDictionaryItemCheckbox(Dictionary dictionary, boolean isChecked);
+
         void onDrawerClickDownloadButton();
+
         void onDrawerClickAddLocalPdicButton();
+
         void onDrawerClickSettingsButton();
+
+        void onDrawerClickBrowserButton();
+
+        void onDrawerClickFlashcardsButton();
+    }
+
+    static interface DataSource {
+        Dictionaries getDictionariesForDrawer();
     }
 
     private final Listener listener;
 
-    public MainActivityDrawerListAdapter(Context context, Listener listener) {
+    private final DataSource dataSource;
+
+    public MainActivityDrawerListAdapter(Context context, Listener listener, DataSource dataSource) {
         super(context, R.layout.list_item_drawer, android.R.id.text1);
         this.listener = listener;
+        this.dataSource = dataSource;
         reload();
     }
 
@@ -63,13 +77,16 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
         Log.d(TAG, "reload");
         clear();
         ArrayList<Item> items = new ArrayList<>();
-        Dictionaries dictionaries = Dictionaries_.getInstance_(getContext());
-        dictionaries.reload();
+
+        items.add(new NavigationItem());
+
+        Dictionaries dictionaries = dataSource.getDictionariesForDrawer();;
         for (int i = 0; i < dictionaries.getDictionaryCount(); i++) {
             items.add(new DictionaryItem(dictionaries.getDictionary(i)));
         }
+
         items.add(new DictionaryActionsItem());
-        items.add(new SettingsItem());
+
         addAll(items);
         notifyDataSetChanged();
     }
@@ -78,39 +95,74 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         Item item = getItem(position);
-
+        if (item.getType().equals(ItemType.NAVIGATION)) {
+            return getNavigationView(view);
+        }
         if (item.getType().equals(ItemType.DICTIONARY_ITEM)) {
             return getDictionaryItemView(view, item);
         }
         if (item.getType().equals(ItemType.DICTIONARY_ACTIONS)) {
             return getDictionaryActionsView(view);
         }
-        if (item.getType().equals(ItemType.SETTINGS)) {
-            return getSettingsView(view);
-        }
+        return view;
+    }
+
+
+    private View getNavigationView(View view) {
+        view.findViewById(R.id.navigation_layout).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.dictionary_item_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.GONE);
+        String versionName = MonodictApp.getPackageInfo(getContext()).versionName;
+        String appName = getContext().getResources().getString(R.string.app_name);
+        ((TextView)view.findViewById(R.id.title_text)).setText(String.format("%s %s", appName, versionName));
+        view.findViewById(R.id.settings_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDrawerClickSettingsButton();
+            }
+        });
+        view.findViewById(R.id.browser_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDrawerClickBrowserButton();
+            }
+        });
+        view.findViewById(R.id.flashcards_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDrawerClickFlashcardsButton();
+            }
+        });
         return view;
     }
 
     private View getDictionaryItemView(View view, Item item) {
+        view.findViewById(R.id.navigation_layout).setVisibility(View.GONE);
         view.findViewById(R.id.dictionary_item_layout).setVisibility(View.VISIBLE);
         view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.GONE);
-        view.findViewById(R.id.settings_layout).setVisibility(View.GONE);
 
         final Dictionary dictionary = ((DictionaryItem) item).getDictionary();
 
         TextView text1 = (TextView) view.findViewById(android.R.id.text1);
         text1.setText(item.getTitle());
 
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_box);
+        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_box);
         checkBox.setChecked(dictionary.isEnabled());
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDrawerChangeDictionaryItemCheckbox(dictionary, checkBox.isChecked());
+            }
+        });
+        /*
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listener.onDrawerChangeDictionaryItemCheckbox(dictionary, isChecked);
             }
         });
+        */
 
-        view.findViewById(R.id.clickable_view).setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onDrawerClickDictionaryItem(dictionary);
@@ -120,9 +172,9 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
     }
 
     private View getDictionaryActionsView(View view) {
+        view.findViewById(R.id.navigation_layout).setVisibility(View.GONE);
         view.findViewById(R.id.dictionary_item_layout).setVisibility(View.GONE);
         view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.settings_layout).setVisibility(View.GONE);
         view.findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,27 +190,27 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
         return view;
     }
 
-    private View getSettingsView(View view) {
-        view.findViewById(R.id.dictionary_item_layout).setVisibility(View.GONE);
-        view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.GONE);
-        view.findViewById(R.id.settings_layout).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.settings_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onDrawerClickSettingsButton();
-            }
-        });
-        return view;
-    }
-
     public static enum ItemType {
-        DICTIONARY_ITEM, DICTIONARY_ACTIONS, SETTINGS
+        NAVIGATION, DICTIONARY_ITEM, DICTIONARY_ACTIONS
     }
 
     public static interface Item {
         ItemType getType();
 
         String getTitle();
+    }
+
+    public static final class NavigationItem implements Item {
+
+        @Override
+        public ItemType getType() {
+            return ItemType.NAVIGATION;
+        }
+
+        @Override
+        public String getTitle() {
+            return "";
+        }
     }
 
     public static final class DictionaryItem implements Item {
@@ -195,19 +247,6 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
         @Override
         public ItemType getType() {
             return ItemType.DICTIONARY_ACTIONS;
-        }
-
-        @Override
-        public String getTitle() {
-            return "";
-        }
-    }
-
-    public static final class SettingsItem implements Item {
-
-        @Override
-        public ItemType getType() {
-            return ItemType.SETTINGS;
         }
 
         @Override

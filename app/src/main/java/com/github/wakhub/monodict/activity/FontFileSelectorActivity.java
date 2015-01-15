@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 wak
+ * Copyright (C) 2015 wak
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.github.wakhub.monodict.activity;
 import android.content.Intent;
 
 import com.github.wakhub.monodict.R;
-import com.github.wakhub.monodict.preferences.DictionaryFileSelectorActivityState;
+import com.github.wakhub.monodict.preferences.FontFileSelectorActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.google.common.base.Joiner;
 
@@ -27,28 +27,25 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Created by wak on 6/27/14.
  */
 @EActivity(R.layout.activity_abs_file_manager)
-@OptionsMenu({R.menu.file_selector})
-public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
+public class FontFileSelectorActivity extends AbsFileManagerActivity {
 
-    private final static String TAG = DictionaryFileSelectorActivity.class.getSimpleName();
+    private final static String TAG = FontFileSelectorActivity.class.getSimpleName();
 
     public final static String RESULT_INTENT_FILENAME = "filename";
 
-    private static final String[] DICTIONARY_EXT_LIST = new String[]{".dic", ".pdic"};
+    private static final String[] FONT_EXT_LIST = new String[]{".ttf", ".otf"};
 
     @Pref
     Preferences_ preferences;
 
     @Bean
-    DictionaryFileSelectorActivityState state;
+    FontFileSelectorActivityState state;
 
     @Override
     @AfterViews
@@ -58,17 +55,8 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
         commonActivityTrait.initActivity(preferences);
     }
 
-    @OptionsItem(R.id.action_help)
-    void onActionHelp() {
-        activityHelper
-                .buildNoticeDialog(activityHelper.getStringFromRaw(R.raw.file_selector_help))
-                .title(R.string.title_help)
-                .show();
-    }
-
-
-    private boolean isValidDictionaryFile(String path) {
-        for (String ext : DICTIONARY_EXT_LIST) {
+    private boolean isValidFontFile(String path) {
+        for (String ext : FONT_EXT_LIST) {
             if (path.toLowerCase().endsWith(ext)) {
                 return true;
             }
@@ -90,10 +78,9 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
             super.onListItemClick(position);
             return;
         }
-
-        if (isValidDictionaryFile(path)) {
+        if (!isValidFontFile(path)) {
             activityHelper.showToast(getResources().getString(
-                    R.string.message_validation_file_ext, Joiner.on(",").join(DICTIONARY_EXT_LIST)));
+                    R.string.message_validation_file_ext, Joiner.on(",").join(FONT_EXT_LIST)));
             return;
         }
         Intent intent = getIntent();

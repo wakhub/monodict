@@ -34,12 +34,15 @@ public final class DictionaryServiceConnection implements ServiceConnection {
 
     private DictionaryService.DictionaryServiceBinder binder;
 
-    private final WeakReference<DictionaryService.Listener> listenerRef;
+    private WeakReference<DictionaryService.Listener> listenerRef = new WeakReference<>(null);
 
     private boolean isConnected = false;
 
-    public DictionaryServiceConnection(DictionaryService.Listener listener) {
-        this.listenerRef = new WeakReference<>(listener);
+    public DictionaryServiceConnection() {
+    }
+
+    public void setListener(DictionaryService.Listener listener) {
+        listenerRef = new WeakReference<>(listener);
     }
 
     public void search(String query) {
@@ -79,7 +82,9 @@ public final class DictionaryServiceConnection implements ServiceConnection {
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Log.d(TAG, "onServiceConnected");
         binder = ((DictionaryService.DictionaryServiceBinder) iBinder);
-        binder.setListener(this.listenerRef.get());
+        if (listenerRef.get() != null) {
+            binder.setListener(listenerRef.get());
+        }
         isConnected = true;
     }
 

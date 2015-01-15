@@ -41,20 +41,29 @@ class JsonPreferencesFieldAdapter {
         load();
     }
 
+    private Gson createGson() {
+        return new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
+    }
+
     public void load() {
         String json = delegate.loadJson();
-        Gson gson = (new GsonBuilder()).create();
-        data = gson.fromJson(json, dataClass);
+        data = createGson().fromJson(json, dataClass);
     }
 
     public void saveData(Object data) {
-        Gson gson = (new GsonBuilder()).create();
-        String json = gson.toJson(data, dataClass);
+        String json = createGson().toJson(data, dataClass);
         Log.d(TAG, "saveData: " + json);
         delegate.edit().put(json).apply();
         load();
     }
 
+    /**
+     * The fields which is serialized by JsonPreferencesFieldAdapter has to decorated by @Expose
+     *
+     * http://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/annotations/Expose.html
+     *
+     * @return
+     */
     public Object getData() {
         return data;
     }

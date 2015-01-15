@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+<string name="lorem_jp_mix">Lorem ipsum dolor sit amet 色は匂へど散りぬるを</string>
 <string name="action_add_local_pdic">Add local file</string>
 <string name="action_add_new_card">Add new card</string>
 <string name="action_add_to_bookmarks">Add to Bookmarks</string>
@@ -21,6 +22,7 @@
 <string name="action_import">Import</string>
 <string name="action_keep">Keep</string>
 <string name="action_more">More</string>
+<string name="action_more_detail">More Detail</string>
 <string name="action_move_into_inbox">Move the card into inbox</string>
 <string name="action_open_local_file">Open local file</string>
 <string name="action_order_alphabetically">Order Alphabetically</string>
@@ -31,6 +33,7 @@
 <string name="action_search_by_alc_co_jp">Search by alc.co.jp</string>
 <string name="action_search_by_dictionary_com">Search by dictionary.com</string>
 <string name="action_search_by_google_com">Search by google.com</string>
+<string name="action_select_local_font">Select local font</string>
 <string name="action_share">Share</string>
 <string name="action_shuffle">Shuffle</string>
 <string name="action_speech">Speech</string>
@@ -60,12 +63,13 @@
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>
 <string name="message_url_placeholder">keyword or URL</string>
+<string name="message_validation_file_ext">The file extension has to be \"%s\"</string>
 <string name="message_validation_max_100">Enter at least 100 characters</string>
 <string name="message_validation_max_5000">Enter at least 5000 characters</string>
 <string name="message_validation_required">Required</string>
 <string name="title_activity_browser">Browser</string>
 <string name="title_activity_browser_bookmarks">Bookmarks</string>
-<string name="title_activity_dictionary_manager">Dictionary Manager</string>
+<string name="title_activity_dictionary">Dictionary Detail</string>
 <string name="title_activity_directory_selector">Select Directory</string>
 <string name="title_activity_downloads">Downloads</string>
 <string name="title_activity_flashcard">Flashcard</string>

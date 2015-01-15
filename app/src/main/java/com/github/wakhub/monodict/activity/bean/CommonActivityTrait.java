@@ -76,7 +76,7 @@ public class CommonActivityTrait {
         activity.getResources().getConfiguration().orientation = orientation;
     }
 
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (activity.getParent() != null) {

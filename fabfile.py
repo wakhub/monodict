@@ -51,6 +51,7 @@ SYSTEM_ICON_NAMES = [
          'edit',
          'file_download',
          'folder_open',
+         'format_bold', 'format_color_text', 'format_italic', 'format_size',
          'help',
          'list',
          'menu',
@@ -64,6 +65,7 @@ SYSTEM_ICON_NAMES = [
          'settings',
          'shuffle',
          'thumb_down', 'thumb_up',
+         'undo',
          'volume_up',
          ]
     )

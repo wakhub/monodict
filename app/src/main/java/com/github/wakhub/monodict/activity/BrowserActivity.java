@@ -332,7 +332,8 @@ public class BrowserActivity extends ActionBarActivity implements
         super.onResume();
 
         if (dictionaryServiceConnection == null) {
-            dictionaryServiceConnection = new DictionaryServiceConnection(this);
+            dictionaryServiceConnection = new DictionaryServiceConnection();
+            dictionaryServiceConnection.setListener(this);
         }
 
         bindService(
@@ -370,7 +371,7 @@ public class BrowserActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

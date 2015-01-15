@@ -37,6 +37,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
+import com.github.wakhub.monodict.preferences.Dictionary;
+import com.github.wakhub.monodict.preferences.DictionaryFont;
 import com.github.wakhub.monodict.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -270,10 +272,20 @@ public class DicItemListView extends ListView {
             View end;
         }
 
+        public static interface DictionaryDataSource {
+            Dictionary getDictionaryForDicItemListAdapter(int index);
+        }
+
         private String highlightKeyword = null;
+
+        private DictionaryDataSource dictionaryDataSource;
 
         public ResultAdapter(Context context, int resource, int textViewResourceId, ArrayList<Data> objects) {
             super(context, resource, textViewResourceId, objects);
+        }
+
+        public void setDictionaryDataSource(DictionaryDataSource dataSource) {
+            this.dictionaryDataSource = dataSource;
         }
 
         public void setHighlightKeyword(String highlightKeyword) {
@@ -367,25 +379,61 @@ public class DicItemListView extends ListView {
                 view.setTag(holder);
             }
             Data d = getItem(position);
+            DictionaryFont indexFont = DictionaryFont.getDefaultIndexFont();
+            DictionaryFont phoneFont = DictionaryFont.getDefaultPhoneFont();
+            DictionaryFont transFont = DictionaryFont.getDefaultTransFont();
+            DictionaryFont sampleFont = DictionaryFont.getDefaultSampleFont();
+            if (dictionaryDataSource != null) {
+                Dictionary dictionary = dictionaryDataSource.getDictionaryForDicItemListAdapter(d.mDic);
+                if (dictionary != null) {
+                    indexFont = dictionary.getIndexFont();
+                    phoneFont = dictionary.getPhoneFont();
+                    transFont = dictionary.getTransFont();
+                    sampleFont = dictionary.getSampleFont();
+                }
+            }
 
             holder.addToFlashcardButton.setVisibility(View.GONE);
             holder.speechButton.setVisibility(View.GONE);
             holder.actionButton.setVisibility(View.GONE);
             holder.hr.setVisibility(View.VISIBLE);
             holder.end.setVisibility(View.GONE);
-            TextView header = (TextView) view.findViewById(R.id.header);
+            LinearLayout header = (LinearLayout) view.findViewById(R.id.header);
             header.setVisibility(View.GONE);
             View content = view.findViewById(R.id.content);
             content.setVisibility(View.VISIBLE);
 
-            setItem(holder.Index, d.Index, d.IndexFont, 18);
+            setItem(holder.Index, d.Index, d.IndexFont, Typeface.NORMAL, 18);
+
+            Context context = getContext();
 
             switch (d.getMode()) {
                 case Data.WORD:
-                    setItem(holder.Index, d.Index, d.IndexFont, 24);
-                    setItem(holder.Phone, d.Phone, d.PhoneFont, 0);
-                    setItem(holder.Trans, getRichTranslateText(d), d.TransFont, 0);
-                    setItem(holder.Sample, d.Sample, d.SampleFont, 0);
+                    setItem(holder.Index,
+                            d.Index,
+                            indexFont.getTypeface(context),
+                            indexFont.getStyle(),
+                            indexFont.getSize());
+                    setItem(holder.Phone,
+                            d.Phone,
+                            phoneFont.getTypeface(context),
+                            phoneFont.getStyle(),
+                            phoneFont.getSize());
+                    setItem(holder.Trans,
+                            getRichTranslateText(d),
+                            transFont.getTypeface(context),
+                            transFont.getStyle(),
+                            transFont.getSize());
+                    String sample = "";
+                    if (d.Sample != null) {
+                        sample = "“" + d.Sample + "”";
+                    }
+                    setItem(holder.Sample,
+                            sample,
+                            sampleFont.getTypeface(context),
+                            sampleFont.getStyle(),
+                            sampleFont.getSize());
+
                     holder.addToFlashcardButton.setVisibility(View.VISIBLE);
                     holder.speechButton.setVisibility(View.VISIBLE);
                     holder.actionButton.setVisibility(View.VISIBLE);
@@ -401,17 +449,17 @@ public class DicItemListView extends ListView {
                     break;
                 case Data.NORESULT:
                 case Data.NONE:
-                    setItem(holder.Index, d.Index, d.IndexFont, 0);
+                    setItem(holder.Index, d.Index, d.IndexFont, Typeface.NORMAL, 0);
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
                     holder.Sample.setVisibility(View.GONE);
                     break;
                 case Data.FOOTER:
                     header.setVisibility(View.VISIBLE);
-                    header.setText(d.Index);
+                    ((TextView) header.findViewById(R.id.header_text)).setText(d.Index);
                     content.setVisibility(View.GONE);
 
-                    setItem(holder.Index, d.Index, d.IndexFont, 14);
+                    setItem(holder.Index, d.Index, d.IndexFont, Typeface.NORMAL, 14);
                     holder.Index.setVisibility(View.VISIBLE);
                     holder.Phone.setVisibility(View.GONE);
                     holder.Trans.setVisibility(View.GONE);
@@ -430,12 +478,15 @@ public class DicItemListView extends ListView {
             return view;
         }
 
-        private void setItem(TextView tv, CharSequence str, Typeface tf, int size) {
+        private void setItem(TextView tv, CharSequence str, Typeface tf, int style, int size) {
             if (str == null || str.length() == 0) {
                 tv.setVisibility(View.GONE);
             } else {
                 tv.setVisibility(View.VISIBLE);
                 tv.setText(str);
+                if (tf != null) {
+                    tv.setTypeface(tf, style);
+                }
                 if (size > 10) {
                     tv.setTextSize(size);
                 }

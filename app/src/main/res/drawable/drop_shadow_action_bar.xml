@@ -15,12 +15,12 @@
   -->
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:bottom="9.7dp">
+    <item android:bottom="9.5dp">
         <shape>
             <solid android:color="@color/drop_shadow_action_bar_edge" />
         </shape>
     </item>
-    <item android:top="0.3dp">
+    <item android:top="0.5dp">
         <shape>
             <gradient
                 android:angle="90"

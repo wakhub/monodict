@@ -205,7 +205,7 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
             finish();
             return true;
         }
-        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

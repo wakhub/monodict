@@ -34,7 +34,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.MonodictApp;
@@ -93,7 +92,9 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements
         MainActivityRootLayout.Listener,
         MainActivityDrawerListAdapter.Listener,
+        MainActivityDrawerListAdapter.DataSource,
         DicItemListView.Callback,
+        DicItemListView.ResultAdapter.DictionaryDataSource,
         DicContextDialogBuilder.OnContextActionListener,
         DictionaryService.Listener,
         DictionaryContextDialogBuilder.OnContextActionListener,
@@ -125,12 +126,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @ViewById
     DicItemListView dicItemListView;
-
-    @ViewById
-    FloatingActionButton browserButton;
-
-    @ViewById
-    FloatingActionButton flashcardButton;
 
     @ViewById
     FloatingActionButton searchButton;
@@ -165,8 +160,6 @@ public class MainActivity extends ActionBarActivity implements
     @DimensionRes
     float spaceWell;
 
-    private ActionBarDrawerToggle drawerToggle;
-
     private boolean queryInitialized = false;
 
     private String extraActionSearchQuery = null;
@@ -193,11 +186,11 @@ public class MainActivity extends ActionBarActivity implements
         rootLayout.setListener(this);
 
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
-        drawerToggle = new ActionBarDrawerToggle(this, rootLayout, toolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, rootLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerToggle.setDrawerIndicatorEnabled(true);
         rootLayout.setDrawerListener(drawerToggle);
-        drawerList.setAdapter(new MainActivityDrawerListAdapter(this, this));
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        drawerList.setAdapter(new MainActivityDrawerListAdapter(this, this, this));
 
         searchView.setListener(this);
         searchView.onActionViewExpanded();
@@ -209,6 +202,7 @@ public class MainActivity extends ActionBarActivity implements
                 R.layout.list_item_dic,
                 R.id.dic_item_list_view,
                 resultData);
+        resultAdapter.setDictionaryDataSource(this);
         dicItemListView.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
     }
@@ -314,28 +308,14 @@ public class MainActivity extends ActionBarActivity implements
         ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
-    @Click(R.id.flashcard_button)
-    void onClickFlashcardButton(View view) {
-        startActivityFromNav(view, FlashcardActivity_.intent(this).get());
-    }
-
-    @Click(R.id.browser_button)
-    void onClickBrowserButton(View view) {
-        startActivityFromNav(view, BrowserActivity_.intent(this).get());
-    }
-
     private void showNavButtons(boolean animate) {
         if (rootLayout.isSoftKeyboardShown()) {
             return;
         }
-        browserButton.show(animate);
-        flashcardButton.show(animate);
         searchButton.show(animate);
     }
 
     private void hideNavButtons(boolean animate) {
-        browserButton.hide(animate);
-        flashcardButton.hide(animate);
         searchButton.hide(animate);
     }
 
@@ -369,17 +349,6 @@ public class MainActivity extends ActionBarActivity implements
     protected void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-
-        if (dictionaryServiceConnection == null) {
-            dictionaryServiceConnection = new DictionaryServiceConnection(this);
-            activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
-        }
-
-        bindService(
-                new Intent(this, DictionaryService.class),
-                dictionaryServiceConnection,
-                Context.BIND_AUTO_CREATE);
-
         dicItemListView.setFastScrollEnabled(preferences.fastScroll().get());
     }
 
@@ -403,8 +372,21 @@ public class MainActivity extends ActionBarActivity implements
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+
+        if (dictionaryServiceConnection == null) {
+            dictionaryServiceConnection = new DictionaryServiceConnection();
+            dictionaryServiceConnection.setListener(this);
+            activityHelper.showProgressDialog(R.string.message_loading_dictionaries);
+        }
+
+        bindService(
+                new Intent(this, DictionaryService.class),
+                dictionaryServiceConnection,
+                Context.BIND_AUTO_CREATE);
+
         MonodictApp.getEventBus().register(this);
         commonActivityTrait.setOrientation(preferences.orientation().get());
+        reloadDictionaries();
 
         initQuery();
     }
@@ -414,6 +396,7 @@ public class MainActivity extends ActionBarActivity implements
         Log.d(TAG, "onPause");
         super.onPause();
         MonodictApp.getEventBus().unregister(this);
+        unbindService(dictionaryServiceConnection);
     }
 
     @Override
@@ -423,7 +406,7 @@ public class MainActivity extends ActionBarActivity implements
         speechHelper.finish();
 
         queryInitialized = false;
-        unbindService(dictionaryServiceConnection);
+//        unbindService(dictionaryServiceConnection);
 
         String action = getIntent().getAction();
         if (Intent.ACTION_SEND.equals(action)) {
@@ -439,8 +422,17 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if (rootLayout.isDrawerOpen(drawerList)) {
+            rootLayout.closeDrawer(drawerList);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -483,6 +475,11 @@ public class MainActivity extends ActionBarActivity implements
         speechHelper.speech(selectedText);
     }
 
+    @Override
+    public Dictionary getDictionaryForDicItemListAdapter(int index) {
+        return dictionaries.getDictionary(index);
+    }
+
     private Snackbar createSnackbar() {
         return Snackbar.with(getApplicationContext())
                 .swipeToDismiss(true)
@@ -490,8 +487,6 @@ public class MainActivity extends ActionBarActivity implements
                     @Override
                     public void onShow(Snackbar snackbar) {
                         int snackbarHeight = snackbar.getHeight();
-                        ViewUtils.addMarginBottom(browserButton, snackbarHeight);
-                        ViewUtils.addMarginBottom(flashcardButton, snackbarHeight);
                         ViewUtils.addMarginBottom(searchButton, snackbarHeight);
                     }
 
@@ -503,8 +498,6 @@ public class MainActivity extends ActionBarActivity implements
                     @Override
                     public void onDismiss(Snackbar snackbar) {
                         int snackbarHeight = snackbar.getHeight();
-                        ViewUtils.addMarginBottom(browserButton, -snackbarHeight);
-                        ViewUtils.addMarginBottom(flashcardButton, -snackbarHeight);
                         ViewUtils.addMarginBottom(searchButton, -snackbarHeight);
                     }
 
@@ -665,52 +658,28 @@ public class MainActivity extends ActionBarActivity implements
         }
     }
 
+    /*
     @Override
     public void onContextActionDelete(final Dictionary dictionary) {
-        Log.d(TAG, "onContextActionDelete");
-        activityHelper
-                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog materialDialog) {
 
-                        dictionaryServiceConnection.deleteDictionary(dictionary);
-                    }
-                })
-                .icon(R.drawable.ic_delete_black_36dp)
-                .title(dictionary.getName())
-                .content(R.string.message_confirm_delete)
-                .show();
     }
 
     @Override
     public void onContextActionToggleEnabled(Dictionary dictionary) {
-        dictionary.setEnabled(!dictionary.isEnabled());
-        if (dictionaries.updateDictionary(dictionary)) {
-            dictionaryServiceConnection.reload();
-            reloadDictionaries();
-        }
+
     }
 
     @Override
     public void onContextActionRename(final Dictionary dictionary) {
-        activityHelper
-                .buildInputDialog(dictionary.getName(), new MaterialDialog.SimpleCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog materialDialog) {
-                        TextView textView = (TextView) materialDialog.findViewById(android.R.id.text1);
-                        String dictionaryName = textView.getText().toString().trim();
-                        if (dictionaryName.isEmpty()) {
-                            return;
-                        }
-                        dictionary.setName(dictionaryName);
-                        dictionaries.updateDictionary(dictionary);
-                        dictionaryServiceConnection.reload();
-                        reloadDictionaries();
-                    }
-                })
-                .icon(R.drawable.ic_edit_black_36dp)
-                .title(R.string.action_rename)
-                .show();
+
+    }
+    */
+
+    @Override
+    public void onContextActionMoreDetail(Dictionary dictionary) {
+        DictionaryActivity_.intent(this)
+                .extraDictionaryPath(dictionary.getPath())
+                .start();
     }
 
     @Override
@@ -725,7 +694,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onDrawerClickDictionaryItem(Dictionary dictionary) {
-        Log.d(TAG, "onDrawerClickDicitonaryItem: " + dictionary);
+        Log.d(TAG, "onDrawerClickDictionaryItem: " + dictionary);
         new DictionaryContextDialogBuilder(this, dictionary)
                 .setContextActionListener(this)
                 .show();
@@ -745,6 +714,11 @@ public class MainActivity extends ActionBarActivity implements
     public void onDrawerClickDownloadButton() {
         Log.d(TAG, "onDrawerClickDownloadButton");
         DownloadsActivity_.intent(this).startForResult(REQUEST_CODE_DOWNLOAD_DICTIONARY);
+    }
+
+    @Override
+    public Dictionaries getDictionariesForDrawer() {
+        return dictionaries;
     }
 
     @OnActivityResult(REQUEST_CODE_DOWNLOAD_DICTIONARY)
@@ -770,18 +744,26 @@ public class MainActivity extends ActionBarActivity implements
         if (resultCode != RESULT_OK || data == null) {
             return;
         }
-        String path = data.getStringExtra(DownloadsActivity.RESULT_INTENT_PATH);
-        String filename = data.getStringExtra(DownloadsActivity.RESULT_INTENT_FILENAME);
-        if (path != null) {
-            activityHelper.showProgressDialog(R.string.message_creating_index);
-            addDictionary(path + "/" + filename);
-        }
+        String path = data.getStringExtra(DownloadsActivity.RESULT_INTENT_PATH)
+                + "/" + data.getStringExtra(DownloadsActivity.RESULT_INTENT_FILENAME);
+        activityHelper.showProgressDialog(R.string.message_creating_index);
+        addDictionary(path);
     }
 
     @Override
     public void onDrawerClickSettingsButton() {
         Log.d(TAG, "onDrawerClickSettingsButton");
         SettingsActivity_.intent(this).start();
+    }
+
+    @Override
+    public void onDrawerClickBrowserButton() {
+        BrowserActivity_.intent(this).start();
+    }
+
+    @Override
+    public void onDrawerClickFlashcardsButton() {
+        FlashcardActivity_.intent(this).start();
     }
 
 

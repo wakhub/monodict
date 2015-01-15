@@ -36,9 +36,7 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
     private static final String TAG = DictionaryContextDialogBuilder.class.getSimpleName();
 
     private static final List<Integer> ITEM_IDS = Arrays.asList(
-            R.string.action_delete,
-            R.string.action_enable,
-            R.string.action_rename,
+            R.string.action_more_detail,
             R.string.action_up,
             R.string.action_down,
             android.R.string.cancel);
@@ -76,14 +74,8 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
         int id = ITEM_IDS.get(i);
         Log.d(TAG, "click" + i);
         switch (id) {
-            case R.string.action_delete:
-                contextActionListener.onContextActionDelete(dictionary);
-                break;
-            case R.string.action_enable:
-                contextActionListener.onContextActionToggleEnabled(dictionary);
-                break;
-            case R.string.action_rename:
-                contextActionListener.onContextActionRename(dictionary);
+            case R.string.action_more_detail:
+                contextActionListener.onContextActionMoreDetail(dictionary);
                 break;
             case R.string.action_up:
                 contextActionListener.onContextActionUp(dictionary);
@@ -95,11 +87,7 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
     }
 
     public interface OnContextActionListener {
-        void onContextActionDelete(Dictionary dictionary);
-
-        void onContextActionToggleEnabled(Dictionary dictionary);
-
-        void onContextActionRename(Dictionary dictionary);
+        void onContextActionMoreDetail(Dictionary dictionary);
 
         void onContextActionUp(Dictionary dictionary);
 

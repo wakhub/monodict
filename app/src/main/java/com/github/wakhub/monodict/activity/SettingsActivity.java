@@ -76,7 +76,7 @@ public class SettingsActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

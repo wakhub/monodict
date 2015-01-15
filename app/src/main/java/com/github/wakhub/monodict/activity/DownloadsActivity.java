@@ -113,7 +113,7 @@ public class DownloadsActivity extends AbsListActivity {
         resultIntent = getIntent();
         dlTask = new DownloadTask();
 
-        listAdapter = new ArrayAdapter<DownloadsItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1) {
+        listAdapter = new ArrayAdapter<DownloadsItem>(this, R.layout.list_item_download, android.R.id.text1) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -200,7 +200,7 @@ public class DownloadsActivity extends AbsListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (commonActivityTrait.onMenuItemSelected(item.getItemId(), item)) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -215,8 +215,7 @@ public class DownloadsActivity extends AbsListActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String filename = downloadDicfile(params[0], true);
-            return filename;
+            return downloadDicfile(params[0], true);
         }
 
         @Override

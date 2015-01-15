@@ -20,27 +20,28 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/path_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_well"
+        android:singleLine="true"/>
+
+    <ListView
+        android:layout_below="@+id/path_text"
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:scrollbars="vertical"/>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/path_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/space_well"
-            android:singleLine="true"/>
-
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:clickable="true"
-            android:focusableInTouchMode="true"
-            android:scrollbars="vertical"/>
-
-    </LinearLayout>
+        android:layout_height="@dimen/drop_shadow_size"
+        android:layout_below="@+id/path_text"
+        android:background="@drawable/drop_shadow_bottom"/>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/back_button"

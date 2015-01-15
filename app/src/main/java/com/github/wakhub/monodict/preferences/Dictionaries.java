@@ -17,6 +17,8 @@ package com.github.wakhub.monodict.preferences;
 
 import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -78,11 +80,16 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
     }
 
     public int getDictionaryCount() {
-        return getData().dictionaries.size();
+        Data data = getData();
+        if (data == null || data.dictionaries == null) {
+            return 0;
+        }
+        return data.dictionaries.size();
     }
 
     public boolean addDictionary(Dictionary dictionary) {
         if (hasDictionary(dictionary)) {
+            Log.d(TAG, "Already has the dictionary: " + dictionary);
             return false;
         }
         Data data = getData();
@@ -96,6 +103,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
             return false;
         }
         Data data = getData();
+        Log.d(TAG, "BEFORE: " + toString());
         int i = 0;
         for (Dictionary storedDictionary : data.dictionaries) {
             if (dictionary.equals(storedDictionary)) {
@@ -104,6 +112,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
             i++;
         }
         adapter.saveData(data);
+        Log.d(TAG, "AFTER: " + toString());
 
         return true;
     }
@@ -118,7 +127,11 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
     }
 
     public Dictionary getDictionary(int index) {
-        return getData().dictionaries.get(index);
+        Data data = getData();
+        if (data.dictionaries.size() - 1 < index) {
+            return null;
+        }
+        return data.dictionaries.get(index);
     }
 
     public int getDictionaryIndex(Dictionary dictionary) {
@@ -150,6 +163,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
 
     @Override
     public String loadJson() {
+        Log.d(TAG, "loadJson: " + preferences.dictionaries().get());
         return preferences.dictionaries().get();
     }
 
@@ -159,6 +173,7 @@ public class Dictionaries implements JsonPreferencesFieldAdapter.Delegate {
     }
 
     static final class Data {
-        List<Dictionary> dictionaries;
+        @Expose
+        List<Dictionary> dictionaries = new ArrayList<>();
     }
 }

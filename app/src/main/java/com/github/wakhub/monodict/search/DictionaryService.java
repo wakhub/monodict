@@ -35,7 +35,6 @@ import com.github.wakhub.monodict.ui.DicItemListView;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
@@ -137,7 +136,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
 
         void removeListener() {
             if (getService() != null) {
-                getService().listenerRef = new WeakReference<Listener>(null);
+                getService().listenerRef = new WeakReference<>(null);
             }
         }
     }
@@ -179,8 +178,6 @@ public final class DictionaryService extends Service implements SearchThread.Lis
             in.close();
             Log.i(TAG, "Open OK:" + name);
             dice.setIrreg(irreg);
-        } catch (FileNotFoundException e) {
-            Log.i(TAG, "Open NG:" + name);
         } catch (IOException e) {
             Log.i(TAG, "Open NG:" + name);
         }
@@ -344,7 +341,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
     public void onSearchFinished(String query, ArrayList<DicItemListView.Data> result) {
         resultData.clear();
         for (DicItemListView.Data d : result) {
-            resultData.add(new WeakReference<DicItemListView.Data>(d));
+            resultData.add(new WeakReference<>(d));
         }
 
         if (result.size() < 1) {
