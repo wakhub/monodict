@@ -11,6 +11,14 @@ the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
 `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
 
 
+TOC
+
+- TODO
+- Setup monodict Project
+- Graphic Design Guideline
+- LICENSE
+
+
 TODO
 ==========
 
@@ -22,7 +30,7 @@ TODO
 - Bluetooth integration
 
 
-Setup monodict Project
+Setup monodict project
 ========================
 
 Requirements
@@ -47,12 +55,32 @@ Command::
 Then check `sdk.dir` and `ndk.dir` in your `local.properties`
 
 
+Design Guideline
+=================
+
+- **Basis**
+  - Follow Material Design.
+  - Don't use Material Design if the design was difficult to implement with supported API or the design was not important for the functionality.
+
+- Graphic Design
+  - Only use gray scale for theming.
+    - No need to worry about the difference of colors between multiple displays.
+    - Decrease battery usage.
+
+  - Consider to add lines as a divider because Material Design doesn't use border as a divider normally.
+  - Follow native shadow style and shade style.
+
+- Navigation
+  - Place primary actions at bottom of Activity.
+  - Place secondary actions at ActionBar or Toolbar.
+
+
 LICENSE
 =======
 
 ::
 
-    Copyright 2014 wak
+    Copyright 2015 wak
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

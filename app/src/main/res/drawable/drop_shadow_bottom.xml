@@ -14,10 +14,19 @@
   ~ limitations under the License.
   -->
 
-<shape
+<layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:angle="90"
-        android:endColor="@color/drop_shadow"
-        android:startColor="@android:color/transparent"/>
-</shape>
+    <item android:bottom="3dp">
+        <shape>
+            <solid android:color="@color/drop_shadow_edge"/>
+        </shape>
+    </item>
+    <item android:top="1dp">
+        <shape>
+            <gradient
+                android:angle="90"
+                android:endColor="@color/drop_shadow"
+                android:startColor="@android:color/transparent"/>
+        </shape>
+    </item>
+</layer-list>
