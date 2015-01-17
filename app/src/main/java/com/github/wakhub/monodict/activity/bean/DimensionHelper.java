@@ -16,8 +16,10 @@
 package com.github.wakhub.monodict.activity.bean;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
@@ -50,9 +52,11 @@ public class DimensionHelper {
     }
 
     /**
+     * gt action bar height
+     *
      * http://stackoverflow.com/questions/7165830/what-is-the-size-of-actionbar-in-pixels
      *
-     * @return
+     * @return int
      */
     public int getActionBarHeight() {
         final TypedArray styledAttributes = activity.getTheme().obtainStyledAttributes(
@@ -63,13 +67,46 @@ public class DimensionHelper {
     }
 
     /**
+     * get Display size
+     *
      * http://stackoverflow.com/questions/1016896/how-to-get-screen-dimensions
      *
-     * @return
+     * @return Point
      */
     public Point getDisplaySize() {
         Point displaySize = new Point();
         activity.getWindowManager().getDefaultDisplay().getSize(displaySize);
         return displaySize;
     }
+
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
+     *
+     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent px equivalent to dp depending on device density
+     */
+    public float convertDpToPixel(float dp){
+        Resources resources = activity.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * (metrics.densityDpi / 160f);
+    }
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     *
+     * http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
+     *
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent dp equivalent to px value
+     */
+    public float convertPixelsToDp(float px){
+        Resources resources = activity.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return px / (metrics.densityDpi / 160f);
+    }
+
 }

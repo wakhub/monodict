@@ -21,7 +21,6 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
-import com.github.wakhub.monodict.activity.BrowserActivity_;
 import com.github.wakhub.monodict.db.Card;
 
 import java.util.ArrayList;
@@ -40,10 +39,7 @@ public class CardContextDialogBuilder extends MaterialDialog.Builder implements 
             R.string.action_edit,
             R.string.action_delete,
             R.string.action_move_into_inbox,
-            R.string.action_search,
-            R.string.action_search_by_google_com,
-            R.string.action_search_by_dictionary_com,
-            R.string.action_search_by_alc_co_jp);
+            R.string.action_search);
 
     private CardContextActionListener contextActionListener;
 
@@ -105,21 +101,6 @@ public class CardContextDialogBuilder extends MaterialDialog.Builder implements 
                 break;
             case R.string.action_search:
                 contextActionListener.onCardContextActionSearch(card);
-                break;
-            case R.string.action_search_by_google_com:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_google_com_search, display))
-                        .start();
-                break;
-            case R.string.action_search_by_dictionary_com:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_dictionary_com_search, display))
-                        .start();
-                break;
-            case R.string.action_search_by_alc_co_jp:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_alc_co_jp_search, display))
-                        .start();
                 break;
         }
     }

@@ -1,0 +1,9 @@
+拡張子が ".ttf" または ".otf" のフォントファイルが読み込めます。
+
+下記 URL からアプリで利用可能なフォントがダウンロード可能です。
+
+Google Noto Fonts
+https://www.google.com/get/noto
+
+IPA フォント (明朝体フォント含む)
+http://ipafont.ipa.go.jp/

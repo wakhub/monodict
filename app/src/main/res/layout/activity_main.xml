@@ -29,18 +29,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/main">
 
-                <com.github.wakhub.monodict.ui.DictionarySearchView
-                    android:id="@+id/search_view"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/more_button"/>
+                    android:layout_height="wrap_content">
+
+                    <com.github.wakhub.monodict.ui.DictionarySearchView
+                        android:id="@+id/search_view"
+                        android:focusable="false"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <ImageButton
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/action_more"
+                        android:id="@+id/more_button"
+                        android:src="@drawable/ic_more_vert_black_24dp"/>
+                </LinearLayout>
 
             </android.support.v7.widget.Toolbar>
 

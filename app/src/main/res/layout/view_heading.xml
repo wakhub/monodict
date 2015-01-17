@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2014 wak
+  ~ Copyright (C) 2015 wak
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<menu
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.wakhub.monodict.activity.MainActivity_">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_grey600_24dp"
-        android:title="@string/action_search"
-        app:showAsAction="always"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view"
+        android:textColor="@color/grey_900"
+        android:textSize="@dimen/text_size_subhead"
+        android:textStyle="bold"/>
 
-    <item
-        android:id="@+id/action_speech"
-        android:icon="@drawable/ic_volume_up_grey600_24dp"
-        android:title="@string/action_speech"
-        app:showAsAction="ifRoom"/>
-</menu>
+    <View
+        android:id="@+id/border_view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/grey_900"/>
+</LinearLayout>

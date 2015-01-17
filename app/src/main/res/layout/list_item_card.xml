@@ -64,13 +64,12 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/action_button"
+                    android:id="@+id/more_button"
                     style="@style/AppTheme.ImageButtonStyle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:contentDescription="@string/action_speech"
-                    android:src="@drawable/ic_more_horiz_grey600_24dp"
-                    />
+                    android:contentDescription="@string/action_more"
+                    android:src="@drawable/ic_more_horiz_grey600_24dp" />
 
                 <ImageButton
                     android:id="@+id/speech_button"

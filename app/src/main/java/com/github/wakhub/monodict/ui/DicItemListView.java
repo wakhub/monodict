@@ -115,7 +115,7 @@ public class DicItemListView extends ListView {
                 Matcher m = p.matcher(Trans);
 
                 while (m.find()) {
-                    linkPairs.add(new Pair<String, String>(m.group(1), m.group(2)));
+                    linkPairs.add(new Pair<>(m.group(1), m.group(2)));
                 }
             }
             // "→　" 和英辞郎形式
@@ -124,7 +124,7 @@ public class DicItemListView extends ListView {
                 Matcher m = p.matcher(Trans);
 
                 while (m.find()) {
-                    linkPairs.add(new Pair<String, String>(m.group(1), m.group(2)));
+                    linkPairs.add(new Pair<>(m.group(1), m.group(2)));
                 }
             }
 
@@ -134,7 +134,7 @@ public class DicItemListView extends ListView {
                 Matcher m = p.matcher(Trans);
 
                 while (m.find()) {
-                    linkPairs.add(new Pair<String, String>(m.group(1), m.group(2)));
+                    linkPairs.add(new Pair<>(m.group(1), m.group(2)));
                 }
             }
             return linkPairs;
@@ -202,7 +202,7 @@ public class DicItemListView extends ListView {
         private WeakReference<TextView> textViewRef;
 
         ActionModeCallback(Context context, TextView textView) {
-            this.textViewRef = new WeakReference<TextView>(textView);
+            this.textViewRef = new WeakReference<>(textView);
         }
 
         @Override
@@ -398,7 +398,7 @@ public class DicItemListView extends ListView {
             holder.actionButton.setVisibility(View.GONE);
             holder.hr.setVisibility(View.VISIBLE);
             holder.end.setVisibility(View.GONE);
-            LinearLayout header = (LinearLayout) view.findViewById(R.id.header);
+            View header = view.findViewById(R.id.header);
             header.setVisibility(View.GONE);
             View content = view.findViewById(R.id.content);
             content.setVisibility(View.VISIBLE);

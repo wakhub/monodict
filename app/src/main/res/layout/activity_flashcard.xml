@@ -19,7 +19,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity_">
+    tools:context="com.github.wakhub.monodict.activity.FlashcardActivity_"
+    android:focusable="true">
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
@@ -45,17 +46,6 @@
         android:layout_alignParentBottom="true"
         android:gravity="right"
         android:orientation="horizontal">
-
-        <com.melnykov.fab.FloatingActionButton
-            android:id="@+id/auto_play_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/abc_control_padding_material"
-            android:layout_marginRight="@dimen/space_default"
-            android:src="@drawable/ic_play_arrow_white_36dp"
-            app:fab_colorNormal="@color/gray"
-            app:fab_colorPressed="@color/light_gray"
-            app:fab_colorRipple="@color/light_gray"/>
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/alphabetical_order_button"

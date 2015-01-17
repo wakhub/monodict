@@ -23,9 +23,9 @@ import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.db.DatabaseOpenHelper;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState_;
+import com.github.wakhub.monodict.test.util.Solo;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
-import com.jayway.android.robotium.solo.Solo;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -86,25 +86,26 @@ public class FlashcardActivityTest extends ActivityInstrumentationTestCase2<Flas
         deleteBuilder.delete();
     }
 
-    public void testActionBar() throws Exception {
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_order_alphabetically);
-        solo.clickOnActionBarItem(R.id.action_order_alphabetically);
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_order_alphabetically);
-        solo.clickOnActionBarItem(R.id.action_shuffle);
-        solo.clickOnActionBarItem(R.id.action_order_alphabetically);
+    public void testNavigation() throws Exception {
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.alphabetical_order_button);
+        solo.clickOnView(R.id.alphabetical_order_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.alphabetical_order_button);
+        solo.clickOnView(R.id.shuffle_button);
+        solo.clickOnView(R.id.alphabetical_order_button);
     }
 
-    public void testList() throws Exception {
-        solo.clickInList(1);
+    public void testRecyclerView() throws Exception {
+        solo.clickOnRecyclerChildView(R.id.recycler_view, 0);
         solo.goBack();
-        solo.clickInList(2);
+        solo.clickOnRecyclerChildView(R.id.recycler_view, 1);
         solo.goBack();
-        solo.clickInList(3);
+        solo.clickOnRecyclerChildView(R.id.recycler_view, 2);
         solo.goBack();
     }
 }

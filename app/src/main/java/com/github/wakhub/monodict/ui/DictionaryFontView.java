@@ -17,6 +17,7 @@
 package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
@@ -48,7 +49,7 @@ public class DictionaryFontView extends RelativeLayout {
     }
 
     @ViewById
-    TextView text;
+    HeadingView headingView;
 
     @ViewById
     TextView fontNameText;
@@ -75,8 +76,15 @@ public class DictionaryFontView extends RelativeLayout {
 
     private Optional<Listener> optListener = Optional.absent();
 
+    private final TypedArray customAttributes;
+
     public DictionaryFontView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        customAttributes = getContext().getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.DictionaryFontView,
+                0, 0);
     }
 
     public void setListener(Listener listener) {
@@ -97,6 +105,7 @@ public class DictionaryFontView extends RelativeLayout {
 
     @AfterViews
     void afterViews() {
+        setTitle(customAttributes.getString(R.styleable.DictionaryFontView_title));
         resetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,8 +186,8 @@ public class DictionaryFontView extends RelativeLayout {
         loremText.setTextSize(font.getSize());
     }
 
-    public void setText(String textValue) {
-        text.setText(textValue);
+    public void setTitle(String title) {
+        headingView.setText(title);
     }
 
     public void setDictionaryFont(DictionaryFont font) {

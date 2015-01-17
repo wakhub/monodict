@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Dictionary;
@@ -112,9 +111,7 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
         view.findViewById(R.id.navigation_layout).setVisibility(View.VISIBLE);
         view.findViewById(R.id.dictionary_item_layout).setVisibility(View.GONE);
         view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.GONE);
-        String versionName = MonodictApp.getPackageInfo(getContext()).versionName;
-        String appName = getContext().getResources().getString(R.string.app_name);
-        ((TextView)view.findViewById(R.id.title_text)).setText(String.format("%s %s", appName, versionName));
+        ((TextView)view.findViewById(R.id.title_text)).setText(R.string.app_name);
         view.findViewById(R.id.settings_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

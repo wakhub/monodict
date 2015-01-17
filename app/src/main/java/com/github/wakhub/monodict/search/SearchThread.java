@@ -17,6 +17,7 @@ package com.github.wakhub.monodict.search;
 
 import android.util.Log;
 
+import com.github.wakhub.monodict.dice.DiceFactory;
 import com.github.wakhub.monodict.dice.IdicResult;
 import com.github.wakhub.monodict.dice.Idice;
 import com.github.wakhub.monodict.ui.DicItemListView;
@@ -60,6 +61,7 @@ class SearchThread extends Thread {
 
     private void search() {
         final ArrayList<DicItemListView.Data> result = new ArrayList<DicItemListView.Data>();
+        String convertedQuery = DiceFactory.convert(query);
 
         try {
             sleep(timer);
@@ -79,7 +81,7 @@ class SearchThread extends Thread {
                 if (interrupted())
                     return;
 
-                dice.search(dic, query);
+                dice.search(dic, convertedQuery);
 
                 IdicResult pr = dice.getResult(dic);
 

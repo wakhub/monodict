@@ -17,8 +17,8 @@ package com.github.wakhub.monodict.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
-import com.jayway.android.robotium.solo.Solo;
+import com.github.wakhub.monodict.activity.SettingsActivity_;
+import com.github.wakhub.monodict.test.util.Solo;
 
 /**
  * Created by wak on 5/9/14.

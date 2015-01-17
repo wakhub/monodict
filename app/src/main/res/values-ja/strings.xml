@@ -27,9 +27,6 @@
 <string name="action_refresh">更新</string>
 <string name="action_rename">名前を変更する</string>
 <string name="action_search">検索</string>
-<string name="action_search_by_alc_co_jp">alc.co.jp で検索</string>
-<string name="action_search_by_dictionary_com">dictionary.com で検索</string>
-<string name="action_search_by_google_com">google.com で検索</string>
 <string name="action_share">共有</string>
 <string name="action_shuffle">ランダムに並べる</string>
 <string name="action_speech">発音 (英語のみ)</string>

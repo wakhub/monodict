@@ -294,8 +294,17 @@ public class MainActivity extends ActionBarActivity implements
 
     @Click(R.id.search_button)
     void onClickSearchButton() {
-        searchView.clear();
+        // TODO: To be enabled with config
+        //searchView.clear();
         searchView.focus();
+    }
+
+    @Click(R.id.more_button)
+    void onCilckMoreButton() {
+        MaterialDialog.Builder builder = activityHelper.buildSearchEnginesDialog(searchView.getQuery());
+        if (builder != null) {
+            builder.show();
+        }
     }
 
     private void startActivityFromNav(View view, Intent intent) {
@@ -372,6 +381,9 @@ public class MainActivity extends ActionBarActivity implements
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+
+        // For ignoring auto focus of searchView
+        rootLayout.requestFocus();
 
         if (dictionaryServiceConnection == null) {
             dictionaryServiceConnection = new DictionaryServiceConnection();
@@ -557,6 +569,11 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public void onContextActionSearch(DicItemListView.Data data) {
+        searchView.setQuery(data.Index, true);
+    }
+
+    @Override
     public void onContextActionShare(DicItemListView.Data data) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -657,23 +674,6 @@ public class MainActivity extends ActionBarActivity implements
             showNavButtons(false);
         }
     }
-
-    /*
-    @Override
-    public void onContextActionDelete(final Dictionary dictionary) {
-
-    }
-
-    @Override
-    public void onContextActionToggleEnabled(Dictionary dictionary) {
-
-    }
-
-    @Override
-    public void onContextActionRename(final Dictionary dictionary) {
-
-    }
-    */
 
     @Override
     public void onContextActionMoreDetail(Dictionary dictionary) {
@@ -798,20 +798,25 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onSearchViewQueryTextSubmit(String query) {
-        search(query, 0);
+        if (query == null) {
+            return;
+        }
+        search(query, 10);
     }
 
     @Override
-    public void onSearchViewQueryTextChange(String s) {
-        String text = DiceFactory.convert(s);
+    public void onSearchViewQueryTextChange(String query) {
+        if (query == null) {
+            return;
+        }
         String lastSearchQuery = state.getLastSearchQuery();
-        if (text.length() > 0 && !lastSearchQuery.equals(text)) {
+        if (query.length() > 0 && !lastSearchQuery.equals(query)) {
             int delay = 0;
-            if (lastSearchQuery.length() > 0 &&
-                    lastSearchQuery.charAt(lastSearchQuery.length() - 1) != text.charAt(text.length() - 1)) {
+            if (lastSearchQuery.length() > 0
+                    && lastSearchQuery.charAt(lastSearchQuery.length() - 1) != query.charAt(query.length() - 1)) {
                 delay = 10;
             }
-            search(text, delay);
+            search(query, delay);
         }
     }
 }

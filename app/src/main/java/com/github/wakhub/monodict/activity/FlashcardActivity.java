@@ -127,9 +127,6 @@ public class FlashcardActivity extends ActionBarActivity implements
     ViewPager pager;
 
     @ViewById
-    FloatingActionButton autoPlayButton;
-
-    @ViewById
     FloatingActionButton alphabeticalOrderButton;
 
     @ViewById
@@ -199,7 +196,6 @@ public class FlashcardActivity extends ActionBarActivity implements
                     @Override
                     public void onShow(Snackbar snackbar) {
                         int snackbarHeight = snackbar.getHeight();
-                        ViewUtils.addMarginBottom(autoPlayButton, snackbarHeight);
                         ViewUtils.addMarginBottom(alphabeticalOrderButton, snackbarHeight);
                         ViewUtils.addMarginBottom(shuffleButton, snackbarHeight);
                     }
@@ -212,7 +208,6 @@ public class FlashcardActivity extends ActionBarActivity implements
                     @Override
                     public void onDismiss(Snackbar snackbar) {
                         int snackbarHeight = snackbar.getHeight();
-                        ViewUtils.addMarginBottom(autoPlayButton, -snackbarHeight);
                         ViewUtils.addMarginBottom(alphabeticalOrderButton, -snackbarHeight);
                         ViewUtils.addMarginBottom(shuffleButton, -snackbarHeight);
                     }
@@ -404,12 +399,6 @@ public class FlashcardActivity extends ActionBarActivity implements
         getCurrentFragment().notifyDataSetChanged();
     }
 
-    @Click(R.id.auto_play_button)
-    void onActionAutoPlay() {
-        Log.d(TAG, "onActionAutoPlay");
-        startAutoPlay();
-    }
-
     @UiThread
     void showAutoPlayAlertDialog() {
         if (autoPlayDialog != null) {
@@ -561,6 +550,11 @@ public class FlashcardActivity extends ActionBarActivity implements
     @OptionsItem(R.id.action_add)
     void onActionAdd() {
         new CardEditDialog(this, null).show();
+    }
+
+    @OptionsItem(R.id.action_auto_play)
+    void onActionAutoPlay() {
+        startAutoPlay();
     }
 
     @OptionsItem(R.id.action_delete_all)

@@ -179,9 +179,8 @@ public class FlashcardActivityPagerFragment extends Fragment {
                 if (position == 0 || position <= gridSpanCount - 1) {
                     outRect.top = marginVertical;
                 }
-                if (position > itemCount - gridSpanCount) {
-                    outRect.bottom = res.getDimensionPixelSize(R.dimen.fab_size_normal)
-                            + (res.getDimensionPixelSize(R.dimen.card_view_margin) * 2);
+                if (position >= itemCount - gridSpanCount) {
+                    outRect.bottom = res.getDimensionPixelSize(R.dimen.space_for_floating_buttons) + dividerVertical;
                 }
             }
         });
@@ -223,7 +222,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
                 holder.text2.setVisibility(View.VISIBLE);
                 holder.text2.setText(dictionary);
             }
-            holder.actionButton.setOnClickListener(new View.OnClickListener() {
+            holder.moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     MonodictApp.getEventBus().post(new FlashcardItemMoreEvent(card));
@@ -254,7 +253,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
             private CardView cardView;
             private TextView text1;
             private TextView text2;
-            private ImageButton actionButton;
+            private ImageButton moreButton;
             private ImageButton speechButton;
 
             private ViewHolder(View view) {
@@ -263,7 +262,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
                 cardView = (CardView) view.findViewById(R.id.card_view);
                 text1 = (TextView) view.findViewById(android.R.id.text1);
                 text2 = (TextView) view.findViewById(android.R.id.text2);
-                actionButton = (ImageButton) view.findViewById(R.id.action_button);
+                moreButton = (ImageButton) view.findViewById(R.id.more_button);
                 speechButton = (ImageButton) view.findViewById(R.id.speech_button);
             }
         }

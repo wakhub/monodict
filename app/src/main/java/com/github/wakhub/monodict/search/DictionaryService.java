@@ -246,8 +246,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
             }
             searchThread = null;
         }
-        final String searchQuery = query.toLowerCase();
-        searchThread = new SearchThread(this, dice, searchQuery, 10);
+        searchThread = new SearchThread(this, dice, query, 10);
         searchThread.start();
     }
 

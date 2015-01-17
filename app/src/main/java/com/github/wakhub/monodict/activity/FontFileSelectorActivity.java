@@ -27,12 +27,15 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 /**
  * Created by wak on 6/27/14.
  */
 @EActivity(R.layout.activity_abs_file_manager)
+@OptionsMenu(R.menu.font_file_selector)
 public class FontFileSelectorActivity extends AbsFileManagerActivity {
 
     private final static String TAG = FontFileSelectorActivity.class.getSimpleName();
@@ -89,4 +92,13 @@ public class FontFileSelectorActivity extends AbsFileManagerActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    @OptionsItem(R.id.action_help)
+    void onActionHelp() {
+        activityHelper
+                .buildNoticeDialog(activityHelper.getStringFromRaw(R.raw.font_file_selector_help))
+                .title(R.string.title_help)
+                .show();
+    }
+
 }

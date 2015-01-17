@@ -1,0 +1,10 @@
+An extension of the font file has to be ".ttf" or ".otf" .
+
+You can download useful fonts from below links.
+
+Google Noto Fonts
+https://www.google.com/get/noto
+
+IPA Font (Including Japanese mincho font)
+http://ipafont.ipa.go.jp/#en
+

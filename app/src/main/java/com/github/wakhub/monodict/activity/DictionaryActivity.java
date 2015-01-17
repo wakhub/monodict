@@ -19,11 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,6 +45,8 @@ import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -56,6 +55,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @EActivity(R.layout.activity_dictionary)
+@OptionsMenu(R.menu.dictionary)
 public class DictionaryActivity extends AbsListActivity {
 
     private static final String TAG = DictionaryActivity.class.getSimpleName();
@@ -88,9 +88,6 @@ public class DictionaryActivity extends AbsListActivity {
 
     @ViewById
     CheckBox enableCheckBox;
-
-    @ViewById
-    Spinner maxResultsSpinner;
 
     @ViewById
     DictionaryFontView indexFontView;
@@ -132,6 +129,7 @@ public class DictionaryActivity extends AbsListActivity {
         }
         return 0;
     }
+
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity(preferences);
@@ -140,26 +138,7 @@ public class DictionaryActivity extends AbsListActivity {
 
         enableCheckBox.setChecked(dictionary.isEnabled());
 
-        maxResultsSpinner.setSelection(getMaxResultsIndex());
-        maxResultsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Dictionary dictionary = getDictionary();
-                String[] maxResultsArray = getResources().getStringArray(R.array.max_results);
-                if (position < maxResultsArray.length) {
-                    int maxResults = Integer.valueOf(maxResultsArray[position]);
-                    dictionary.setMaxResults(maxResults);
-                    dictionaries.updateDictionary(dictionary);
-                    reload();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        indexFontView.setText("Index font");
+//        indexFontView.setTitle("Index font");
         indexFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -183,7 +162,7 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        phoneFontView.setText("Phone font");
+        phoneFontView.setTitle("Phone font");
         phoneFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -208,7 +187,7 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        transFontView.setText("Trans font");
+        transFontView.setTitle("Trans font");
         transFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -232,7 +211,7 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        sampleFontView.setText("Sample font");
+        sampleFontView.setTitle("Sample font");
         sampleFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -301,7 +280,7 @@ public class DictionaryActivity extends AbsListActivity {
         reload();
     }
 
-    @Click(R.id.delete_button)
+    @OptionsItem(R.id.action_delete)
     void onClickDeleteButton() {
         final Dictionary dictionary = getDictionary();
         activityHelper

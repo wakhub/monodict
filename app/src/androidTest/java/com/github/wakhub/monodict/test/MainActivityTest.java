@@ -15,14 +15,15 @@
  */
 package com.github.wakhub.monodict.test;
 
+import android.support.v4.widget.DrawerLayout;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.BrowserActivity_;
 import com.github.wakhub.monodict.activity.FlashcardActivity_;
 import com.github.wakhub.monodict.activity.MainActivity_;
-import com.github.wakhub.monodict.activity.settings.SettingsActivity_;
-import com.jayway.android.robotium.solo.Solo;
+import com.github.wakhub.monodict.activity.SettingsActivity_;
+import com.github.wakhub.monodict.test.util.Solo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,19 +60,31 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    public void testNav() {
-        solo.clearEditText(0);
-        solo.enterText(0, "dummy");
+    private void openDrawer() throws Throwable {
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DrawerLayout drawerLayout = (DrawerLayout) solo.getView(R.id.root_layout);
+                drawerLayout.openDrawer(solo.getView(R.id.drawer_list));
+            }
+        });
+    }
 
-        solo.clickOnView(solo.getView(R.id.flashcard_button));
+    public void testNav() throws Throwable {
+        solo.clearEditText(0);
+
+        openDrawer();
+        solo.clickOnView(R.id.flashcards_button);
         solo.waitForActivity(FlashcardActivity_.class);
         solo.goBack();
 
-        solo.clickOnView(solo.getView(R.id.browser_button));
+        openDrawer();
+        solo.clickOnView(R.id.browser_button);
         solo.waitForActivity(BrowserActivity_.class);
         solo.goBack();
 
-        solo.clickOnView(solo.getView(R.id.settings_button));
+        openDrawer();
+        solo.clickOnView(R.id.settings_button);
         solo.waitForActivity(SettingsActivity_.class);
         solo.goBack();
     }

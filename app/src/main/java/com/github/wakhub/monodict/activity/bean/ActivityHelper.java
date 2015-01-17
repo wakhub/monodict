@@ -36,12 +36,17 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
+import com.github.wakhub.monodict.activity.BrowserActivity_;
 import com.github.wakhub.monodict.activity.MainActivity_;
 import com.github.wakhub.monodict.db.Card;
 import com.github.wakhub.monodict.db.Model;
+import com.github.wakhub.monodict.json.SearchEngines;
+import com.github.wakhub.monodict.json.SearchEnginesItem;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.google.common.io.CharStreams;
+import com.google.gson.Gson;
+import com.google.gson.stream.MalformedJsonException;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
@@ -53,6 +58,8 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wak on 5/19/14.
@@ -126,7 +133,7 @@ public class ActivityHelper {
      * Build dialog with user input
      *
      * @param text
-     * @param onClickListener
+     * @param callback
      * @return MaterialDialog.Builder
      */
     public MaterialDialog.Builder buildInputDialog(CharSequence text, MaterialDialog.SimpleCallback callback) {
@@ -164,6 +171,39 @@ public class ActivityHelper {
         return new MaterialDialog.Builder(activity)
                 .customView(scrollView)
                 .positiveText(android.R.string.ok);
+    }
+
+    public MaterialDialog.Builder buildSearchEnginesDialog(final CharSequence query) {
+        final SearchEngines searchEngines;
+        try {
+            InputStream inputStream = activity.getAssets().open("search_engines.json");
+            searchEngines = (new Gson()).fromJson(
+                    CharStreams.toString(new InputStreamReader(inputStream)),
+                    SearchEngines.class);
+        } catch (MalformedJsonException e) {
+            showError(e);
+            return null;
+        } catch (IOException e) {
+            showError(e);
+            return null;
+        }
+        List<String> entries = new ArrayList<>();
+        for (SearchEnginesItem item : searchEngines.getItems()) {
+            entries.add(item.getName());
+        }
+        return new MaterialDialog.Builder(activity)
+                .title(R.string.action_search_by)
+                .cancelable(true)
+                .items(entries.toArray(new String[entries.size()]))
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                        SearchEnginesItem item = searchEngines.getItems().get(i);
+                        BrowserActivity_.intent(activity)
+                                .extraUrlOrKeywords(String.format(item.getUrl(), query))
+                                .start();
+                    }
+                });
     }
 
     public void onDuplicatedCardFound(final Card duplicateCard, final String newTranslate, final String newDictionary) {

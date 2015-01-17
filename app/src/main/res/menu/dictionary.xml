@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2014 wak
+  ~ Copyright (C) 2015 wak
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,22 +13,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.wakhub.monodict.activity.MainActivity_">
-
+    tools:context="com.github.wakhub.monodict.activity.DictionaryActivity_">
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_grey600_24dp"
-        android:title="@string/action_search"
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/action_delete"
         app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_speech"
-        android:icon="@drawable/ic_volume_up_grey600_24dp"
-        android:title="@string/action_speech"
-        app:showAsAction="ifRoom"/>
 </menu>
+

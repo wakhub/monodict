@@ -1,4 +1,4 @@
-拡張子が ".dic" の PDIC ファイルを読み込めます。
+拡張子が ".dic" または ".pdic" の PDIC ファイルを読み込めます。
 
 現在入手可能な PDIC ファイルのリストを下記 URLから参照できます。
 https://docs.google.com/spreadsheets/d/1c3F29JlbZBkHipypM4MrEvojk_XsR40Ro98jrH_-eX4/edit?usp=sharing

@@ -21,7 +21,6 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
-import com.github.wakhub.monodict.activity.BrowserActivity_;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +34,7 @@ public class DicContextDialogBuilder extends MaterialDialog.Builder implements M
     private static final String TAG = DicContextDialogBuilder.class.getSimpleName();
     private static final List<Integer> ITEM_IDS = Arrays.asList(
             R.string.action_copy_all,
-            R.string.action_search_by_google_com,
-            R.string.action_search_by_dictionary_com,
-            R.string.action_search_by_alc_co_jp,
+            R.string.action_search,
             R.string.action_share);
 
     private OnContextActionListener contextActionListener;
@@ -76,20 +73,8 @@ public class DicContextDialogBuilder extends MaterialDialog.Builder implements M
             case R.string.action_copy_all:
                 contextActionListener.onContextActionCopyAll(data);
                 break;
-            case R.string.action_search_by_google_com:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_google_com_search, data.Index.toString()))
-                        .start();
-                break;
-            case R.string.action_search_by_dictionary_com:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_dictionary_com_search, data.Index.toString()))
-                        .start();
-                break;
-            case R.string.action_search_by_alc_co_jp:
-                BrowserActivity_.intent(context)
-                        .extraUrlOrKeywords(resources.getString(R.string.url_alc_co_jp_search, data.Index.toString()))
-                        .start();
+            case R.string.action_search:
+                contextActionListener.onContextActionSearch(data);
                 break;
             case R.string.action_share:
                 contextActionListener.onContextActionShare(data);
@@ -99,6 +84,8 @@ public class DicContextDialogBuilder extends MaterialDialog.Builder implements M
 
     public interface OnContextActionListener {
         void onContextActionShare(DicItemListView.Data data);
+
+        void onContextActionSearch(DicItemListView.Data data);
 
         void onContextActionCopyAll(DicItemListView.Data data);
     }

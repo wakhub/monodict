@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-<string name="lorem_jp_mix">Lorem ipsum dolor sit amet 色は匂へど散りぬるを</string>
 <string name="action_add_local_pdic">Add local file</string>
 <string name="action_add_new_card">Add new card</string>
 <string name="action_add_to_bookmarks">Add to Bookmarks</string>
@@ -30,9 +29,7 @@
 <string name="action_refresh">Refresh</string>
 <string name="action_rename">Rename</string>
 <string name="action_search">Search</string>
-<string name="action_search_by_alc_co_jp">Search by alc.co.jp</string>
-<string name="action_search_by_dictionary_com">Search by dictionary.com</string>
-<string name="action_search_by_google_com">Search by google.com</string>
+<string name="action_search_by">Search by</string>
 <string name="action_select_local_font">Select local font</string>
 <string name="action_share">Share</string>
 <string name="action_shuffle">Shuffle</string>
@@ -41,6 +38,7 @@
 <string name="action_up">Up</string>
 <string name="app_name" translatable="false">monodict</string>
 <string name="blank_text" translatable="false">---</string>
+<string name="lorem_jp_mix">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 色はにほへど散りぬるを我が世たれぞ常ならむ</string>
 <string name="message_confirm_delete">Are you sure you want to delete?</string>
 <string name="message_copy_succeeded">Copy succeeded</string>
 <string name="message_creating_index">Now creating index…</string>
@@ -104,7 +102,9 @@
 <string name="title_settings_version">Version</string>
 <string name="title_system_default">System Default</string>
 <string name="title_welcome">Welcome to monodict!</string>
-<string name="url_alc_co_jp_search" translatable="false">http://eow.alc.co.jp/sp/search.html?q=%s</string>
-<string name="url_dictionary_com_search" translatable="false">http://dictionary.reference.com/browse/%s</string>
-<string name="url_google_com_search" translatable="false">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%s</string>
+<string name="title_index_text_font">Index text font</string>
+<string name="title_phonetic_text_font">Phonetic text font</string>
+<string name="title_translation_text_font">Translation text font</string>
+<string name="title_sample_text_font">Sample text font</string>
+<string name="url_google_com_search">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%"</string>
 </resources>

@@ -20,7 +20,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.BrowserActivity_;
-import com.jayway.android.robotium.solo.Solo;
+import com.github.wakhub.monodict.test.util.Solo;
 
 /**
  * Created by wak on 5/9/14.
@@ -29,7 +29,7 @@ public class BrowserActivityTest extends ActivityInstrumentationTestCase2<Browse
 
     private static Solo solo;
 
-    public BrowserActivityTest(){
+    public BrowserActivityTest() {
         super(BrowserActivity_.class);
     }
 
@@ -45,11 +45,11 @@ public class BrowserActivityTest extends ActivityInstrumentationTestCase2<Browse
     public void testActionBar() throws Exception {
         solo.clearEditText(0);
         solo.enterText(0, "http://example.com");
-        solo.clickOnActionBarItem(R.id.action_back);
-        solo.clickOnActionBarItem(R.id.action_forward);
-        solo.clickOnActionBarItem(R.id.action_reload);
-        solo.clickOnActionBarItem(R.id.action_reload);
-        solo.clickOnActionBarItem(R.id.action_reload);
+        solo.clickOnView(R.id.next_button);
+        solo.clickOnView(R.id.back_button);
+        solo.clickOnView(R.id.refresh_button);
+        solo.clickOnView(R.id.refresh_button);
+        solo.clickOnView(R.id.refresh_button);
     }
 }
 
