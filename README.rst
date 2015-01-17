@@ -15,7 +15,7 @@ TOC
 
 - TODO
 - Setup monodict Project
-- Graphic Design Guideline
+- Design Guideline
 - LICENSE
 
 
@@ -60,19 +60,27 @@ Design Guideline
 
 - **Basis**
   - Follow Material Design.
-  - Don't use Material Design if the design was difficult to implement with supported API or the design was not important for the functionality.
+  - Don't follow Material Design if the design was difficult to implement
+    with supported API or the design was not important for the functionality.
 
 - Graphic Design
+  - Use sans-serif fonts as app's typography because Android doesn't support
+    serif-like Japanese font (Mincho) as default fonts normally.
   - Only use gray scale for theming.
     - No need to worry about the difference of colors between multiple displays.
     - Decrease battery usage.
 
-  - Consider to add lines as a divider because Material Design doesn't use border as a divider normally.
+  - Consider to add borders as a divider because Material Design doesn't use
+    borders as a divider normally.
   - Follow native shadow style and shade style.
 
 - Navigation
   - Place primary actions at bottom of Activity.
-  - Place secondary actions at ActionBar or Toolbar.
+    FloatingActionButton and Toolbar at bottom are useful for this case.
+  - Place secondary actions at top of Activity.
+    ActionBar and Toolbar at top are useful for this case.
+  - The behaviours which involve swipe gestures have to behave with
+    non-gesture actions (buttons, tabs, etc...) also.
 
 
 LICENSE
