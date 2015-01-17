@@ -83,7 +83,7 @@ public class FontFileSelectorActivity extends AbsFileManagerActivity {
         }
         if (!isValidFontFile(path)) {
             activityHelper.showToast(getResources().getString(
-                    R.string.message_validation_file_ext, Joiner.on(",").join(FONT_EXT_LIST)));
+                    R.string.message_validation_file_ext, Joiner.on(" or ").join(FONT_EXT_LIST)));
             return;
         }
         Intent intent = getIntent();

@@ -91,9 +91,9 @@ public class DictionaryFileSelectorActivity extends AbsFileManagerActivity {
             return;
         }
 
-        if (isValidDictionaryFile(path)) {
+        if (!isValidDictionaryFile(path)) {
             activityHelper.showToast(getResources().getString(
-                    R.string.message_validation_file_ext, Joiner.on(",").join(DICTIONARY_EXT_LIST)));
+                    R.string.message_validation_file_ext, Joiner.on(" or ").join(DICTIONARY_EXT_LIST)));
             return;
         }
         Intent intent = getIntent();
