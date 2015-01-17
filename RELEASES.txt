@@ -1,3 +1,11 @@
+Version 3.0.0
+
++ Add Font settings
+* Optimize UI for one-hand control
+* Material Design
+* Merge "search by" functions into a dialog
+
+
 Version 2.0.0
 
 + Add Autoplay function for flashcard

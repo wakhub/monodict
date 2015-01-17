@@ -15,7 +15,7 @@ TODO
 ==========
 
 - Refactoring activity state codes by using savedInstanceState
-- Font settings
+- Use com.timehop.stickyheadersrecyclerview on MainActivity
 - History
 - Refine browser
 - Implement translaion ruby function that is like http://zurukko.jp/
