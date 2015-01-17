@@ -86,7 +86,6 @@ def init():
     local('mkdir -p ' + DOWNLOADS_DIR)
     local('mkdir -p ' + CREDENTIALS_DIR)
 #    download_resources()
-    init_system_icons()
     if not os.path.exists(RELEASE_KEYSTORE) and prompt('Create release.keystore? [y/n]') == 'y':
         generate_keystore(RELEASE_KEYSTORE)
 
@@ -98,6 +97,8 @@ def prepare_for_commit():
     _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/icons.svg'))
     _cleanup_inkscape_svg(os.path.join(ROOT_DIR, 'files/logo.svg'))
     local('rm -rf %s' % os.path.join(APP_ROOT_DIR, 'build'))
+    with lcd(APP_ROOT_DIR):
+        local('gradle lintClean')
     validation(False)
 
 
@@ -139,8 +140,8 @@ def download_resources():
 
 
 @task
-def init_system_icons():
-    """ init_action_bar_icons """
+def regenerate_system_icons():
+    """ regenerate_action_bar_icons """
     icons_root_dir = os.path.join(ROOT_DIR, 'submodules/material-design-icons')
 
     for root, dirs, files in os.walk(icons_root_dir):
@@ -159,7 +160,7 @@ def init_system_icons():
 
 
 @task
-def init_custom_icons():
+def regenerate_custom_icons():
     icons_src_dir = os.path.join(ROOT_DIR, 'files/drawable-xxhdpi')
 
     for root, dirs, files in os.walk(icons_src_dir):

@@ -83,7 +83,10 @@
 <string name="title_dictionary_waeijiro">Waejiro %s</string>
 <string name="title_dictionary_webster">Webster English Dictionary 1913</string>
 <string name="title_help">HELP</string>
+<string name="title_index_text_font">Index text font</string>
 <string name="title_keyword">Keyword</string>
+<string name="title_phonetic_text_font">Phonetic text font</string>
+<string name="title_sample_text_font">Sample text font</string>
 <string name="title_settings_about">About</string>
 <string name="title_settings_app_information">Application Information</string>
 <string name="title_settings_clipboard_search">Clipboard Search</string>
@@ -101,10 +104,7 @@
 <string name="title_settings_tts_language_for_translation">Language for translation</string>
 <string name="title_settings_version">Version</string>
 <string name="title_system_default">System Default</string>
-<string name="title_welcome">Welcome to monodict!</string>
-<string name="title_index_text_font">Index text font</string>
-<string name="title_phonetic_text_font">Phonetic text font</string>
 <string name="title_translation_text_font">Translation text font</string>
-<string name="title_sample_text_font">Sample text font</string>
+<string name="title_welcome">Welcome to monodict!</string>
 <string name="url_google_com_search">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%"</string>
 </resources>
