@@ -85,7 +85,7 @@ def init():
     clean()
     local('mkdir -p ' + DOWNLOADS_DIR)
     local('mkdir -p ' + CREDENTIALS_DIR)
-    download_resources()
+#    download_resources()
     init_system_icons()
     if not os.path.exists(RELEASE_KEYSTORE) and prompt('Create release.keystore? [y/n]') == 'y':
         generate_keystore(RELEASE_KEYSTORE)
@@ -124,7 +124,6 @@ def validation(verbose=False):
 @task
 def download_resources():
     downloads = [
-        'https://proxy.piratenpartij.nl/github.com/asystat/Final-Android-Resizer/blob/master/Executable%20Jar/Final%20Android%20Resizer.jar?raw=true',
     ]
     for url in downloads:
         filename = url.split('/')[-1].split('?')[0]
