@@ -8,7 +8,8 @@ monodict
 The application has been developed based on
 the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
 
-`monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
+- `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
+- Download .apk files https://drive.google.com/open?id=0B7-yqP_4DkNZdG9HTk83TWowVUk&authuser=0
 
 
 TOC
