@@ -2,7 +2,7 @@
 monodict
 ============
 
-.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/files/lighting-study.jpg
+.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
 
 **monodict** is a faster offline PDIC dictionary viewer app with TTS integration and flashcard.
 The application has been developed based on
@@ -60,7 +60,7 @@ Design Guideline
 
 - **Basis**
 
-  - Follow Material Design.
+  - Follow `Material Design <http://www.google.com/design/spec/material-design/introduction.html>`_ .
   - Don't follow Material Design if the design was difficult to implement
     with supported API or the design was not important for the functionality.
 
@@ -85,6 +85,8 @@ Design Guideline
     ActionBar and Toolbar at top are useful for this case.
   - The behaviours which involve swipe gestures have to behave with
     non-gesture actions (buttons, tabs, etc...) also.
+
+.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/files/lighting-study.jpg
 
 
 LICENSE
