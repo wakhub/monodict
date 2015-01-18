@@ -2,7 +2,7 @@
 monodict
 ============
 
-.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
+.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/files/lighting-study.jpg
 
 **monodict** is a faster offline PDIC dictionary viewer app with TTS integration and flashcard.
 The application has been developed based on
