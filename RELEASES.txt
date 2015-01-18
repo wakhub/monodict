@@ -1,5 +1,9 @@
 Version 3.0.1
 
+* Bugfix: Can't keep preferences when upgrade
+
+Version 3.0.1
+
 * Bugfix: Can't use flashcards on production app
 
 Version 3.0.0
