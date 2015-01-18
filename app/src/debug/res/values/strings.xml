@@ -15,5 +15,5 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="app_name" translatable="false">monodict DEBUG</string>
+    <string name="app_name" translatable="false">monodict</string>
 </resources>

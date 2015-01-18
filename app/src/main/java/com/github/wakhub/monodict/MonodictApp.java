@@ -24,7 +24,6 @@ import android.content.res.Resources;
 
 import com.google.common.eventbus.EventBus;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EApplication;
 
 import java.util.Locale;
@@ -43,9 +42,10 @@ public class MonodictApp extends Application {
         return eventBus;
     }
 
-    @AfterInject
-    void afterInject() {
-        setLocale(Locale.JAPANESE);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+//        setLocale(Locale.JAPANESE);
     }
 
     public static final PackageInfo getPackageInfo(Context context) {

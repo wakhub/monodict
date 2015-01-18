@@ -27,6 +27,8 @@ import com.google.gson.annotations.Expose;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,17 +78,18 @@ public class Dictionary {
         }
     }
 
-    private final static Template TEMPLATES[] = {
-            new Template("/EIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_eijiro, true),
-            new Template("/WAEI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_waeijiro, false),
-            new Template("/REIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_reijiro, false),
-            new Template("/RYAKU-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_ryakujiro, false),
-            new Template("/PDEJ2005U?.dic", R.string.title_dictionary_pdej, true),
-            new Template("/PDEDICTU?.dic", R.string.title_dictionary_edict, false),
-            new Template("/PDWD1913U?.dic", R.string.title_dictionary_webster, true),
-            new Template("/f2jdic.dic", R.string.title_dictionary_ichirofj, false),
-            new Template("/ine([0-9]+)U.dic", R.string.title_dictionary_dienine, false),
-    };
+    private static List<Template> getTemplates() {
+        return Arrays.asList(
+                new Template("EIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_eijiro, true),
+                new Template("WAEI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_waeijiro, false),
+                new Template("REIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_reijiro, false),
+                new Template("RYAKU-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_ryakujiro, false),
+                new Template("PDEJ2005U?.dic", R.string.title_dictionary_pdej, true),
+                new Template("PDEDICTU?.dic", R.string.title_dictionary_edict, false),
+                new Template("PDWD1913U?.dic", R.string.title_dictionary_webster, true),
+                new Template("f2jdic.dic", R.string.title_dictionary_ichirofj, false),
+                new Template("ine([0-9]+)U.dic", R.string.title_dictionary_dienine, false));
+    }
 
     public static String getIndexCacheFilePath(Context context, String path) {
         return context.getCacheDir() + "/" + path.replace("/", ".") + ".idx";
@@ -115,24 +118,25 @@ public class Dictionary {
 
     public Dictionary(Context context, IdicInfo dicInfo) {
         path = dicInfo.GetFilename();
-        String[] splitFilename = dicInfo.GetFilename().split("/");
-        name = splitFilename[splitFilename.length - 1];
         isEnglishIndex = dicInfo.GetEnglish();
         enabled = true;
 
-        for (Template TEMPLATE : TEMPLATES) {
-            Pattern p = Pattern.compile(TEMPLATE.pattern, Pattern.CASE_INSENSITIVE);
+        String[] splitFilename = dicInfo.GetFilename().split("/");
+        name = splitFilename[splitFilename.length - 1];
+
+        for (Template template : getTemplates()) {
+            Pattern p = Pattern.compile(template.pattern, Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(name);
             if (m.find()) {
                 String dicname;
                 if (m.groupCount() > 0) {
                     String edt = m.group(1);
-                    dicname = context.getResources().getString(TEMPLATE.resourceDicname, edt);
+                    dicname = context.getResources().getString(template.resourceDicname, edt);
                 } else {
-                    dicname = context.getResources().getString(TEMPLATE.resourceDicname);
+                    dicname = context.getResources().getString(template.resourceDicname);
                 }
                 name = dicname;
-                isEnglishIndex = TEMPLATE.englishFlag;
+                isEnglishIndex = template.englishFlag;
             }
         }
     }

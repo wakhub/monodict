@@ -192,6 +192,7 @@ public class ActivityHelper {
             entries.add(item.getName());
         }
         return new MaterialDialog.Builder(activity)
+                .icon(R.drawable.ic_search_black_36dp)
                 .title(R.string.action_search_by)
                 .cancelable(true)
                 .items(entries.toArray(new String[entries.size()]))
