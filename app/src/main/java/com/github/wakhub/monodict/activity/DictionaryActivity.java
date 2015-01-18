@@ -138,7 +138,6 @@ public class DictionaryActivity extends AbsListActivity {
 
         enableCheckBox.setChecked(dictionary.isEnabled());
 
-//        indexFontView.setTitle("Index font");
         indexFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -162,7 +161,6 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        phoneFontView.setTitle("Phone font");
         phoneFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -187,7 +185,6 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        transFontView.setTitle("Trans font");
         transFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {
@@ -211,7 +208,6 @@ public class DictionaryActivity extends AbsListActivity {
             }
         });
 
-        sampleFontView.setTitle("Sample font");
         sampleFontView.setListener(new DictionaryFontView.Listener() {
             @Override
             public void onDictionaryFontViewClickResetButton() {

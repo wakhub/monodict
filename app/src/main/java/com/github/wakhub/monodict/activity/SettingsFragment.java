@@ -44,7 +44,6 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String PREFERENCES_NAME = "Preferences";
     private static final String KEY_ORIENTATION = "orientation";
     private static final String KEY_TTS_DEFAULT_LOCALE = "ttsDefaultLocale";
-    private static final String KEY_TTS_LANGUAGE_FOR_TRANSLATE = "ttsLanguageForTranslate";
     private static final String KEY_ABOUT = "about";
     private static final String KEY_LEGAL = "legal";
 
@@ -113,24 +112,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
 
-        });
-
-        prefItem = findPreference(KEY_TTS_LANGUAGE_FOR_TRANSLATE);
-        prefItem.setSummary(preferences.ttsLanguageForTranslate().get());
-        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                preference.setSummary((String) o);
-                return true;
-            }
-        });
-
-        prefItem.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                preference.setSummary((String) o);
-                return true;
-            }
         });
 
         prefItem = findPreference(KEY_ABOUT);

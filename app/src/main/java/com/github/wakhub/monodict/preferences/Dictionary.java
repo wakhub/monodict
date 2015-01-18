@@ -79,8 +79,8 @@ public class Dictionary {
     private final static Template TEMPLATES[] = {
             new Template("/EIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_eijiro, true),
             new Template("/WAEI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_waeijiro, false),
-            new Template("/REIJI([0-9]+)U?.*\\.DIC", R.string.title_dictionary_reijiro, false),
-            new Template("/RYAKU([0-9]+)U?.*\\.DIC", R.string.title_dictionary_ryakujiro, false),
+            new Template("/REIJI-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_reijiro, false),
+            new Template("/RYAKU-([0-9]+)U?.*\\.DIC", R.string.title_dictionary_ryakujiro, false),
             new Template("/PDEJ2005U?.dic", R.string.title_dictionary_pdej, true),
             new Template("/PDEDICTU?.dic", R.string.title_dictionary_edict, false),
             new Template("/PDWD1913U?.dic", R.string.title_dictionary_webster, true),
@@ -115,7 +115,8 @@ public class Dictionary {
 
     public Dictionary(Context context, IdicInfo dicInfo) {
         path = dicInfo.GetFilename();
-        name = dicInfo.GetFilename();
+        String[] splitFilename = dicInfo.GetFilename().split("/");
+        name = splitFilename[splitFilename.length - 1];
         isEnglishIndex = dicInfo.GetEnglish();
         enabled = true;
 

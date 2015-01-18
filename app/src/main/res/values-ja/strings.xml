@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-<string name="action_add_local_pdic">ローカルファイル登録</string>
+<string name="action_add_local_pdic">ファイル追加</string>
 <string name="action_add_new_card">新しい単語を登録</string>
 <string name="action_add_to_bookmarks">ブックマークに追加</string>
 <string name="action_add_to_flashcard">単語帳に追加</string>
@@ -21,17 +21,23 @@
 <string name="action_import">インポート</string>
 <string name="action_keep">保留</string>
 <string name="action_more">もっと見る</string>
+<string name="action_more_detail">辞書詳細</string>
 <string name="action_move_into_inbox">カードを INBOX へ移動</string>
 <string name="action_open_local_file">ローカルファイルを開く</string>
 <string name="action_order_alphabetically">アルファベット順で並べる</string>
 <string name="action_refresh">更新</string>
 <string name="action_rename">名前を変更する</string>
+<string name="action_retry">リトライ</string>
 <string name="action_search">検索</string>
+<string name="action_search_by">高度な検索</string>
+<string name="action_select_local_font">フォントファイルを選択</string>
 <string name="action_share">共有</string>
 <string name="action_shuffle">ランダムに並べる</string>
-<string name="action_speech">発音 (英語のみ)</string>
+<string name="action_speech">発音</string>
+<string name="action_undo">取り消し</string>
 <string name="action_up">上に移動</string>
 <string name="message_confirm_delete">本当に削除しますか?</string>
+<string name="message_copy_succeeded">コピーしました</string>
 <string name="message_creating_index">インデックスを作成しています…</string>
 <string name="message_download_failed">ダウンロード失敗</string>
 <string name="message_download_succeed">ダウンロード成功</string>
@@ -42,6 +48,7 @@
 <string name="message_item_already_registered_and_confirm">%1$s は既に %2$s に登録されています。内容を上書きして INBOX に移動しますか?</string>
 <string name="message_item_is_not_supported">%s はシステムでサポートされていません</string>
 <string name="message_item_loading_failed">%s の読み込みに失敗しました</string>
+<string name="message_item_modified">\"%s\" が変更されました</string>
 <string name="message_item_removed">%s を削除しました</string>
 <string name="message_language_settings_notice">言語設定はリスタート後に有効になります</string>
 <string name="message_loading_dictionaries">辞書を読み込んでいます…</string>
@@ -51,12 +58,13 @@
 <string name="message_success">成功</string>
 <string name="message_unable_to_access">アクセスできません</string>
 <string name="message_url_placeholder">URL 又はキーワード</string>
+<string name="message_validation_file_ext">以下の拡張子が有効です: %s</string>
 <string name="message_validation_max_100">100 文字まで入力できます</string>
 <string name="message_validation_max_5000">5000 文字まで入力できます</string>
 <string name="message_validation_required">何か入力してください</string>
 <string name="title_activity_browser">ブラウザ</string>
 <string name="title_activity_browser_bookmarks">ブックマーク</string>
-<string name="title_activity_dictionary_manager">辞書管理</string>
+<string name="title_activity_dictionary">辞書詳細</string>
 <string name="title_activity_directory_selector">ディレクトリを選択</string>
 <string name="title_activity_downloads">ダウンロード</string>
 <string name="title_activity_flashcard">単語帳</string>
@@ -72,11 +80,13 @@
 <string name="title_dictionary_waeijiro">和英辞郎 %s版</string>
 <string name="title_dictionary_webster">Webster英英辞典1913年版</string>
 <string name="title_help">ヘルプ</string>
+<string name="title_index_text_font">見出しフォント</string>
 <string name="title_keyword">キーワード</string>
+<string name="title_phonetic_text_font">発音記号フォント</string>
+<string name="title_sample_text_font">サンプルフォント</string>
 <string name="title_settings_about">このアプリについて</string>
 <string name="title_settings_app_information">アプリケーション情報</string>
 <string name="title_settings_clipboard_search">クリップボード検索</string>
-<string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">高速スクロール</string>
 <string name="title_settings_legal">免責事項</string>
 <string name="title_settings_open_tts_settings">Text-to-Speech 設定</string>
@@ -90,5 +100,6 @@
 <string name="title_settings_tts_language_for_translation">訳文の言語</string>
 <string name="title_settings_version">バージョン</string>
 <string name="title_system_default">システムの標準設定を使う</string>
+<string name="title_translation_text_font">訳文フォント</string>
 <string name="title_welcome">monodict へようこそ!</string>
 </resources>

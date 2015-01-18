@@ -1,9 +1,10 @@
 {
-    "version": 6,
+    "version": 7,
     "items": [
         {
             "name": "Webster 1913 English Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZTkNBRGFETXoxZEk",
+            "url_mirror": "https://googledrive.com/host/0B7-yqP_4DkNZTkNBRGFETXoxZEk",
             "size": "5968KB",
             "english": true,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
@@ -11,6 +12,7 @@
         {
             "name": "PDEJ2005 English-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZdElkMVozcFVPdGM",
+            "url_mirror": "",
             "size": "3052KB",
             "english": true,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
@@ -18,6 +20,7 @@
         {
             "name": "EDICT Japanese-English Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZV1R6ZGRNU3EtbEE",
+            "url_morror": "",
             "size": "1424KB",
             "english": false,
             "description": "by Yoshi\nhttp://homepage1.nifty.com/yoshi_2000/"
@@ -25,6 +28,7 @@
         {
             "name": "ICHIRO French-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B7-yqP_4DkNZd0pjdW5Ec2xtWmc",
+            "url_morror": "",
             "size": "720KB",
             "english": false,
             "description": "by ICHIRO\nhttp://rd.vector.co.jp/soft/win95/edu/se217092.html"
@@ -32,6 +36,7 @@
         {
             "name": "Matsushita-Dien Indonesian-Japanese Dictionary",
             "url": "https://googledrive.com/host/0B5IImzdq-qBKcHlBNHhGYmFEelU",
+            "url_mirror": "",
             "size": "341KB",
             "english": false,
             "description": "by Dien\nhttp://www.geocities.jp/indo_ka/bahasa/id_soft.htm\nUpdate: 2014/07/13"

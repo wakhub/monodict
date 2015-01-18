@@ -50,7 +50,7 @@ SYSTEM_ICON_NAMES = [
          'delete',
          'edit',
          'file_download',
-         'folder_open',
+         'folder', 'folder_open',
          'format_bold', 'format_color_text', 'format_italic', 'format_size',
          'help',
          'list',

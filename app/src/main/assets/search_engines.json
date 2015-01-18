@@ -3,15 +3,27 @@
     "items": [
         {
             "name": "google.com",
-            "url": "https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%s"
+            "url": "https://www.google.com/search?ie=UTF-8&oe=UTF-8&q=%s"
         },
         {
-            "name": "alc.co.jp",
-            "url": "http://eow.alc.co.jp/sp/search.html?q=%s"
+            "name": "Oxford dictionary",
+            "url": "http://www.oxforddictionaries.com/definition/english/%s"
+        },
+        {
+            "name": "Cambridge dictionary (British)",
+            "url": "http://dictionary.cambridge.org/dictionary/british/%s"
+        },
+        {
+            "name": "Cambridge dictionary (American)",
+            "url": "http://dictionary.cambridge.org/dictionary/american-english/%s"
         },
         {
             "name": "dictionary.reference.com",
             "url": "http://dictionary.reference.com/browse/%s"
+        },
+        {
+            "name": "alc.co.jp",
+            "url": "http://eow.alc.co.jp/sp/search.html?q=%s"
         }
     ]
 }

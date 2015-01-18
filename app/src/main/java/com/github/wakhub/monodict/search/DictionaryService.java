@@ -71,6 +71,7 @@ public final class DictionaryService extends Service implements SearchThread.Lis
 
     private Dictionaries dictionaries;
 
+    // TODO: Refactor by EventBus
     public interface Listener {
 
         void onDictionaryServiceInitialized();

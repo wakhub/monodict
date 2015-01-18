@@ -195,7 +195,7 @@ public class DownloadsActivity extends AbsListActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCancelable(false);
 
-        dlTask.execute(downloadsItem.getUrl());
+        dlTask.execute(downloadsItem.getUrl(), downloadsItem.getUrlMirror());
     }
 
     @Override
@@ -210,12 +210,31 @@ public class DownloadsActivity extends AbsListActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.show();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+                progressDialog.show();
+            }
         }
 
         @Override
         protected String doInBackground(String... params) {
-            return downloadDicfile(params[0], true);
+            String url = params[0];
+            String urlMirror = params[1];
+            try {
+                return downloadDicfile(url, true);
+            } catch (IOException e) {
+                Log.d(TAG, String.format("Failed to download %s", url));
+                if (!urlMirror.isEmpty()) {
+                    activityHelper.showToast(R.string.action_retry);
+                    try {
+                        return downloadDicfile(urlMirror, true);
+                    } catch (IOException e2) {
+                        Log.d(TAG, String.format("Failed to download %s", urlMirror));
+                        activityHelper.showToast(R.string.message_download_failed);
+                    }
+                }
+            }
+            return null;
         }
 
         @Override
@@ -251,65 +270,61 @@ public class DownloadsActivity extends AbsListActivity {
             return patharr[patharr.length - 1];
         }
 
-        private String downloadDicfile(String url, boolean zip) {
+        private String downloadDicfile(String url, boolean zip) throws IOException {
 
             String ret = null;
             Log.d(TAG, "downloadDicfile: " + url);
-            try {
-                // HTTP GET リクエスト
-                HttpUriRequest httpGet = new HttpGet(url);
-                HttpClient httpClient = null;
-                if (url.startsWith("https://")) {
-                    httpClient = httpsClient;
-                } else {
-                    httpClient = new DefaultHttpClient();
+            // HTTP GET リクエスト
+            HttpUriRequest httpGet = new HttpGet(url);
+            HttpClient httpClient = null;
+            if (url.startsWith("https://")) {
+                httpClient = httpsClient;
+            } else {
+                httpClient = new DefaultHttpClient();
+            }
+
+            HttpConnectionParams.setSoTimeout(httpClient.getParams(), 30000);
+            HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 10000);
+
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            int status = httpResponse.getStatusLine().getStatusCode();
+            Log.d(TAG, "HTTP status: " + status);
+            if (status != HttpStatus.SC_OK) {
+                return ret;
+            }
+            InputStream is = httpResponse.getEntity().getContent();
+            int length = (int) httpResponse.getEntity().getContentLength();
+            String filePath = sdCard.getPath() + "/" + appName + "/" + getName(url);
+            Log.d(TAG, "The file will be saved as " + filePath);
+            File f = new File(filePath);
+            f.getParentFile().mkdir();
+
+            FileOutputStream fos = new FileOutputStream(f);
+
+            byte[] buff = new byte[4096];
+            int len;
+            int offset = 0;
+            int lastOffset = 0;
+            for (; ; ) {
+                len = is.read(buff);
+                if (len == -1) break;
+                fos.write(buff, 0, len);
+                offset += len;
+
+                // update progress bar
+                if (offset - lastOffset > 1024 * 16) {
+                    publishProgress(offset, length);
+                    lastOffset = offset;
                 }
+            }
+            fos.close();
+            is.close();
 
-                HttpConnectionParams.setSoTimeout(httpClient.getParams(), 30000);
-                HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 30000);
-
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int status = httpResponse.getStatusLine().getStatusCode();
-                Log.d(TAG, "HTTP status: " + status);
-                if (status != HttpStatus.SC_OK) {
-                    return ret;
-                }
-                InputStream is = httpResponse.getEntity().getContent();
-                int length = (int) httpResponse.getEntity().getContentLength();
-                String filePath = sdCard.getPath() + "/" + appName + "/" + getName(url);
-                Log.d(TAG, "The file will be saved as " + filePath);
-                File f = new File(filePath);
-                f.getParentFile().mkdir();
-
-                FileOutputStream fos = new FileOutputStream(f);
-
-                byte[] buff = new byte[4096];
-                int len;
-                int offset = 0;
-                int lastOffset = 0;
-                for (; ; ) {
-                    len = is.read(buff);
-                    if (len == -1) break;
-                    fos.write(buff, 0, len);
-                    offset += len;
-
-                    // update progress bar
-                    if (offset - lastOffset > 1024 * 16) {
-                        publishProgress(offset, length);
-                        lastOffset = offset;
-                    }
-                }
-                fos.close();
-                is.close();
-
-                if (url.endsWith(".zip") || zip) {
-                    ret = extractZip(f);
-                    f.delete();
-                } else {
-                    ret = f.getPath();
-                }
-            } catch (IOException e) {
-                Log.d(TAG, e.toString());
+            if (url.endsWith(".zip") || zip) {
+                ret = extractZip(f);
+                f.delete();
+            } else {
+                ret = f.getPath();
             }
 
             return ret;

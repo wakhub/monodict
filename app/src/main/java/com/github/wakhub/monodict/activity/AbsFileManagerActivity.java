@@ -16,8 +16,11 @@
 
 package com.github.wakhub.monodict.activity;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -87,7 +90,7 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
 
         setResult(RESULT_CANCELED);
 
-        listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        listAdapter = new ListAdapter(this);
         setListAdapter(listAdapter);
 
         loadContents();
@@ -209,5 +212,22 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static final class ListAdapter extends ArrayAdapter<String> {
+        public ListAdapter(Context context) {
+            super(context, R.layout.list_item_path, android.R.id.text1);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = super.getView(position, convertView, parent);
+            String path = getItem(position);
+
+            view.findViewById(R.id.icon_image).setVisibility(path.endsWith("/") ? View.VISIBLE : View.GONE);
+            ((TextView)view.findViewById(android.R.id.text1)).setText(path);
+
+            return view;
+        }
     }
 }

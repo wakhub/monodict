@@ -171,7 +171,6 @@ public class Card extends Model {
     public static void initData(Dao<Card, Long> dao) throws SQLException {
         List<Card> cardData = Arrays.asList(
                 new Card("ห้องน้ำ อยู่ที่ไหน ครับ/คะ", "Where is a toilet?", null),
-                new Card("洗手间在哪里?", "Where is a toilet?", null),
                 new Card("トイレはどこですか?", "Where is a toilet?", null),
                 new Card("화장실이어디예요", "Where is a toilet?", null),
                 new Card("Où sont les toilettes?", "Where is a toilet?", null),

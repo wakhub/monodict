@@ -94,7 +94,6 @@ import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -245,11 +244,11 @@ public class FlashcardActivity extends ActionBarActivity implements
 
     @Override
     public void onPageSelected(int position) {
+        Log.d(TAG, "onPageSelected: " + position);
         stopAutoPlay();
         int box = position + 1;
         state.setBox(box);
         reloadCursor(box, state.getOrder());
-        // TODO: scroll to top
     }
 
     @Override
@@ -269,7 +268,8 @@ public class FlashcardActivity extends ActionBarActivity implements
         reloadCursor(box, order);
     }
 
-    void reloadCursor(int box, int order) {
+    private void reloadCursor(int box, int order) {
+        Log.d(TAG, String.format("reloadCursor %d %d", box, order));
         try {
             if (order == FlashcardActivityState.ORDER_SHUFFLE) {
                 optCursor = Optional.of(databaseHelper.findCardInBoxRandomly(box, state.getRandomSeed()));
@@ -288,6 +288,11 @@ public class FlashcardActivity extends ActionBarActivity implements
                 cardList.add(new Card(cursor));
             }
         }
+        onReloadCursor(box, cardList);
+    }
+
+    @UiThread
+    void onReloadCursor(int box, List<Card> cardList) {
         FlashcardActivityPagerFragment fragment = ((ViewPagerAdapter) pager.getAdapter()).getFragment(box - 1);
         fragment.setDataSet(cardList);
         fragment.notifyDataSetChanged();
@@ -489,9 +494,6 @@ public class FlashcardActivity extends ActionBarActivity implements
                 break;
             case WAIT_FOR_TRANSLATE:
                 autoPlayProgress = AutoPlayProgress.TRANSLATE;
-                String languageForTranslate = preferences.ttsLanguageForTranslate().get();
-                Locale localeForTranslate = new Locale(languageForTranslate.substring(0, 2));
-
                 activityHelper.sleep(500);
                 try {
                     card = new Card(cursor);
@@ -500,8 +502,7 @@ public class FlashcardActivity extends ActionBarActivity implements
                     return false;
                 }
                 speechHelper.speech(
-                        card.getTranslate().substring(0, Math.min(card.getTranslate().length(), 100)),
-                        localeForTranslate, null);
+                        card.getTranslate().substring(0, Math.min(card.getTranslate().length(), 100)), null);
                 break;
             case WAIT_FOR_NEXT:
                 cursor.moveToNext();
@@ -525,6 +526,7 @@ public class FlashcardActivity extends ActionBarActivity implements
         wakeLock.acquire();
 
         autoPlayProgress = AutoPlayProgress.START;
+        reloadCursor();
 
         while (autoPlayLoop()) {
             activityHelper.sleep(500);

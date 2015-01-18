@@ -19,17 +19,17 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clipboardSearch"
-            android:title="@string/title_settings_clipboard_search" />
+            android:title="@string/title_settings_clipboard_search"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="fastScroll"
-            android:title="@string/title_settings_fast_scroll" />
+            android:title="@string/title_settings_fast_scroll"/>
         <ListPreference
             android:dialogTitle="@string/title_settings_orientation"
             android:entries="@array/orientations"
             android:entryValues="@array/orientation_values"
             android:key="orientation"
-            android:title="@string/title_settings_orientation" />
+            android:title="@string/title_settings_orientation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_tts">
         <ListPreference
@@ -38,27 +38,20 @@
             android:entries="@array/tts_locales"
             android:entryValues="@array/tts_locales"
             android:key="ttsDefaultLocale"
-            android:title="@string/title_settings_tts_default_language" />
-        <ListPreference
-            android:defaultValue="Japanese"
-            android:dialogTitle="@string/title_settings_tts_language_for_translation"
-            android:entries="@array/tts_locales"
-            android:entryValues="@array/tts_locales"
-            android:key="ttsLanguageForTranslate"
-            android:title="@string/title_settings_tts_language_for_translation" />
+            android:title="@string/title_settings_tts_default_language"/>
         <Preference
             android:summary="@string/message_settings_open_tts_settings"
             android:title="@string/title_settings_open_tts_settings">
-            <intent android:action="com.android.settings.TTS_SETTINGS" />
+            <intent android:action="com.android.settings.TTS_SETTINGS"/>
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_app_information">
         <Preference
             android:icon="@drawable/icon"
             android:key="about"
-            android:title="@string/title_settings_about" />
+            android:title="@string/title_settings_about"/>
         <Preference
             android:key="legal"
-            android:title="@string/title_settings_legal" />
+            android:title="@string/title_settings_legal"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -186,7 +186,8 @@ public class MainActivity extends ActionBarActivity implements
         rootLayout.setListener(this);
 
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, rootLayout, toolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle drawerToggle =
+                new ActionBarDrawerToggle(this, rootLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerToggle.setDrawerIndicatorEnabled(true);
         rootLayout.setDrawerListener(drawerToggle);
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
@@ -418,7 +419,6 @@ public class MainActivity extends ActionBarActivity implements
         speechHelper.finish();
 
         queryInitialized = false;
-//        unbindService(dictionaryServiceConnection);
 
         String action = getIntent().getAction();
         if (Intent.ACTION_SEND.equals(action)) {
@@ -610,32 +610,42 @@ public class MainActivity extends ActionBarActivity implements
     @UiThread
     public void onDictionaryServiceInitialized() {
         activityHelper.hideProgressDialog();
+        boolean isNoDictionaries = dictionaries.getDictionaryCount() == 0;
         int lastVersionCode = preferences.lastVersionCode().getOr(0);
         int currentVersionCode = MonodictApp.getPackageInfo(this).versionCode;
-        if (currentVersionCode > lastVersionCode) {
+        boolean isVersionUp = currentVersionCode > lastVersionCode;
+
+
+        if (isNoDictionaries) {
+            rootLayout.openDrawer(drawerList);
+        }
+
+        if (isVersionUp) {
             preferences.lastVersionCode().put(currentVersionCode);
             removeDirectory(getCacheDir());
 
-            new MaterialDialog.Builder(this)
-                    .title(R.string.title_welcome)
-                    .content(activityHelper.getStringFromRaw(R.raw.welcome))
-                    .positiveText(R.string.action_download_now)
-                    .callback(new MaterialDialog.SimpleCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog materialDialog) {
-                            materialDialog.dismiss();
-                            DownloadsActivity_.intent(MainActivity.this)
-                                    .startForResult(REQUEST_CODE_DOWNLOAD_DICTIONARY);
-                        }
-                    })
-                    .negativeText(android.R.string.cancel)
-                    .cancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
+            if (isNoDictionaries) {
+                new MaterialDialog.Builder(this)
+                        .title(R.string.title_welcome)
+                        .content(activityHelper.getStringFromRaw(R.raw.welcome))
+                        .positiveText(R.string.action_download_now)
+                        .callback(new MaterialDialog.SimpleCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog materialDialog) {
+                                materialDialog.dismiss();
+                                DownloadsActivity_.intent(MainActivity.this)
+                                        .startForResult(REQUEST_CODE_DOWNLOAD_DICTIONARY);
+                            }
+                        })
+                        .negativeText(android.R.string.cancel)
+                        .cancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
         }
         initQuery();
     }

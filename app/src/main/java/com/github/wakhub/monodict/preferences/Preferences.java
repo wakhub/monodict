@@ -50,12 +50,6 @@ public interface Preferences {
     @DefaultString("English")
     String ttsDefaultLocale();
 
-    @DefaultString("Japanese")
-    String ttsLanguageForTranslate();
-
-    @DefaultString("")
-    String ttsDefaultEngine();
-
     /**
      * @see com.github.wakhub.monodict.preferences.Dictionaries
      */

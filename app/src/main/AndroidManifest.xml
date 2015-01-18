@@ -66,11 +66,7 @@
         <activity
             android:name=".activity.BrowserActivity_"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_browser"/>
-        <activity
-            android:name=".activity.BrowserBookmarksActivity_"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_browser_bookmarks">
+            android:label="@string/title_activity_browser">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -88,6 +84,10 @@
                 <data android:scheme="https"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.BrowserBookmarksActivity_"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_browser_bookmarks"/>
         <activity
             android:name=".activity.FileSelectorActivity_"
             android:configChanges="orientation|screenSize"

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.utils.DateTimeUtils;
+import com.github.wakhub.monodict.utils.EasyLocaleDetector;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
@@ -71,10 +72,16 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
 
     private String suspendedText = null;
 
+    private boolean autoLanguageDetection = false;
+
     public void init() {
         Intent intent = new Intent();
         intent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         activity.startActivityForResult(intent, REQUEST_CODE_TTS);
+    }
+
+    public void setAutoLanguageDetection(boolean autoLanguageDetection) {
+        this.autoLanguageDetection = autoLanguageDetection;
     }
 
     @UiThread
@@ -164,13 +171,15 @@ public class SpeechHelper implements TextToSpeech.OnInitListener {
     }
 
     public void speech(String text, HashMap<String, String> params) {
-        String localeText = preferences.ttsDefaultLocale().get().substring(0, 2).toLowerCase();
-        Locale defaultLocale = new Locale(localeText);
-        if (defaultLocale == null) {
-            defaultLocale = Locale.ENGLISH;
+        String defaultLocaleText = preferences.ttsDefaultLocale().get().substring(0, 2).toLowerCase();
+        Locale defaultLocale = new Locale(defaultLocaleText);
+
+        Locale locale = EasyLocaleDetector.detectLocale(text);
+        if (locale.equals(Locale.ENGLISH)) {
+            locale = defaultLocale;
         }
-        Log.d(TAG, "Default locale selected: " + defaultLocale.getDisplayName());
-        speech(text, defaultLocale, params);
+        Log.d(TAG, "Locale selected: " + locale.getDisplayName());
+        speech(text, locale, params);
     }
 
     @Background

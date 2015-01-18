@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-<string name="action_add_local_pdic">Add local file</string>
+<string name="action_add_local_pdic">Add file</string>
 <string name="action_add_new_card">Add new card</string>
 <string name="action_add_to_bookmarks">Add to Bookmarks</string>
 <string name="action_add_to_flashcard">Add to Flashcard</string>
@@ -25,9 +25,9 @@
 <string name="action_move_into_inbox">Move the card into inbox</string>
 <string name="action_open_local_file">Open local file</string>
 <string name="action_order_alphabetically">Order Alphabetically</string>
-<string name="action_order_alphabetically_short" translatable="false">A-Z</string>
 <string name="action_refresh">Refresh</string>
 <string name="action_rename">Rename</string>
+<string name="action_retry">Retry</string>
 <string name="action_search">Search</string>
 <string name="action_search_by">Search by</string>
 <string name="action_select_local_font">Select local font</string>
@@ -38,7 +38,7 @@
 <string name="action_up">Up</string>
 <string name="app_name" translatable="false">monodict</string>
 <string name="blank_text" translatable="false">---</string>
-<string name="lorem_jp_mix">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 色はにほへど散りぬるを我が世たれぞ常ならむ</string>
+<string name="lorem_jp_mix" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 色はにほへど散りぬるを我が世たれぞ常ならむ</string>
 <string name="message_confirm_delete">Are you sure you want to delete?</string>
 <string name="message_copy_succeeded">Copy succeeded</string>
 <string name="message_creating_index">Now creating index…</string>
@@ -61,7 +61,7 @@
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>
 <string name="message_url_placeholder">keyword or URL</string>
-<string name="message_validation_file_ext">The file extension has to be %s</string>
+<string name="message_validation_file_ext">The file extension has to be: %s</string>
 <string name="message_validation_max_100">Enter at least 100 characters</string>
 <string name="message_validation_max_5000">Enter at least 5000 characters</string>
 <string name="message_validation_required">Required</string>
@@ -90,7 +90,6 @@
 <string name="title_settings_about">About</string>
 <string name="title_settings_app_information">Application Information</string>
 <string name="title_settings_clipboard_search">Clipboard Search</string>
-<string name="title_settings_dictionary_manager">@string/title_activity_dictionary_manager</string>
 <string name="title_settings_fast_scroll">Fast Scroll</string>
 <string name="title_settings_legal">Legal Notices</string>
 <string name="title_settings_open_tts_settings">Open Text-to-Speech settings</string>
@@ -106,5 +105,5 @@
 <string name="title_system_default">System Default</string>
 <string name="title_translation_text_font">Translation text font</string>
 <string name="title_welcome">Welcome to monodict!</string>
-<string name="url_google_com_search">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%"</string>
+<string name="url_google_com_search" translatable="false">https://www.google.com/search?ie=UTF-8&amp;oe=UTF-8&amp;q=%s</string>
 </resources>

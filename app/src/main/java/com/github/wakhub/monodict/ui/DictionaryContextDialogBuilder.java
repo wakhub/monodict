@@ -38,8 +38,7 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
     private static final List<Integer> ITEM_IDS = Arrays.asList(
             R.string.action_more_detail,
             R.string.action_up,
-            R.string.action_down,
-            android.R.string.cancel);
+            R.string.action_down);
 
     private OnContextActionListener contextActionListener;
 

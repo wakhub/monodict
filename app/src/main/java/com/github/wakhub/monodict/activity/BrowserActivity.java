@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -163,13 +164,24 @@ public class BrowserActivity extends ActionBarActivity implements
 
         translatePanelFragment.setListener(this);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null && action.equals(Intent.ACTION_VIEW)) {
+                Uri url = intent.getData();
+                if (url != null) {
+                    loadUrl(url.toString());
+                    return;
+                }
+            }
+        }
+
         if (extraUrlOrKeywords.isEmpty()) {
             loadUrl(state.getLastUrl());
         } else {
             loadUrl(extraUrlOrKeywords);
         }
     }
-
 
     private Snackbar createSnackbar() {
         return Snackbar.with(getApplicationContext())

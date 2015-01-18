@@ -45,7 +45,7 @@ public class MonodictApp extends Application {
 
     @AfterInject
     void afterInject() {
-//        setLocale(Locale.JAPANESE);
+        setLocale(Locale.JAPANESE);
     }
 
     public static final PackageInfo getPackageInfo(Context context) {

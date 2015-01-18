@@ -179,7 +179,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
                 if (position == 0 || position <= gridSpanCount - 1) {
                     outRect.top = marginVertical;
                 }
-                if (position >= itemCount - gridSpanCount) {
+                if (itemCount - position <= 1) {
                     outRect.bottom = res.getDimensionPixelSize(R.dimen.space_for_floating_buttons) + dividerVertical;
                 }
             }
