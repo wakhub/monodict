@@ -51,7 +51,8 @@
     public static int d(...);
 }
 
--keepattributes Signature,*Annotation*
+-keepattributes Signature
+-keepattributes *Annotation*
 
 # http://stackoverflow.com/questions/18481752/gradle-failed-to-build-when-proguard-is-activated
 -dontwarn javax.**
@@ -75,4 +76,4 @@
 
 -keep class com.github.wakhub.monodict.dice.Natives { *; }
 -keep class com.github.wakhub.monodict.json.** { *; }
-
+-keepclassmembers class * extends com.github.wakhub.monodict.Model { *; }
