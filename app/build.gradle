@@ -1,23 +1,8 @@
 // https://github.com/excilys/androidannotations/wiki/Building-Project-Gradle
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        // http://stackoverflow.com/questions/24088275/android-studio-after-updating-to-build-tools-19-1-0
-        classpath 'com.android.tools.build:gradle:0.12.2'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-    }
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'com.droidtitan.lintcleaner'
 
 
 dependencies {
@@ -36,12 +21,13 @@ dependencies {
 
 apt {
     arguments {
-        androidManifestFile variant.processResources.manifestFile
+        androidManifestFile variant.outputs[0].processResources.manifestFile
         resourcePackageName 'com.github.wakhub.monodict'
     }
 }
 
 android {
+
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
 
@@ -50,9 +36,11 @@ android {
         targetSdkVersion 19
         versionCode 13
         versionName '2.0.0'
-
-        ndk {
-            moduleName 'monodict'
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'src/main/libs'
+            jni.srcDirs = [] // disable automatic ndk-build
         }
     }
 
@@ -64,8 +52,7 @@ android {
     buildTypes {
         release {
             debuggable false
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled false
             signingConfig signingConfigs.release
         }
     }
@@ -79,8 +66,8 @@ android {
     }
 
     lintOptions {
-//        checkReleaseBuilds false
-//        abortOnError false
+        checkReleaseBuilds false
+        abortOnError false
     }
 }
 
