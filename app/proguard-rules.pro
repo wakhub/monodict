@@ -76,4 +76,9 @@
 
 -keep class com.github.wakhub.monodict.dice.Natives { *; }
 -keep class com.github.wakhub.monodict.json.** { *; }
--keepclassmembers class * extends com.github.wakhub.monodict.Model { *; }
+-keep class com.github.wakhub.monodict.db.Card { *; }
+-keepclassmembernames class com.github.wakhub.monodict.db.Card { *; }
+-keepclassmembers class com.github.wakhub.monodict.db.Card { *; }
+-keep class com.github.wakhub.monodict.db.Bookmark { *; }
+-keepclassmembernames class com.github.wakhub.monodict.db.Bookmark { *; }
+-keepclassmembers class com.github.wakhub.monodict.db.Bookmark { *; }
