@@ -59,14 +59,17 @@ Design Guideline
 =================
 
 - **Basis**
+
   - Follow Material Design.
   - Don't follow Material Design if the design was difficult to implement
     with supported API or the design was not important for the functionality.
 
 - Graphic Design
+
   - Use sans-serif fonts as app's typography because Android doesn't support
     serif-like Japanese font (Mincho) as default fonts normally.
   - Only use gray scale for theming.
+
     - No need to worry about the difference of colors between multiple displays.
     - Decrease battery usage.
 
@@ -75,6 +78,7 @@ Design Guideline
   - Follow native shadow style and shade style.
 
 - Navigation
+
   - Place primary actions at bottom of Activity.
     FloatingActionButton and Toolbar at bottom are useful for this case.
   - Place secondary actions at top of Activity.
