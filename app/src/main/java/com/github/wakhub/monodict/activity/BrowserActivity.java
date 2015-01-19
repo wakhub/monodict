@@ -30,7 +30,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -38,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.wakhub.monodict.MonodictApp;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
@@ -84,7 +84,8 @@ public class BrowserActivity extends ActionBarActivity implements
         DictionaryService.Listener,
         TranslatePanelFragment.Listener,
         TextView.OnEditorActionListener,
-        BrowserActivityWebView.ActionModeListener {
+        BrowserActivityWebView.ActionModeListener,
+        BrowserActivityJavaScriptInterface.Listener {
 
     private static final String TAG = BrowserActivity.class.getSimpleName();
 
@@ -154,13 +155,15 @@ public class BrowserActivity extends ActionBarActivity implements
         urlText.setSelectAllOnFocus(true);
         urlText.setOnEditorActionListener(this);
 
-        webView.setWebViewClient(new BrowserWebViewClient(this));
-        webView.addJavascriptInterface(new BrowserJavaScriptInterface(this), BrowserJavaScriptInterface.NAME);
-        webView.setActionModeListener(this);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName(ENCODING);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.addJavascriptInterface(
+                new BrowserActivityJavaScriptInterface(this),
+                BrowserActivityJavaScriptInterface.NAME);
+        webView.setWebViewClient(new BrowserWebViewClient(this));
+        webView.setActionModeListener(this);
 
         translatePanelFragment.setListener(this);
 
@@ -290,9 +293,13 @@ public class BrowserActivity extends ActionBarActivity implements
         if (descriptionCharSequence != null) {
             description = descriptionCharSequence.toString();
         }
+        String url = webView.getUrl();
+        if (url == null || url.isEmpty()) {
+            return;
+        }
 
         try {
-            bookmark = databaseHelper.createBookmark(webView.getUrl(), title, description);
+            bookmark = databaseHelper.createBookmark(url, title, description);
         } catch (SQLException e) {
             activityHelper.showError(e);
             return;
@@ -317,21 +324,13 @@ public class BrowserActivity extends ActionBarActivity implements
     }
 
     private void startGettingSelectionInBrowser(String callback) {
+        Log.d(TAG, "startGettingSelectionInBrowser: " + callback);
         String script = String.format(
-                "%s.onBrowserJavaScriptGetSelection(\"%s\", document.getSelection().toString());",
-                BrowserJavaScriptInterface.NAME,
+                "%s.%s(\"%s\", document.getSelection().toString());",
+                BrowserActivityJavaScriptInterface.NAME,
+                BrowserActivityJavaScriptInterface.ON_GET_SELECTION_METHOD,
                 callback);
         webView.loadUrl("javascript:" + script);
-    }
-
-    private void onJavaScriptGetSelection(String callback, String selection) {
-        Log.d(TAG, "onJavaScriptGetSelection");
-        if (callback.equals(JAVASCRIPT_CALLBACK_SEARCH)) {
-            search(selection);
-        }
-        if (callback.equals(JAVASCRIPT_CALLBACK_SPEECH)) {
-            speechHelper.speech(selection);
-        }
     }
 
     @Background
@@ -342,6 +341,8 @@ public class BrowserActivity extends ActionBarActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
+        MonodictApp.getEventBus().register(this);
 
         if (dictionaryServiceConnection == null) {
             dictionaryServiceConnection = new DictionaryServiceConnection();
@@ -357,6 +358,9 @@ public class BrowserActivity extends ActionBarActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+
+        MonodictApp.getEventBus().unregister(this);
+
         unbindService(dictionaryServiceConnection);
     }
 
@@ -364,7 +368,7 @@ public class BrowserActivity extends ActionBarActivity implements
     protected void onDestroy() {
         speechHelper.finish();
         webView.setWebViewClient(null);
-        webView.removeJavascriptInterface(BrowserJavaScriptInterface.NAME);
+        webView.removeJavascriptInterface(BrowserActivityJavaScriptInterface.NAME);
         webView.stopLoading();
         webView.destroy();
         translatePanelFragment.setListener(null);
@@ -528,6 +532,17 @@ public class BrowserActivity extends ActionBarActivity implements
         return actionMode;
     }
 
+    @Override
+    public void onJavaScriptInterfaceGetSelection(String callback, String selection) {
+        Log.d(TAG, String.format("onJavaScriptInterfaceGetSelection: %s %s", callback, selection));
+        if (callback.equals(JAVASCRIPT_CALLBACK_SEARCH)) {
+            search(selection);
+        }
+        if (callback.equals(JAVASCRIPT_CALLBACK_SPEECH)) {
+            speechHelper.speech(selection);
+        }
+    }
+
     private static final class BrowserWebViewClient extends WebViewClient {
 
         private final WeakReference<BrowserActivity> activityRef;
@@ -563,24 +578,6 @@ public class BrowserActivity extends ActionBarActivity implements
                 activity.reloadViews();
             }
             super.onPageFinished(view, url);
-        }
-    }
-
-    private static final class BrowserJavaScriptInterface {
-
-        private static final String NAME = "__com_github_wakhub_monodict";
-
-        private final WeakReference<BrowserActivity> activityRef;
-
-        private BrowserJavaScriptInterface(BrowserActivity activity) {
-            this.activityRef = new WeakReference<>(activity);
-        }
-
-        @JavascriptInterface
-        public void onBrowserJavaScriptGetSelection(String callback, String selection) {
-            if (this.activityRef.get() != null) {
-                this.activityRef.get().onJavaScriptGetSelection(callback, selection);
-            }
         }
     }
 }

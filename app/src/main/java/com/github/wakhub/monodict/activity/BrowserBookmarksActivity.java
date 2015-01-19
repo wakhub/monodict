@@ -17,6 +17,7 @@
 package com.github.wakhub.monodict.activity;
 
 import android.content.Intent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -96,6 +97,14 @@ public class BrowserBookmarksActivity extends AbsListActivity {
             return;
         }
         onLoadBookmarks(bookmarks);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (commonActivityTrait.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @UiThread

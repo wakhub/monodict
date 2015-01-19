@@ -77,6 +77,7 @@
 -keep class com.github.wakhub.monodict.dice.Natives { *; }
 -keep class com.github.wakhub.monodict.json.** { *; }
 -keep class com.github.wakhub.monodict.preferences.** { *; }
+-keep class com.github.wakhub.monodict.activity.BrowserActivityJavaScriptInterface { *; }
 
 -keep class com.github.wakhub.monodict.db.Card { *; }
 -keepclassmembernames class com.github.wakhub.monodict.db.Card { *; }
