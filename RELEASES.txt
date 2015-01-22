@@ -1,15 +1,22 @@
-Version 3.0.3
+Version 3.1.0
 
-* Bugfix: ActionMode doesn't appear on Browser
-* Bugfix: Home button doesn't akt as back button.
++ Add "Focus and Clear" setting
++ Show input method selector when you long click search button
+* Small update of logo mark
+* Bugfix: ActionMode doesn't appear on Browser (only production app)
+* Bugfix: Back icon on ActionBar doesn't work
+* Bugfix: "Reijiro-xxx.dic" become "Eijiro" when you added it
+
 
 Version 3.0.2
 
 * Bugfix: Can't keep preferences when upgrade
 
+
 Version 3.0.1
 
 * Bugfix: Can't use flashcards on production app
+
 
 Version 3.0.0
 

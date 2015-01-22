@@ -319,7 +319,7 @@ def _sort_string_xml(xml_path):
 
 
 def _cleanup_inkscape_svg(svg_path):
-    print('Cleaning inkscape svg...')
+    print('Cleaning inkscape svg: {}'.format(svg_path))
     ns_dict = {'osb': 'http://www.openswatchbook.org/uri/2009/osb',
                'dc': 'http://purl.org/dc/elements/1.1/',
                'cc': 'http://creativecommons.org/ns#',

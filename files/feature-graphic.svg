@@ -82,8 +82,63 @@
       <svg:feOffset dx="3" dy="3" id="feOffset3717" result="offset" />
       <svg:feComposite id="feComposite3719" in="SourceGraphic" in2="offset" operator="over" result="composite2" />
     </svg:filter>
+    <svg:linearGradient gradientUnits="userSpaceOnUse" id="linearGradient3920" x1="260" x2="139.66467" y1="270" y2="270.79745" inkscape:collect="always" xlink:href="#linearGradient3809" />
+    <svg:mask id="mask3877" maskUnits="userSpaceOnUse">
+      <svg:path d="m 193.84471,-5.4710125 c -2.77645,2.7769922 -2.83094,7.7751058 -0.11439,10.492206 L 354.28374,165.57462 c 2.71711,2.71655 7.71521,2.66206 10.49221,-0.11439 L 533.90706,-3.6708742 c 2.77644,-2.7769992 2.83094,-7.7751058 0.11439,-10.4922128 L 373.46802,-174.71651 c -2.7171,-2.71655 -7.71521,-2.66206 -10.4922,0.11439 z" id="path3879" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient3881);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="ccccccccc" inkscape:connector-curvature="0" />
+    </svg:mask>
+    <svg:linearGradient gradientTransform="matrix(0.70710678,-0.70710678,0.69185424,0.69185424,-380.12248,-380.12248)" gradientUnits="userSpaceOnUse" id="linearGradient3881" x1="205.74281" x2="278.6785" y1="710.40674" y2="879.93341" inkscape:collect="always" xlink:href="#linearGradient4020-5" />
+    <svg:linearGradient gradientUnits="userSpaceOnUse" id="linearGradient3867" x1="438.40622" x2="565.68542" y1="-28.284271" y2="-28.284271" inkscape:collect="always" xlink:href="#linearGradient3858" />
+    <svg:linearGradient gradientUnits="userSpaceOnUse" id="linearGradient3807" x1="120" x2="260" y1="254.67419" y2="254.67419" inkscape:collect="always" xlink:href="#linearGradient3797" />
+    <svg:mask id="mask3812-4" maskUnits="userSpaceOnUse">
+      <svg:path d="m 140.9375,133.20032 c -3.92688,3.8e-4 -7.49961,3.49605 -7.5,7.33822 l 0,227.05683 c 3.9e-4,3.84218 3.57312,7.33784 7.5,7.33823 l 239.1875,0 c 3.92688,-3.9e-4 7.49961,-3.49605 7.5,-7.33823 l 0,-227.05683 c -3.9e-4,-3.84217 -3.57312,-7.33784 -7.5,-7.33822 z" id="path3814-5" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient3816-6);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="ccccccccc" inkscape:connector-curvature="0" />
+    </svg:mask>
+    <svg:linearGradient gradientTransform="matrix(1,0,0,0.97842965,0,-537.57436)" gradientUnits="userSpaceOnUse" id="linearGradient3816-6" x1="205.74281" x2="278.6785" y1="710.40674" y2="879.93341" inkscape:collect="always" xlink:href="#linearGradient4020-5" />
+    <svg:mask id="mask4252-7" maskUnits="userSpaceOnUse">
+      <svg:path d="m 140.9375,133.20032 c -3.92688,3.9e-4 -7.49961,3.57312 -7.5,7.5 l 0,232.0625 c 3.9e-4,3.92688 3.57312,7.49961 7.5,7.5 l 239.1875,0 c 3.92688,-3.9e-4 7.49961,-3.57312 7.5,-7.5 l 0,-232.0625 c -3.9e-4,-3.92688 -3.57312,-7.49961 -7.5,-7.5 z" id="path4254-8" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4256-9);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="ccccccccc" inkscape:connector-curvature="0" />
+    </svg:mask>
+    <svg:linearGradient gradientTransform="translate(0,-552.36218)" gradientUnits="userSpaceOnUse" id="linearGradient4256-9" x1="205.74281" x2="278.6785" y1="710.40674" y2="879.93341" inkscape:collect="always" xlink:href="#linearGradient4020-5" />
+    <svg:filter id="filter4200-98" style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow">
+      <svg:feFlood flood-color="rgb(0,0,0)" flood-opacity="0.7" id="feFlood4202-7" result="flood" />
+      <svg:feComposite id="feComposite4204-7" in="flood" in2="SourceGraphic" operator="in" result="composite1" />
+      <svg:feGaussianBlur id="feGaussianBlur4206-0" in="composite" result="blur" stdDeviation="5" />
+      <svg:feOffset dx="1" dy="5" id="feOffset4208-2" result="offset" />
+      <svg:feComposite id="feComposite4210-7" in="SourceGraphic" in2="offset" operator="over" result="composite2" />
+    </svg:filter>
+    <svg:linearGradient gradientTransform="matrix(1,0,0,0.97842965,0,-537.57436)" gradientUnits="userSpaceOnUse" id="linearGradient4042-7" x1="205.74281" x2="278.6785" y1="710.40674" y2="879.93341" inkscape:collect="always" xlink:href="#linearGradient4020-5" />
+    <svg:clipPath clipPathUnits="userSpaceOnUse" id="clipPath3807-3">
+      <svg:path d="m -10,-26.53125 c -4.949957,-0.0011 -9.869867,2.036087 -13.370015,5.536235 -3.500148,3.500148 -5.537377,8.420058 -5.536235,13.370015 l 0,220 c 0.007,4.94475 2.047918,9.85624 5.547276,13.34982 3.499358,3.49357 8.414223,5.52633 13.358974,5.52518 l 220,0 c 4.94475,0.001 9.85962,-2.03161 13.35897,-5.52518 3.49936,-3.49358 5.54025,-8.40507 5.54728,-13.34982 l 0,-220 c 0.001,-4.949957 -2.03609,-9.869867 -5.53623,-13.370015 -3.50015,-3.500148 -8.42006,-5.537377 -13.37002,-5.536235 z" id="path3809-1" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;opacity:0.5;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:37.79999924;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="csccsccsccscc" inkscape:connector-curvature="0" />
+    </svg:clipPath>
+    <svg:linearGradient id="linearGradient4020-5">
+      <svg:stop id="stop4022-15" offset="0" style="stop-color:#969696;stop-opacity:1;" />
+      <svg:stop id="stop4024-1" offset="1" style="stop-color:#828282;stop-opacity:1;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3797">
+      <svg:stop id="stop3801" offset="0" style="stop-color:#ffffff;stop-opacity:0.11764706;" />
+      <svg:stop id="stop3852" offset="1" style="stop-color:#ffffff;stop-opacity:0;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3809">
+      <svg:stop id="stop3811" offset="0" style="stop-color:#000000;stop-opacity:0.07843138;" />
+      <svg:stop id="stop3813" offset="1" style="stop-color:#000000;stop-opacity:0;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3819">
+      <svg:stop id="stop3821" offset="0" style="stop-color:#000000;stop-opacity:0.39215687;" />
+      <svg:stop id="stop3823" offset="1" style="stop-color:#000000;stop-opacity:0;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3858">
+      <svg:stop id="stop3860" offset="0" style="stop-color:#000000;stop-opacity:0.19607843;" />
+      <svg:stop id="stop3862" offset="1" style="stop-color:#000000;stop-opacity:0.07843138;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3894">
+      <svg:stop id="stop3896" offset="0" style="stop-color:#000000;stop-opacity:0;" />
+      <svg:stop id="stop3902" offset="0.5" style="stop-color:#000000;stop-opacity:0.11764706;" />
+      <svg:stop id="stop3898" offset="1" style="stop-color:#000000;stop-opacity:0;" />
+    </svg:linearGradient>
+    <svg:linearGradient id="linearGradient3832">
+      <svg:stop id="stop3834" offset="0" style="stop-color:#000000;stop-opacity:0.08627451;" />
+      <svg:stop id="stop3836" offset="1" style="stop-color:#000000;stop-opacity:0;" />
+    </svg:linearGradient>
   </svg:defs>
-  <sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" pagecolor="#ffffff" showgrid="true" showguides="false" inkscape:current-layer="layer6" inkscape:cx="505.6413" inkscape:cy="192.6487" inkscape:document-units="px" inkscape:guide-bbox="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:snap-grids="false" inkscape:snap-page="false" inkscape:snap-to-guides="false" inkscape:window-height="801" inkscape:window-maximized="0" inkscape:window-width="1258" inkscape:window-x="71" inkscape:window-y="4" inkscape:zoom="0.76508705">
+  <sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" pagecolor="#ffffff" showgrid="true" showguides="false" inkscape:current-layer="layer2" inkscape:cx="503.02722" inkscape:cy="192.6487" inkscape:document-units="px" inkscape:guide-bbox="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:snap-grids="false" inkscape:snap-page="false" inkscape:snap-to-guides="false" inkscape:window-height="801" inkscape:window-maximized="0" inkscape:window-width="1258" inkscape:window-x="71" inkscape:window-y="4" inkscape:zoom="0.76508705">
     <inkscape:grid empspacing="5" enabled="true" id="grid2985" snapvisiblegridlinesonly="true" type="xygrid" visible="true" />
   </sodipodi:namedview>
   <svg:metadata id="metadata7">
@@ -95,48 +150,55 @@
       </cc:Work>
     </rdf:RDF>
   </svg:metadata>
-  <svg:g id="layer2" inkscape:groupmode="layer" inkscape:label="logo">
-    <svg:g id="g3482" style="enable-background:new;filter:url(#filter3607)" transform="matrix(1.1196048,0,0,1.1196048,-15.240009,-34.512807)">
-      <svg:g id="layer12" style="display:none" inkscape:label="guide">
-        <svg:rect height="313.05713" id="rect4264" style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none" width="313.05713" x="102.51086" y="100.11503" inkscape:export-filename="" inkscape:export-xdpi="147.19" inkscape:export-ydpi="147.19" />
+  <svg:g id="layer2" style="display:inline" inkscape:groupmode="layer" inkscape:label="logo">
+    <svg:g id="g3423" style="enable-background:new" transform="matrix(1.1457559,0,0,1.1457559,-18.363176,-42.103138)">
+      <svg:g id="layer12-0" style="display:none" inkscape:label="guide">
+        <svg:rect height="313.05713" id="rect4264-8" style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none" width="313.05713" x="102.51086" y="100.11503" inkscape:export-filename="" inkscape:export-xdpi="147.19" inkscape:export-ydpi="147.19" />
       </svg:g>
-      <svg:g id="layer7" style="display:inline" inkscape:label="back">
-        <svg:path d="m 140.9375,133.20032 c -3.92688,3.8e-4 -7.49961,3.49605 -7.5,7.33822 l 0,227.05683 c 3.9e-4,3.84218 3.57312,7.33784 7.5,7.33823 l 239.1875,0 c 3.92688,-3.9e-4 7.49961,-3.49605 7.5,-7.33823 l 0,-227.05683 c -3.9e-4,-3.84217 -3.57312,-7.33784 -7.5,-7.33822 z" id="rect3239" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4042);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="ccccccccc" inkscape:connector-curvature="0" />
+      <svg:g id="layer7-9" style="display:inline" inkscape:label="back">
+        <svg:path d="m 140.9375,133.20032 c -3.92688,3.8e-4 -7.49961,3.49605 -7.5,7.33822 l 0,227.05683 c 3.9e-4,3.84218 3.57312,7.33784 7.5,7.33823 l 239.1875,0 c 3.92688,-3.9e-4 7.49961,-3.49605 7.5,-7.33823 l 0,-227.05683 c -3.9e-4,-3.84217 -3.57312,-7.33784 -7.5,-7.33822 z" id="rect3239-9" style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#linearGradient4042-7);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" sodipodi:nodetypes="ccccccccc" inkscape:connector-curvature="0" />
       </svg:g>
-      <svg:g id="layer9" style="display:inline" inkscape:label="pages shadow">
-        <svg:path d="m 362.78681,366.66629 c 0,1.52679 -47.50889,2.7645 -106.11408,2.7645 -58.60519,0 -106.11408,-1.23771 -106.11408,-2.7645 0,-1.52679 47.50889,-2.76449 106.11408,-2.76449 58.60519,0 106.11408,1.2377 106.11408,2.76449 z" id="path4212" style="fill:#000000;fill-opacity:0.20289857;fill-rule:evenodd;stroke:none" transform="translate(4.6783762,-6.1854423)" sodipodi:cx="256.67273" sodipodi:cy="366.66629" sodipodi:rx="106.11408" sodipodi:ry="2.7644951" sodipodi:type="arc" />
+      <svg:g id="g3906" style="display:inline" inkscape:label="back accent">
+        <svg:rect height="241.71893" id="rect3912" style="fill:#000000;fill-opacity:0.07843137;fill-rule:evenodd;stroke:none" width="39.999985" x="240" y="133.20699" />
       </svg:g>
-      <svg:g id="layer10" style="display:inline" inkscape:label="pages">
-        <svg:rect height="210.36238" id="rect3243" style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new" width="220" x="150" y="149.63762" />
+      <svg:g id="layer9-7" style="display:inline" inkscape:label="pages shadow">
+        <svg:path d="m 362.78681,366.66629 c 0,1.52679 -47.50889,2.7645 -106.11408,2.7645 -58.60519,0 -106.11408,-1.23771 -106.11408,-2.7645 0,-1.52679 47.50889,-2.76449 106.11408,-2.76449 58.60519,0 106.11408,1.2377 106.11408,2.76449 z" id="path4212-4" style="fill:#000000;fill-opacity:0.20289857;fill-rule:evenodd;stroke:none" transform="translate(4.6783762,-6.1854423)" sodipodi:cx="256.67273" sodipodi:cy="366.66629" sodipodi:rx="106.11408" sodipodi:ry="2.7644951" sodipodi:type="arc" />
       </svg:g>
-      <svg:g id="layer1" style="display:inline" inkscape:label="shade">
-        <svg:rect height="278.06613" id="rect3241" mask="url(#mask3812-5)" style="fill:#000000;fill-opacity:0.07843137;fill-rule:evenodd;stroke:none;display:inline;enable-background:new" width="140" x="120" y="115.64113" />
+      <svg:g id="layer10-5" style="display:inline" inkscape:label="pages">
+        <svg:path d="m 150,149.63762 109.92721,0 110.07279,0 L 370,360 150,360 z" id="rect3243-6" style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new" sodipodi:nodetypes="cccccc" inkscape:connector-curvature="0" />
       </svg:g>
-      <svg:g id="layer11" inkscape:label="texts">
-        <svg:path d="m 165,175 0,10 80,0 0,-10 z" id="path4217" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,200 0,10 80,0 0,-10 z" id="path4219" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,225 0,10 80,0 0,-10 z" id="path4221" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,250 0,10 80,0 0,-10 z" id="path4223" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,275 0,10 80,0 0,-10 z" id="path4227" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,300 0,10 80,0 0,-10 z" id="path4229" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,175 0,10 80,0 0,-10 z" id="path4231" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,200 0,10 80,0 0,-10 z" id="path4233" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,225 0,10 80,0 0,-10 z" id="path4235" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,250 0,10 80,0 0,-10 z" id="path4237" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,275 0,10 80,0 0,-10 z" id="path4239" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,300 0,10 80,0 0,-10 z" id="path4241" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 165,325 0,10 80,0 0,-10 z" id="path4243" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
-        <svg:path d="m 275,325 0,10 80,0 0,-10 z" id="path4245" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+      <svg:g id="layer11-4" style="display:inline" inkscape:label="texts">
+        <svg:path d="m 165,175 0,10 80,0 0,-10 z" id="path4217-8" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,200 0,10 80,0 0,-10 z" id="path4219-7" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,225 0,10 80,0 0,-10 z" id="path4221-5" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,250 0,10 80,0 0,-10 z" id="path4223-1" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,275 0,10 80,0 0,-10 z" id="path4227-7" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,300 0,10 80,0 0,-10 z" id="path4229-7" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,175 0,10 80,0 0,-10 z" id="path4231-1" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,200 0,10 80,0 0,-10 z" id="path4233-6" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,225 0,10 80,0 0,-10 z" id="path4235-9" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,250 0,10 80,0 0,-10 z" id="path4237-8" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,275 0,10 80,0 0,-10 z" id="path4239-0" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,300 0,10 80,0 0,-10 z" id="path4241-4" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 165,325 0,10 80,0 0,-10 z" id="path4243-7" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
+        <svg:path d="m 275,325 0,10 80,0 0,-10 z" id="path4245-4" style="fill:#cccccc;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" />
       </svg:g>
-      <svg:g id="layer4" style="display:inline" inkscape:label="lupe shadow">
-        <svg:path d="m 355.75623,308.94728 h -8.03295 l -2.84714,-2.74544 c 9.96495,-11.59187 15.96425,-26.64097 15.96425,-43.01196 0,-36.50423 -29.58978,-66.09402 -66.09402,-66.09402 -36.50423,0 -66.09402,29.58979 -66.09402,66.09402 0,36.50424 29.58979,66.09402 66.09402,66.09402 16.37099,0 31.42008,-5.9993 43.01195,-15.96425 l 2.74545,2.84714 v 8.03296 l 50.84155,50.73987 15.15079,-15.15079 -50.73988,-50.84155 z m -61.00986,0 c -25.31909,0 -45.7574,-20.4383 -45.7574,-45.7574 0,-25.31909 20.43831,-45.7574 45.7574,-45.7574 25.3191,0 45.7574,20.43831 45.7574,45.7574 0,25.3191 -20.4383,45.7574 -45.7574,45.7574 z" id="path4017" mask="url(#mask4252-11)" style="fill:#000000;fill-opacity:0.15686275;display:inline;enable-background:new" inkscape:connector-curvature="0" />
+      <svg:g id="layer1-8" style="display:inline" inkscape:label="shade">
+        <svg:rect height="210.35165" id="rect3904" style="fill:#000000;fill-opacity:0.15686275;fill-rule:evenodd;stroke:none" width="6.0000072" x="257" y="149.64836" />
       </svg:g>
-      <svg:g id="layer3" style="display:inline" transform="translate(0,-552.36218)" inkscape:label="loupe">
-        <svg:path d="m 352.02369,848.24555 h -8.03296 l -2.84714,-2.74545 c 9.96495,-11.59187 15.96425,-26.64096 15.96425,-43.01195 0,-36.50423 -29.58978,-66.09402 -66.09402,-66.09402 -36.50423,0 -66.09402,29.58979 -66.09402,66.09402 0,36.50424 29.58979,66.09402 66.09402,66.09402 16.37099,0 31.42009,-5.9993 43.01196,-15.96425 l 2.74544,2.84714 v 8.03295 l 50.84155,50.73988 15.15079,-15.15079 -50.73987,-50.84155 z m -61.00987,0 c -25.31909,0 -45.75739,-20.4383 -45.75739,-45.7574 0,-25.31909 20.4383,-45.7574 45.75739,-45.7574 25.3191,0 45.7574,20.43831 45.7574,45.7574 0,25.3191 -20.4383,45.7574 -45.7574,45.7574 z" id="path3223" style="fill:#333333;display:inline;enable-background:new" inkscape:connector-curvature="0" />
+      <svg:g id="layer2-4" style="display:inline" inkscape:label="loupe shadow">
+        <svg:path d="m 376.95248,-94.752304 275,0 0,130 -275,0 L 431.33514,0 l 3.53553,-53.033009 z" id="rect3854" mask="url(#mask3877)" style="fill:url(#linearGradient3867);fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;enable-background:new" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)" sodipodi:nodetypes="ccccccc" inkscape:connector-curvature="0" />
+      </svg:g>
+      <svg:g id="layer3-7" style="display:inline" transform="translate(0,-552.36218)" inkscape:label="loupe">
+        <svg:path d="m 310,220 c 0,30.37566 -24.62434,55 -55,55 -30.37566,0 -55,-24.62434 -55,-55 0,-30.37566 24.62434,-55 55,-55 30.37566,0 55,24.62434 55,55 z" id="path3922" style="fill:#ffffff;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" transform="translate(35,582.36218)" sodipodi:cx="255" sodipodi:cy="220" sodipodi:rx="55" sodipodi:ry="55" sodipodi:type="arc" />
+        <svg:path d="m 352.02369,848.24555 h -8.03296 l -2.84714,-2.74545 c 9.96495,-11.59187 15.96425,-26.64096 15.96425,-43.01195 0,-36.50423 -29.58978,-66.09402 -66.09402,-66.09402 -36.50423,0 -66.09402,29.58979 -66.09402,66.09402 0,36.50424 29.58979,66.09402 66.09402,66.09402 16.37099,0 31.42009,-5.9993 43.01196,-15.96425 l 2.74544,2.84714 v 8.03295 l 50.84155,50.73988 15.15079,-15.15079 -50.73987,-50.84155 z m -61.00987,0 c -25.31909,0 -45.75739,-20.4383 -45.75739,-45.7574 0,-25.31909 20.4383,-45.7574 45.75739,-45.7574 25.3191,0 45.7574,20.43831 45.7574,45.7574 0,25.3191 -20.4383,45.7574 -45.7574,45.7574 z" id="path3223-9" style="fill:#333333;display:inline;enable-background:new" inkscape:connector-curvature="0" />
       </svg:g>
     </svg:g>
   </svg:g>
-  <svg:g id="layer6" inkscape:groupmode="layer" inkscape:label="text">
-    <svg:text id="text3513" style="font-size:54.07714081000000306px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;enable-background:new;font-family:Sans;-inkscape-font-specification:Helvetica;filter:url(#filter3709)" x="695.04193" y="132.90109" sodipodi:linespacing="125%" xml:space="preserve"><svg:tspan id="tspan3523" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="132.90109" sodipodi:role="line">PDIC dictionary</svg:tspan><svg:tspan id="tspan3547" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="200.49751" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3553" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="268.09396" sodipodi:role="line">Text-to-Speech</svg:tspan><svg:tspan id="tspan3555" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="335.69037" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3557" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="403.2868" sodipodi:role="line">Flashcards</svg:tspan></svg:text>
+  <svg:g id="layer6" style="display:none" inkscape:groupmode="layer" inkscape:label="text">
+    <svg:text id="text3513" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3709);enable-background:new;font-family:Sans;-inkscape-font-specification:Helvetica" x="695.04193" y="132.90109" sodipodi:linespacing="125%" xml:space="preserve"><svg:tspan id="tspan3523" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="132.90109" sodipodi:role="line">PDIC dictionary</svg:tspan><svg:tspan id="tspan3547" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="200.49751" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3553" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="268.09393" sodipodi:role="line">Text-to-Speech</svg:tspan><svg:tspan id="tspan3555" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="335.69037" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3557" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Roboto;-inkscape-font-specification:Roboto" x="695.04193" y="403.2868" sodipodi:role="line">Flashcards</svg:tspan></svg:text>
+  </svg:g>
+  <svg:g id="g3084" style="display:inline" inkscape:groupmode="layer" inkscape:label="text-ja">
+    <svg:text id="text3086" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3709);enable-background:new;font-family:Sans;-inkscape-font-specification:Helvetica" x="695.04193" y="132.90109" sodipodi:linespacing="125%" xml:space="preserve"><svg:tspan id="tspan3096" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Hiragino Kaku Gothic StdN;-inkscape-font-specification:Hiragino Kaku Gothic StdN Ultra-Bold" x="695.04193" y="132.90109" sodipodi:role="line">PDIC 辞書</svg:tspan><svg:tspan id="tspan3112" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Hiragino Kaku Gothic StdN;-inkscape-font-specification:Hiragino Kaku Gothic StdN Ultra-Bold" x="695.04193" y="200.49751" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3114" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Hiragino Kaku Gothic StdN;-inkscape-font-specification:Hiragino Kaku Gothic StdN Ultra-Bold" x="695.04193" y="268.09393" sodipodi:role="line">テキスト読み上げ</svg:tspan><svg:tspan id="tspan3116" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Hiragino Kaku Gothic StdN;-inkscape-font-specification:Hiragino Kaku Gothic StdN Ultra-Bold" x="695.04193" y="335.69037" sodipodi:role="line">+</svg:tspan><svg:tspan id="tspan3118" style="font-size:54.07714081px;font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Hiragino Kaku Gothic StdN;-inkscape-font-specification:Hiragino Kaku Gothic StdN Ultra-Bold" x="695.04193" y="403.2868" sodipodi:role="line">単語帳</svg:tspan></svg:text>
   </svg:g>
 </svg:svg>

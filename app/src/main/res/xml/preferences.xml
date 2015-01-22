@@ -14,8 +14,20 @@
   ~ limitations under the License.
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <PreferenceCategory android:title="@string/title_settings_general">
+        <ListPreference
+            android:dialogTitle="@string/title_settings_orientation"
+            android:entries="@array/orientations"
+            android:entryValues="@array/orientation_values"
+            android:key="orientation"
+            android:title="@string/title_settings_orientation"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_search">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="focusAndClear"
+            android:summary="@string/message_settings_focus_and_clear"
+            android:title="@string/title_settings_focus_and_clear"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clipboardSearch"
@@ -24,12 +36,6 @@
             android:defaultValue="false"
             android:key="fastScroll"
             android:title="@string/title_settings_fast_scroll"/>
-        <ListPreference
-            android:dialogTitle="@string/title_settings_orientation"
-            android:entries="@array/orientations"
-            android:entryValues="@array/orientation_values"
-            android:key="orientation"
-            android:title="@string/title_settings_orientation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/title_settings_tts">
         <ListPreference

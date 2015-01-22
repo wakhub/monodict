@@ -37,15 +37,18 @@ public interface Preferences {
 
     // { Settings
 
+    // Configuration.ORIENTATION_xxx
+    @DefaultString("0")
+    String orientation();
+
+    @DefaultBoolean(false)
+    boolean focusAndClear();
+
     @DefaultBoolean(false)
     boolean clipboardSearch();
 
     @DefaultBoolean(false)
     boolean fastScroll();
-
-    // Configuration.ORIENTATION_xxx
-    @DefaultString("0")
-    String orientation();
 
     @DefaultString("English")
     String ttsDefaultLocale();

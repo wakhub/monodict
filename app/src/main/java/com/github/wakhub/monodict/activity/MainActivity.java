@@ -33,6 +33,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -72,6 +73,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.LongClick;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
@@ -135,6 +137,9 @@ public class MainActivity extends ActionBarActivity implements
 
     @SystemService
     SearchManager searchManager;
+
+    @SystemService
+    InputMethodManager inputMethogManager;
 
     @Bean
     ActivityHelper activityHelper;
@@ -295,13 +300,23 @@ public class MainActivity extends ActionBarActivity implements
 
     @Click(R.id.search_button)
     void onClickSearchButton() {
-        // TODO: To be enabled with config
-        //searchView.clear();
+        if (preferences.focusAndClear().get()) {
+            searchView.clear();
+        }
+        searchView.focus();
+    }
+
+    @LongClick(R.id.search_button)
+    void onLongClickSearchButton() {
+        if (preferences.focusAndClear().get()) {
+            searchView.clear();
+        }
+        inputMethogManager.showInputMethodPicker();
         searchView.focus();
     }
 
     @Click(R.id.more_button)
-    void onCilckMoreButton() {
+    void onClickMoreButton() {
         MaterialDialog.Builder builder = activityHelper.buildSearchEnginesDialog(searchView.getQuery());
         if (builder != null) {
             builder.show();

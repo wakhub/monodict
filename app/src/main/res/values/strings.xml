@@ -57,6 +57,7 @@
 <string name="message_loading_dictionaries">Now loading dictionaries…</string>
 <string name="message_modified">Modified</string>
 <string name="message_no_result">No result</string>
+<string name="message_settings_focus_and_clear">Clear search keyword when started input</string>
 <string name="message_settings_open_tts_settings">Open Text-to-Speech settings in Android Settings</string>
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>
@@ -91,6 +92,8 @@
 <string name="title_settings_app_information">Application Information</string>
 <string name="title_settings_clipboard_search">Clipboard Search</string>
 <string name="title_settings_fast_scroll">Fast Scroll</string>
+<string name="title_settings_focus_and_clear">Focus and Clear</string>
+<string name="title_settings_general">General</string>
 <string name="title_settings_legal">Legal Notices</string>
 <string name="title_settings_open_tts_settings">Open Text-to-Speech settings</string>
 <string name="title_settings_orientation">Orientation</string>
