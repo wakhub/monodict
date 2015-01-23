@@ -66,6 +66,7 @@
 <string name="message_validation_max_100">Enter at least 100 characters</string>
 <string name="message_validation_max_5000">Enter at least 5000 characters</string>
 <string name="message_validation_required">Required</string>
+<string name="message_network_error">Network Error</string>
 <string name="title_activity_browser">Browser</string>
 <string name="title_activity_browser_bookmarks">Bookmarks</string>
 <string name="title_activity_dictionary">Dictionary Detail</string>

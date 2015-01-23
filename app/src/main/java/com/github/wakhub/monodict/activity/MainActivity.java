@@ -644,7 +644,7 @@ public class MainActivity extends ActionBarActivity implements
                         .title(R.string.title_welcome)
                         .content(activityHelper.getStringFromRaw(R.raw.welcome))
                         .positiveText(R.string.action_download_now)
-                        .callback(new MaterialDialog.SimpleCallback() {
+                        .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog materialDialog) {
                                 materialDialog.dismiss();

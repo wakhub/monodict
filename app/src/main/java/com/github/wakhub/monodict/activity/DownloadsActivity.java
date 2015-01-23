@@ -172,11 +172,11 @@ public class DownloadsActivity extends AbsListActivity {
         scrollView.addView(textView);
 
         new MaterialDialog.Builder(this)
-                .icon(R.drawable.ic_file_download_black_36dp)
+                .iconRes(R.drawable.ic_file_download_black_36dp)
                 .title(item.getName())
-                .customView(scrollView)
+                .customView(scrollView, true)
                 .positiveText(R.string.action_download)
-                .callback(new MaterialDialog.SimpleCallback() {
+                .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
                         resultIntent.putExtra(RESULT_INTENT_ENGLISH, item.isEnglish());

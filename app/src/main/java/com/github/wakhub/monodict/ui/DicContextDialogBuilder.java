@@ -54,7 +54,7 @@ public class DicContextDialogBuilder extends MaterialDialog.Builder implements M
         for (Integer id : ITEM_IDS) {
             itemLabels.add(resources.getString(id));
         }
-        icon(R.drawable.ic_search_black_36dp);
+        iconRes(R.drawable.ic_search_black_36dp);
         title(data.Index.toString());
         items(itemLabels.toArray(new CharSequence[0]));
         itemsCallback(this);

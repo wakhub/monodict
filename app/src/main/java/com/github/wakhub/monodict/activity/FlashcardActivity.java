@@ -361,7 +361,7 @@ public class FlashcardActivity extends ActionBarActivity implements
                 getResources().getString(R.string.app_name),
                 DateTimeUtils.getInstance().getCurrentDateTimeString());
         activityHelper
-                .buildInputDialog(defaultPath, new MaterialDialog.SimpleCallback() {
+                .buildInputDialog(defaultPath, new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
 
@@ -424,8 +424,8 @@ public class FlashcardActivity extends ActionBarActivity implements
 
         autoPlayDialog = new MaterialDialog.Builder(this)
                 .title(R.string.action_auto_play)
-                .icon(R.drawable.ic_play_arrow_black_24dp)
-                .customView(layout)
+                .iconRes(R.drawable.ic_play_arrow_black_24dp)
+                .customView(layout, true)
                 .negativeText(android.R.string.cancel)
                 .cancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -562,14 +562,14 @@ public class FlashcardActivity extends ActionBarActivity implements
     @OptionsItem(R.id.action_delete_all)
     void onActionDeleteAll() {
         activityHelper
-                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
+                .buildConfirmDialog(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
 
                         deleteAllCards();
                     }
                 })
-                .icon(R.drawable.ic_delete_black_36dp)
+                .iconRes(R.drawable.ic_delete_black_36dp)
                 .title(R.string.action_delete_all)
                 .content(R.string.message_confirm_delete)
                 .show();
@@ -732,7 +732,7 @@ public class FlashcardActivity extends ActionBarActivity implements
         Log.d(TAG, "onCardContextActionDelete: " + card);
         final Card finalCard = card;
         activityHelper
-                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
+                .buildConfirmDialog(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
                         try {
@@ -752,7 +752,7 @@ public class FlashcardActivity extends ActionBarActivity implements
                         refreshPager();
                     }
                 })
-                .icon(R.drawable.ic_delete_black_36dp)
+                .iconRes(R.drawable.ic_delete_black_36dp)
                 .title(R.string.action_delete)
                 .content(R.string.message_confirm_delete)
                 .show();

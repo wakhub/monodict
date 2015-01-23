@@ -56,7 +56,7 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
             }
             itemLabels.add(resources.getString(id));
         }
-        icon(R.drawable.ic_dictionary_black_36dp);
+        iconRes(R.drawable.ic_dictionary_black_36dp);
         title(dictionary.getName());
         items(itemLabels.toArray(new CharSequence[0]));
         itemsCallback(this);

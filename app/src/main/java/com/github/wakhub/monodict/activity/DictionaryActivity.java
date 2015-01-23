@@ -253,7 +253,7 @@ public class DictionaryActivity extends AbsListActivity {
     void onClickRenameButton() {
         final Dictionary dictionary = getDictionary();
         activityHelper
-                .buildInputDialog(dictionary.getName(), new MaterialDialog.SimpleCallback() {
+                .buildInputDialog(dictionary.getName(), new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
                         TextView textView = (TextView) materialDialog.findViewById(android.R.id.text1);
@@ -266,7 +266,7 @@ public class DictionaryActivity extends AbsListActivity {
                         onRename();
                     }
                 })
-                .icon(R.drawable.ic_edit_black_36dp)
+                .iconRes(R.drawable.ic_edit_black_36dp)
                 .title(R.string.action_rename)
                 .show();
     }
@@ -280,7 +280,7 @@ public class DictionaryActivity extends AbsListActivity {
     void onClickDeleteButton() {
         final Dictionary dictionary = getDictionary();
         activityHelper
-                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
+                .buildConfirmDialog(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
                         dictionaries.removeDictionary(dictionary);
@@ -288,7 +288,7 @@ public class DictionaryActivity extends AbsListActivity {
                         finish();
                     }
                 })
-                .icon(R.drawable.ic_delete_black_36dp)
+                .iconRes(R.drawable.ic_delete_black_36dp)
                 .title(dictionary.getName())
                 .content(R.string.message_confirm_delete)
                 .show();

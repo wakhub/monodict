@@ -126,7 +126,7 @@ public class BrowserBookmarksActivity extends AbsListActivity {
     void onListItemLongClick(int position) {
         final Bookmark bookmark = listAdapter.getItem(position);
         activityHelper
-                .buildConfirmDialog(new MaterialDialog.SimpleCallback() {
+                .buildConfirmDialog(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog materialDialog) {
                         try {

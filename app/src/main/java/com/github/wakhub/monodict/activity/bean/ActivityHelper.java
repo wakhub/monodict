@@ -136,7 +136,7 @@ public class ActivityHelper {
      * @param callback
      * @return MaterialDialog.Builder
      */
-    public MaterialDialog.Builder buildInputDialog(CharSequence text, MaterialDialog.SimpleCallback callback) {
+    public MaterialDialog.Builder buildInputDialog(CharSequence text, MaterialDialog.ButtonCallback callback) {
         final EditText editText = new EditText(activity);
         if (text != null) {
             editText.setText(text);
@@ -155,7 +155,7 @@ public class ActivityHelper {
      * @param callback
      * @return MaterialDialog.Builder
      */
-    public MaterialDialog.Builder buildConfirmDialog(MaterialDialog.SimpleCallback callback) {
+    public MaterialDialog.Builder buildConfirmDialog(MaterialDialog.ButtonCallback callback) {
         return new MaterialDialog.Builder(activity)
                 .positiveText(android.R.string.ok)
                 .callback(callback)
@@ -192,7 +192,7 @@ public class ActivityHelper {
             entries.add(item.getName());
         }
         return new MaterialDialog.Builder(activity)
-                .icon(R.drawable.ic_search_black_36dp)
+                .iconRes(R.drawable.ic_search_black_36dp)
                 .title(R.string.action_search_by)
                 .cancelable(true)
                 .items(entries.toArray(new String[entries.size()]))
@@ -221,7 +221,7 @@ public class ActivityHelper {
                 boxName);
         final DatabaseHelper databaseHelper = DatabaseHelper_.getInstance_(activity);
 
-        buildConfirmDialog(new MaterialDialog.SimpleCallback() {
+        buildConfirmDialog(new MaterialDialog.ButtonCallback() {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 duplicateCard.setBox(1);

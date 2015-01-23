@@ -26,6 +26,7 @@ import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.activity.bean.ActivityHelper;
 import com.github.wakhub.monodict.preferences.Dictionaries;
 import com.github.wakhub.monodict.preferences.Preferences_;
+import com.github.wakhub.monodict.ui.WebViewDialog;
 
 import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.Bean;
@@ -115,15 +116,12 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         prefItem = findPreference(KEY_ABOUT);
-        PackageInfo packageInfo = MonodictApp.getPackageInfo(getActivity());
-        prefItem.setSummary(String.format(
-                "%s %s",
-                appName,
-                packageInfo.versionName));
+        final PackageInfo packageInfo = MonodictApp.getPackageInfo(getActivity());
+        prefItem.setSummary(String.format("%s %s", appName, packageInfo.versionName));
         prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                activityHelper.buildNoticeDialog(activityHelper.getHtmlFromRaw(R.raw.about)).show();
+                WebViewDialog.build(getActivity(),"https://github.com/wakhub/monodict/blob/develop/README.rst").show();
                 return false;
             }
         });
