@@ -57,7 +57,7 @@
 <string name="message_loading_dictionaries">Now loading dictionaries…</string>
 <string name="message_modified">Modified</string>
 <string name="message_no_result">No result</string>
-<string name="message_settings_focus_and_clear">Clear search keyword when started input</string>
+<string name="message_settings_focus_and_clear">Clear search keyword when focused to search input box</string>
 <string name="message_settings_open_tts_settings">Open Text-to-Speech settings in Android Settings</string>
 <string name="message_success">Success</string>
 <string name="message_unable_to_access">Unable to access</string>

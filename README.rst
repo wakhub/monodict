@@ -1,23 +1,18 @@
 ============
-monodict
+README
 ============
 
 .. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
 
-**monodict** is a faster offline PDIC dictionary viewer app with TTS integration and flashcard.
-The application has been developed based on
-the source code of `aDice <https://github.com/jiro-aqua/aDice>`_
+monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
+The application has been developed based on the source code of aDice_
+
+monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
+このアプリケーションは aDice_ のソースコードを元に開発しています。
+
 
 - `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
 - Download .apk files https://drive.google.com/open?id=0B7-yqP_4DkNZdG9HTk83TWowVUk&authuser=0
-
-
-TOC
-
-- TODO
-- Setup monodict Project
-- Design Guideline
-- LICENSE
 
 
 TODO
@@ -39,7 +34,6 @@ Requirements
 - `Android Studio <https://developer.android.com/sdk/installing/studio.html>`_
 - `Python <https://www.python.org/>`_,
   `Fabric <http://www.fabfile.org/>`_,
-  `Requests <http://docs.python-requests.org/en/latest/>`_
   `Wand <http://docs.wand-py.org/en/0.3.9/>`_
 
 Optionals
@@ -61,7 +55,7 @@ Design Guideline
 
 - **Basis**
 
-  - Follow `Material Design <http://www.google.com/design/spec/material-design/introduction.html>`_ .
+  - Follow `Material Design`_.
   - Don't follow Material Design if the design was difficult to implement
     with supported API or the design was not important for the functionality.
 
@@ -90,6 +84,25 @@ Design Guideline
 .. image:: https://raw.githubusercontent.com/wakhub/monodict/master/files/lighting-study.jpg
 
 
+Thanks
+=========
+
+- | PDIC Home Page
+  | http://homepage3.nifty.com/TaN/
+
+- | Aquamarine Networks
+  | https://sites.google.com/site/aquamarinepandora/
+
+- | PDIC Users Page 電子辞書と英語学習のページ
+  | http://homepage1.nifty.com/yoshi_2000/
+
+- | ＩＣＨＩＲＯ
+  | http://rd.vector.co.jp/vpack/browse/person/an028955.html
+
+- | 私の好きなインドネシア
+  | http://www.geocities.jp/indo_ka/index.html
+
+
 LICENSE
 =======
 
@@ -112,3 +125,14 @@ LICENSE
 
 See also: app/src/main/res/raw/legal.txt
 
+
+References
+==========
+
+- `pdico <https://itunes.apple.com/jp/app/pdico/id346546622>`_ -- PDIC viewer for iOS
+- `辞郎シリーズの辞書データ（Ver.143） <http://www.dlmarket.jp/products/detail/290249>`_ -- JPY 2,700
+
+
+.. _PDIC: http://homepage3.nifty.com/TaN/
+.. _aDice: https://github.com/jiro-aqua/aDice
+.. _Material Design: http://www.google.com/design/spec/material-design/introduction.html
