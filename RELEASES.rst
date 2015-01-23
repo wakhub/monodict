@@ -18,13 +18,13 @@ Version 3.1.0
 - Bugfixes
 
   - | Text selection doesn't work on Browser
-    | バグ修正: ブラウザ上でテキスト選択が動作しない
+    | ブラウザ上でテキスト選択が動作しない
 
-  - | Bugfix: Back icon on ActionBar doesn't work on Bookmarks
+  - | Back icon on ActionBar doesn't work on Bookmarks
     | ブックマークの「戻る」ボタンが動作しない
 
-  - | Bugfix: "Reijiro-xxx.dic" become "Eijiro" when you added it
-    | "Reijiro-xxx.dic" を追加した際に名前が "英辞郎" に変換される不具合を修正
+  - | "Reijiro-xxx.dic" become "Eijiro" when you added it
+    | "Reijiro-xxx.dic" を追加した際に名前が "英辞郎" に変換されてしまう
 
 
 Version 3.0.2

@@ -1,18 +1,20 @@
 ============
 README
 ============
+:ReleaseNotes:
+    https://github.com/wakhub/monodict/blob/master/RELEASES.rst
+:Google Play Store:
+    https://play.google.com/store/apps/details?id=com.github.wakhub.monodict
+:.apk files:
+    http://goo.gl/bn4W1G
 
 .. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
 
-monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
+**EN** monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
 The application has been developed based on the source code of aDice_
 
-monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
-このアプリケーションは aDice_ のソースコードを元に開発しています。
-
-
-- `monodict in Google Play Store <https://play.google.com/store/apps/details?id=com.github.wakhub.monodict>`_
-- Download .apk files https://drive.google.com/open?id=0B7-yqP_4DkNZdG9HTk83TWowVUk&authuser=0
+**JA** monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
+このアプリは aDice_ のソースコードを元に開発しています。
 
 
 TODO
@@ -44,7 +46,7 @@ Command::
 
     $ git clone https://github.com/wakhub/monodict.git
     $ cd monodict
-    $ pip install fabric requests wand
+    $ pip install fabric wand
     $ fab init
 
 Then check `sdk.dir` and `ndk.dir` in your `local.properties`
@@ -123,7 +125,7 @@ LICENSE
     limitations under the License.
 
 
-See also: app/src/main/res/raw/legal.txt
+See also: `legal.txt <app/src/main/res/raw/legal.txt>`_
 
 
 References
