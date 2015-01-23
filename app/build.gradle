@@ -25,7 +25,7 @@ android {
         applicationId "com.github.wakhub.monodict"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 306
+        versionCode 307
         versionName '3.1.0'
     }
 

@@ -105,4 +105,5 @@
 <string name="title_system_default">システムの標準設定を使う</string>
 <string name="title_translation_text_font">訳文フォント</string>
 <string name="title_welcome">monodict へようこそ!</string>
+    <string name="message_network_error">ネットワークエラー</string>
 </resources>

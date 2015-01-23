@@ -121,7 +121,7 @@ public class SettingsFragment extends PreferenceFragment {
         prefItem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                WebViewDialog.build(getActivity(),"https://github.com/wakhub/monodict/blob/develop/README.rst").show();
+                WebViewDialog.build(getActivity(),"https://github.com/wakhub/monodict/blob/master/README.rst").show();
                 return false;
             }
         });
