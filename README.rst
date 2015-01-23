@@ -1,20 +1,31 @@
 ============
 README
 ============
+
+.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
+
+About
+=====
+
+**EN**
+monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
+The application has been developed based on the source code of aDice_
+The source code under the Apache License v2.0
+https://github.com/wakhub/monodict
+
+
+**JA**
+monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
+このアプリは aDice_ のソースコードを元に開発しています。
+このアプリケーションのソースコードは Apache License v2.0 で公開されています。
+https://github.com/wakhub/monodict
+
 :ReleaseNotes:
     https://github.com/wakhub/monodict/blob/master/RELEASES.rst
 :Google Play Store:
     https://play.google.com/store/apps/details?id=com.github.wakhub.monodict
 :.apk files:
     http://goo.gl/bn4W1G
-
-.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
-
-**EN** monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
-The application has been developed based on the source code of aDice_
-
-**JA** monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
-このアプリは aDice_ のソースコードを元に開発しています。
 
 
 TODO
