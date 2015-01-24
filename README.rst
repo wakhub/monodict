@@ -90,8 +90,6 @@ Design Guideline
   - The behaviours which involve swipe gestures have to behave with
     non-gesture actions (buttons, tabs, etc...) also.
 
-.. image:: https://raw.githubusercontent.com/wakhub/monodict/master/files/lighting-study.jpg
-
 
 Thanks
 =========
