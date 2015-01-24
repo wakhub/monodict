@@ -1,26 +1,22 @@
 ============
-README
+monodict
 ============
 
 .. image:: https://raw.githubusercontent.com/wakhub/monodict/master/app/src/main/res/drawable-xxxhdpi/icon.png
 
-About
-=====
-
 **EN**
-monodict is a faster offline PDIC_ dictionary app with Text-to-Speech integration and flashcards.
+monodict is a faster offline PDIC_ dictionary app witch is combined with Text-to-Speech and flashcards.
 The application has been developed based on the source code of aDice_
-The source code under the Apache License v2.0
+and the source code under the `Apache License v2.0`_
 https://github.com/wakhub/monodict
 
 
 **JA**
 monodict は高速なオフライン PDIC_ 辞書ビューア、テキスト読み上げ、単語帳を一つにまとめたアプリです。
-このアプリは aDice_ のソースコードを元に開発しています。
-このアプリケーションのソースコードは Apache License v2.0 で公開されています。
+このアプリは aDice_ のソースコードを元に開発を行い、 `Apache License v2.0`_ のライセンスで公開されています。
 https://github.com/wakhub/monodict
 
-:ReleaseNotes:
+:Release Notes:
     https://github.com/wakhub/monodict/blob/master/RELEASES.rst
 :Google Play Store:
     https://play.google.com/store/apps/details?id=com.github.wakhub.monodict
@@ -116,6 +112,15 @@ Thanks
   | http://www.geocities.jp/indo_ka/index.html
 
 
+Links
+==========
+
+- `pdico <https://itunes.apple.com/jp/app/pdico/id346546622>`_
+  -- PDIC viewer for iOS
+- `英辞郎シリーズの辞書データ（Ver.143） <http://www.dlmarket.jp/products/detail/290249>`_
+  -- JPY 2,700
+
+
 LICENSE
 =======
 
@@ -139,13 +144,9 @@ LICENSE
 See also: `legal.txt <app/src/main/res/raw/legal.txt>`_
 
 
-References
-==========
-
-- `pdico <https://itunes.apple.com/jp/app/pdico/id346546622>`_ -- PDIC viewer for iOS
-- `辞郎シリーズの辞書データ（Ver.143） <http://www.dlmarket.jp/products/detail/290249>`_ -- JPY 2,700
-
 
 .. _PDIC: http://homepage3.nifty.com/TaN/
 .. _aDice: https://github.com/jiro-aqua/aDice
 .. _Material Design: http://www.google.com/design/spec/material-design/introduction.html
+.. _Apache License v2.0: http://www.apache.org/licenses/LICENSE-2.0
+

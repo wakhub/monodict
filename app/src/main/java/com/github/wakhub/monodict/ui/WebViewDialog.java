@@ -69,7 +69,7 @@ public class WebViewDialog extends MaterialDialog {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     getContext().startActivity(intent);
                     progressBar.setVisibility(View.GONE);
-                    return false;
+                    return true;
                 }
 
                 @Override

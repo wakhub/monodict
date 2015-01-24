@@ -231,7 +231,8 @@ https://github.com/google/material-design-icons
 
 Copyright (c) 2014 Material Design Authors
 
-Licensed under Attribution 4.0 International (CC BY 4.0) http://creativecommons.org/licenses/by/4.0/
+Licensed under Attribution 4.0 International (CC BY 4.0)
+http://creativecommons.org/licenses/by/4.0/
 
 
 ----------
