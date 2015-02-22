@@ -6,6 +6,10 @@
             "url": "https://www.google.com/search?ie=UTF-8&oe=UTF-8&q=%s"
         },
         {
+            "name": "Google Translate",
+            "url": "http://www.google.com/translate_t?text=%s"
+        },
+        {
             "name": "Oxford dictionary",
             "url": "http://www.oxforddictionaries.com/definition/english/%s"
         },
