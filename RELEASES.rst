@@ -3,6 +3,19 @@ RELEASE NOTES
 ====================
 
 
+Version 3.2.0
+--------------------
+
+- | Replace context menu from dialog to popup menu
+  | コンテキストメニューをダイアログからポップアップメニューに変更
+
+- | Add Indonesian into TTS default languages
+  | インドネシア語を TTS の言語設定に追加
+
+- | Add Google Translate into search engines
+  | Google 翻訳を検索エンジンに追加
+
+
 Version 3.1.0
 --------------------
 
