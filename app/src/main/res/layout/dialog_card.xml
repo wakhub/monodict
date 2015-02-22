@@ -37,9 +37,9 @@
             android:paddingTop="@dimen/card_view_content_padding">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/display_text"
@@ -99,24 +99,28 @@
 
             <ImageButton
                 android:id="@+id/action_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:src="@drawable/ic_more_horiz_grey600_24dp"/>
 
             <ImageButton
                 android:id="@+id/speech_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:src="@drawable/ic_volume_up_grey600_24dp"/>
 
             <ImageButton
                 android:id="@+id/edit_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:src="@drawable/ic_edit_grey600_24dp"/>
 
             <ImageButton
                 android:id="@+id/delete_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:src="@drawable/ic_delete_grey600_24dp"/>
@@ -138,6 +142,7 @@
             android:layout_height="fill_parent">
 
             <ImageButton
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/image_button_size"
@@ -146,14 +151,15 @@
                 android:src="@drawable/ic_thumb_down_black_24dp"/>
 
             <Button
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/keep_button"
-                style="@style/AppTheme.Flashcard.PlainTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/action_keep"/>
 
             <ImageButton
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/image_button_size"

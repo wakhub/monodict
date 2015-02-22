@@ -35,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.MonodictApp;
@@ -54,9 +55,8 @@ import com.github.wakhub.monodict.preferences.MainActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.search.DictionaryService;
 import com.github.wakhub.monodict.search.DictionaryServiceConnection;
-import com.github.wakhub.monodict.ui.DicContextDialogBuilder;
 import com.github.wakhub.monodict.ui.DicItemListView;
-import com.github.wakhub.monodict.ui.DictionaryContextDialogBuilder;
+import com.github.wakhub.monodict.ui.DictionaryContextMenu;
 import com.github.wakhub.monodict.ui.DictionarySearchView;
 import com.github.wakhub.monodict.utils.ViewUtils;
 import com.google.common.eventbus.Subscribe;
@@ -90,16 +90,14 @@ import java.util.List;
  * @see com.github.wakhub.monodict.activity.MainActivity_
  */
 @EActivity(R.layout.activity_main)
-//@OptionsMenu({R.menu.main})
 public class MainActivity extends ActionBarActivity implements
         MainActivityRootLayout.Listener,
         MainActivityDrawerListAdapter.Listener,
         MainActivityDrawerListAdapter.DataSource,
         DicItemListView.Callback,
         DicItemListView.ResultAdapter.DictionaryDataSource,
-        DicContextDialogBuilder.OnContextActionListener,
         DictionaryService.Listener,
-        DictionaryContextDialogBuilder.OnContextActionListener,
+        DictionaryContextMenu.OnContextActionListener,
         DictionarySearchView.Listener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -317,9 +315,11 @@ public class MainActivity extends ActionBarActivity implements
 
     @Click(R.id.more_button)
     void onClickMoreButton() {
-        MaterialDialog.Builder builder = activityHelper.buildSearchEnginesDialog(searchView.getQuery());
-        if (builder != null) {
-            builder.show();
+        PopupMenu popupMenu = activityHelper.popupSearchEngines(
+                searchView.getQuery(),
+                findViewById(R.id.more_button));
+        if (popupMenu != null) {
+            popupMenu.show();
         }
     }
 
@@ -475,30 +475,50 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onDicviewItemClickAddToFlashcardButton(int position) {
+    public void onDicItemActionAddToFlashcard(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         addFlashcard(data);
     }
 
     @Override
-    public void onDicviewItemClickSpeechButton(int position) {
+    public void onDicItemClickSpeechButton(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
         speechHelper.speech(data.Index.toString());
     }
 
     @Override
-    public void onDicviewItemClickActionButton(int position) {
+    public void onDicItemActionShare(int position) {
         final DicItemListView.Data data = resultAdapter.getItem(position);
-        new DicContextDialogBuilder(this, data).setContextActionListener(this).show();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, data.toSummaryString());
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            activityHelper.showError(e);
+        }
     }
 
     @Override
-    public void onDicviewItemActionModeSearch(String selectedText) {
+    public void onDicItemActionSearch(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        searchView.setQuery(data.Index, true);
+    }
+
+    @Override
+    public void onDicItemActionCopyAll(int position) {
+        final DicItemListView.Data data = resultAdapter.getItem(position);
+        clipboardManager.setPrimaryClip(ClipData.newPlainText("all", data.toSummaryString()));
+        SnackbarManager.show(createSnackbar().text(R.string.message_copy_succeeded), this);
+    }
+
+    @Override
+    public void onDicItemActionModeSearch(String selectedText) {
         searchView.setQuery(selectedText, true);
     }
 
     @Override
-    public void onDicviewItemActionModeSpeech(String selectedText) {
+    public void onDicItemActionModeSpeech(String selectedText) {
         speechHelper.speech(selectedText);
     }
 
@@ -581,30 +601,6 @@ public class MainActivity extends ActionBarActivity implements
                         })
                 ,
                 this);
-    }
-
-    @Override
-    public void onContextActionSearch(DicItemListView.Data data) {
-        searchView.setQuery(data.Index, true);
-    }
-
-    @Override
-    public void onContextActionShare(DicItemListView.Data data) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, data.toSummaryString());
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            activityHelper.showError(e);
-        }
-    }
-
-    @Override
-    public void onContextActionCopyAll(DicItemListView.Data data) {
-        Log.d(TAG, "onContextActionCopyAll");
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("all", data.toSummaryString()));
-        SnackbarManager.show(createSnackbar().text(R.string.message_copy_succeeded), this);
     }
 
     private static void removeDirectory(File path) {
@@ -718,11 +714,11 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onDrawerClickDictionaryItem(Dictionary dictionary) {
+    public void onDrawerClickDictionaryItem(View view, Dictionary dictionary) {
         Log.d(TAG, "onDrawerClickDictionaryItem: " + dictionary);
-        new DictionaryContextDialogBuilder(this, dictionary)
-                .setContextActionListener(this)
-                .show();
+        DictionaryContextMenu contextMenu = new DictionaryContextMenu(this, view, dictionary);
+        contextMenu.setContextActionListener(this);
+        contextMenu.show();
     }
 
     @Override

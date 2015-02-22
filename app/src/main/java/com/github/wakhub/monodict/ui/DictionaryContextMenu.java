@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2014 wak
+/*
+ * Copyright (C) 2015 wak
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,23 @@ package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.preferences.Dictionary;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by wak on 6/10/14.
  */
-public class DictionaryContextDialogBuilder extends MaterialDialog.Builder implements MaterialDialog.ListCallback {
+public class DictionaryContextMenu extends PopupMenu implements PopupMenu.OnMenuItemClickListener {
 
-    private static final String TAG = DictionaryContextDialogBuilder.class.getSimpleName();
+    private static final String TAG = DictionaryContextMenu.class.getSimpleName();
 
     private static final List<Integer> ITEM_IDS = Arrays.asList(
             R.string.action_more_detail,
@@ -42,47 +42,47 @@ public class DictionaryContextDialogBuilder extends MaterialDialog.Builder imple
 
     private OnContextActionListener contextActionListener;
 
-    private ArrayList<String> itemLabels = new ArrayList<String>();
+    private final Context context;
 
     private final Dictionary dictionary;
 
-    public DictionaryContextDialogBuilder(Context context, Dictionary dictionary) {
-        super(context);
+    public DictionaryContextMenu(Context context, View anchor, Dictionary dictionary) {
+        super(context, anchor);
+        this.context = context;
         this.dictionary = dictionary;
         Resources resources = context.getResources();
+        Menu menu = getMenu();
         for (Integer id : ITEM_IDS) {
-            if (id == R.string.action_enable && dictionary.isEnabled()) {
-                id = R.string.action_disable;
-            }
-            itemLabels.add(resources.getString(id));
+            menu.add(resources.getString(id));
         }
-        iconRes(R.drawable.ic_dictionary_black_36dp);
-        title(dictionary.getName());
-        items(itemLabels.toArray(new CharSequence[0]));
-        itemsCallback(this);
-        cancelable(true);
+        setOnMenuItemClickListener(this);
     }
 
-    public DictionaryContextDialogBuilder setContextActionListener(OnContextActionListener contextActionListener) {
+    public DictionaryContextMenu setContextActionListener(OnContextActionListener contextActionListener) {
         this.contextActionListener = contextActionListener;
         return this;
     }
 
     @Override
-    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-        int id = ITEM_IDS.get(i);
-        Log.d(TAG, "click" + i);
-        switch (id) {
-            case R.string.action_more_detail:
-                contextActionListener.onContextActionMoreDetail(dictionary);
-                break;
-            case R.string.action_up:
-                contextActionListener.onContextActionUp(dictionary);
-                break;
-            case R.string.action_down:
-                contextActionListener.onContextActionDown(dictionary);
-                break;
+    public boolean onMenuItemClick(MenuItem item) {
+        if (contextActionListener == null) {
+            return false;
         }
+        CharSequence title = item.getTitle();
+        Resources resources = context.getResources();
+        if (title.equals(resources.getString(R.string.action_more_detail))) {
+            contextActionListener.onContextActionMoreDetail(dictionary);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_up))) {
+            contextActionListener.onContextActionUp(dictionary);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_down))) {
+            contextActionListener.onContextActionDown(dictionary);
+            return true;
+        }
+        return false;
     }
 
     public interface OnContextActionListener {

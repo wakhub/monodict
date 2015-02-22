@@ -79,17 +79,17 @@
             android:layout_height="fill_parent">
 
             <Button
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:text="@android:string/cancel"
                 android:id="@+id/cancel_button"
                 android:layout_weight="1"
-                style="@style/AppTheme.Flashcard.PlainTextButton"
                 android:layout_height="@dimen/button_size"/>
 
             <Button
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:text="@android:string/ok"
                 android:id="@+id/save_button"
                 android:layout_weight="1"
-                style="@style/AppTheme.Flashcard.PlainTextButton"
                 android:layout_height="@dimen/button_size"/>
         </TableRow>
 

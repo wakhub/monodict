@@ -42,7 +42,7 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
     private static final String TAG = MainActivityDrawerListAdapter.class.getSimpleName();
 
     static interface Listener {
-        void onDrawerClickDictionaryItem(Dictionary dictionary);
+        void onDrawerClickDictionaryItem(View view, Dictionary dictionary);
 
         void onDrawerChangeDictionaryItemCheckbox(Dictionary dictionary, boolean isChecked);
 
@@ -133,7 +133,7 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
         return view;
     }
 
-    private View getDictionaryItemView(View view, Item item) {
+    private View getDictionaryItemView(final View view, Item item) {
         view.findViewById(R.id.navigation_layout).setVisibility(View.GONE);
         view.findViewById(R.id.dictionary_item_layout).setVisibility(View.VISIBLE);
         view.findViewById(R.id.dictionary_actions_layout).setVisibility(View.GONE);
@@ -151,18 +151,10 @@ public class MainActivityDrawerListAdapter extends ArrayAdapter<MainActivityDraw
                 listener.onDrawerChangeDictionaryItemCheckbox(dictionary, checkBox.isChecked());
             }
         });
-        /*
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            }
-        });
-        */
-
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onDrawerClickDictionaryItem(dictionary);
+                listener.onDrawerClickDictionaryItem(view, dictionary);
             }
         });
         return view;

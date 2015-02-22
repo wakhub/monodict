@@ -50,7 +50,7 @@ import com.github.wakhub.monodict.db.Model;
 import com.github.wakhub.monodict.preferences.FlashcardActivityState;
 import com.github.wakhub.monodict.preferences.Preferences_;
 import com.github.wakhub.monodict.ui.CardContextActionListener;
-import com.github.wakhub.monodict.ui.CardContextDialogBuilder;
+import com.github.wakhub.monodict.ui.CardContextMenu;
 import com.github.wakhub.monodict.ui.CardDialog;
 import com.github.wakhub.monodict.ui.CardEditDialog;
 import com.github.wakhub.monodict.utils.DateTimeUtils;
@@ -840,9 +840,13 @@ public class FlashcardActivity extends ActionBarActivity implements
     @Subscribe
     public void onEvent(FlashcardActivityPagerFragment.FlashcardItemMoreEvent event) {
         Log.d(TAG, "onEvent: " + event);
-        new CardContextDialogBuilder(this, event.getCard(), new int[]{R.string.action_speech})
-                .setContextActionListener(this)
-                .show();
+        CardContextMenu contextMenu = new CardContextMenu(
+                this,
+                event.getView(),
+                event.getCard(),
+                new int[]{R.string.action_speech});
+        contextMenu.setContextActionListener(this);
+        contextMenu.show();
     }
 
     @Subscribe

@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -99,7 +100,9 @@ public class CardDialog extends Dialog {
     }
 
     public CardDialog(Context context, final Card card) {
-        super(context, R.style.AppTheme_Flashcard_CardDialog);
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         this.card = card;
 
         setOnShowListener(new OnShowListener() {
@@ -140,10 +143,10 @@ public class CardDialog extends Dialog {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
-                new CardContextDialogBuilder(contextActionContext, card, ignoredContextItemIds)
-                        .setContextActionListener(contextActionListener)
-                        .show();
+                CardContextMenu contextMenu =
+                        new CardContextMenu(getContext(), view, card, ignoredContextItemIds);
+                contextMenu.setContextActionListener(contextActionListener);
+                contextMenu.show();
             }
         });
 

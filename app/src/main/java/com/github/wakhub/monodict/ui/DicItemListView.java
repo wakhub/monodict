@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.github.wakhub.monodict.R;
@@ -150,15 +151,19 @@ public class DicItemListView extends ListView {
     }
 
     public interface Callback {
-        void onDicviewItemClickAddToFlashcardButton(int position);
+        void onDicItemActionAddToFlashcard(int position);
 
-        void onDicviewItemClickSpeechButton(int position);
+        void onDicItemClickSpeechButton(int position);
 
-        void onDicviewItemClickActionButton(int position);
+        void onDicItemActionShare(int position);
 
-        void onDicviewItemActionModeSearch(String selectedText);
+        void onDicItemActionSearch(int position);
 
-        void onDicviewItemActionModeSpeech(String selectedText);
+        void onDicItemActionCopyAll(int position);
+
+        void onDicItemActionModeSearch(String selectedText);
+
+        void onDicItemActionModeSpeech(String selectedText);
     }
 
     Callback callback;
@@ -238,14 +243,14 @@ public class DicItemListView extends ListView {
 
             if (menuItem.getItemId() == R.id.action_search) {
                 if (callback != null) {
-                    callback.onDicviewItemActionModeSearch(selectedText);
+                    callback.onDicItemActionModeSearch(selectedText);
                 }
                 actionMode.finish();
                 return true;
             }
             if (menuItem.getItemId() == R.id.action_speech) {
                 if (callback != null) {
-                    callback.onDicviewItemActionModeSpeech(selectedText);
+                    callback.onDicItemActionModeSpeech(selectedText);
                 }
                 actionMode.finish();
                 return true;
@@ -313,13 +318,13 @@ public class DicItemListView extends ListView {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final View view;
-            ViewHolder holder;
+            final ViewHolder holder;
             if (convertView != null && (convertView instanceof LinearLayout)) {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
                 view = inflate(getContext(), R.layout.list_item_dic, null);
-                Context context = getContext();
+                final Context context = getContext();
 
                 holder = new ViewHolder();
 
@@ -342,7 +347,7 @@ public class DicItemListView extends ListView {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
                         if (listView.callback != null) {
-                            listView.callback.onDicviewItemClickAddToFlashcardButton(listView.getPositionForView(rowView));
+                            listView.callback.onDicItemActionAddToFlashcard(listView.getPositionForView(rowView));
                         }
                     }
                 });
@@ -353,7 +358,7 @@ public class DicItemListView extends ListView {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
                         if (listView.callback != null) {
-                            listView.callback.onDicviewItemClickSpeechButton(listView.getPositionForView(rowView));
+                            listView.callback.onDicItemClickSpeechButton(listView.getPositionForView(rowView));
                         }
                     }
                 });
@@ -363,9 +368,28 @@ public class DicItemListView extends ListView {
                     public void onClick(View view) {
                         View rowView = (View) ViewUtils.findParentView(view, R.id.root);
                         DicItemListView listView = (DicItemListView) rowView.getParent();
-                        if (listView.callback != null) {
-                            listView.callback.onDicviewItemClickActionButton(listView.getPositionForView(rowView));
-                        }
+                        PopupMenu popupMenu = new PopupMenu(context, holder.actionButton);
+                        popupMenu.inflate(R.menu.popup_dic);
+                        final int position  = listView.getPositionForView(rowView);
+                        final Callback listViewCallback = listView.callback;
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.action_copy_all:
+                                        listViewCallback.onDicItemActionCopyAll(position);
+                                        return true;
+                                    case R.id.action_search:
+                                        listViewCallback.onDicItemActionSearch(position);
+                                        return true;
+                                    case R.id.action_share:
+                                        listViewCallback.onDicItemActionShare(position);
+                                        return true;
+                                }
+                                return false;
+                            }
+                        });
+                        popupMenu.show();
                     }
                 });
                 holder.hr = view.findViewById(R.id.hr);

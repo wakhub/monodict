@@ -71,8 +71,15 @@ public class FlashcardActivityPagerFragment extends Fragment {
     }
 
     public static final class FlashcardItemMoreEvent extends FlashcardItemEvent {
-        public FlashcardItemMoreEvent(Card card) {
+        private final View view;
+
+        public FlashcardItemMoreEvent(Card card, View view) {
             super(card);
+            this.view = view;
+        }
+
+        public View getView() {
+            return view;
         }
     }
 
@@ -207,7 +214,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             final FlashcardActivityPagerFragment fragment = fragmentRef.get();
             if (fragment == null || fragment.dataSet.size() <= position) {
                 return;
@@ -225,7 +232,7 @@ public class FlashcardActivityPagerFragment extends Fragment {
             holder.moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MonodictApp.getEventBus().post(new FlashcardItemMoreEvent(card));
+                    MonodictApp.getEventBus().post(new FlashcardItemMoreEvent(card, holder.moreButton));
                 }
             });
             holder.speechButton.setOnClickListener(new View.OnClickListener() {

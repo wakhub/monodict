@@ -18,6 +18,7 @@ package com.github.wakhub.monodict.test.util;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 
 /**
@@ -29,11 +30,11 @@ public class Solo extends com.robotium.solo.Solo {
         super(instrumentation, activity);
     }
 
-    public void clickOnView(int resId) {
+    public void clickOnView(@IdRes int resId) {
         clickOnView(getCurrentActivity().findViewById(resId));
     }
 
-    public void clickOnRecyclerChildView(int recyclerViewId, int index) {
+    public void clickOnRecyclerChildView(@IdRes int recyclerViewId, int index) {
         RecyclerView recyclerView = (RecyclerView) getView(recyclerViewId);
         clickOnView(recyclerView.getChildAt(index));
     }

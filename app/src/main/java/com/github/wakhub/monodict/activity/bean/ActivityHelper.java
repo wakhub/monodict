@@ -22,13 +22,19 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RawRes;
+import android.support.annotation.StringRes;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -58,8 +64,6 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wak on 5/19/14.
@@ -101,7 +105,7 @@ public class ActivityHelper {
         }
     }
 
-    public void showToast(int resId) {
+    public void showToast(@StringRes int resId) {
         String message = activity.getResources().getString(resId);
         showToast(message);
     }
@@ -113,7 +117,7 @@ public class ActivityHelper {
         toast.show();
     }
 
-    public void showToastLong(int resId) {
+    public void showToastLong(@StringRes int resId) {
         showToastLong(activity.getResources().getString(resId));
     }
 
@@ -173,7 +177,8 @@ public class ActivityHelper {
                 .positiveText(android.R.string.ok);
     }
 
-    public MaterialDialog.Builder buildSearchEnginesDialog(final CharSequence query) {
+    @Nullable
+    public PopupMenu popupSearchEngines(@NonNull final CharSequence query, @NonNull View anchor) {
         final SearchEngines searchEngines;
         try {
             InputStream inputStream = activity.getAssets().open("search_engines.json");
@@ -187,24 +192,24 @@ public class ActivityHelper {
             showError(e);
             return null;
         }
-        List<String> entries = new ArrayList<>();
+        PopupMenu popupMenu = new PopupMenu(activity, anchor);
         for (SearchEnginesItem item : searchEngines.getItems()) {
-            entries.add(item.getName());
+            popupMenu.getMenu().add(item.getName());
         }
-        return new MaterialDialog.Builder(activity)
-                .iconRes(R.drawable.ic_search_black_36dp)
-                .title(R.string.action_search_by)
-                .cancelable(true)
-                .items(entries.toArray(new String[entries.size()]))
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                        SearchEnginesItem item = searchEngines.getItems().get(i);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                for (SearchEnginesItem searchEngine : searchEngines.getItems()) {
+                    if (item.getTitle().equals(searchEngine.getName())) {
                         BrowserActivity_.intent(activity)
-                                .extraUrlOrKeywords(String.format(item.getUrl(), query))
+                                .extraUrlOrKeywords(String.format(searchEngine.getUrl(), query))
                                 .start();
                     }
-                });
+                }
+                return false;
+            }
+        });
+        return popupMenu;
     }
 
     public void onDuplicatedCardFound(final Card duplicateCard, final String newTranslate, final String newDictionary) {
@@ -248,7 +253,7 @@ public class ActivityHelper {
         progressDialog.show();
     }
 
-    public void showProgressDialog(int resId) {
+    public void showProgressDialog(@StringRes int resId) {
         showProgressDialog(activity.getResources().getString(resId));
     }
 
@@ -304,11 +309,11 @@ public class ActivityHelper {
         }, delay);
     }
 
-    public Spanned getHtmlFromRaw(int resId) {
+    public Spanned getHtmlFromRaw(@RawRes int resId) {
         return Html.fromHtml(getStringFromRaw(resId));
     }
 
-    public String getStringFromRaw(int resId) {
+    public String getStringFromRaw(@RawRes int resId) {
         InputStream stream = activity.getResources().openRawResource(resId);
         String text;
         try {

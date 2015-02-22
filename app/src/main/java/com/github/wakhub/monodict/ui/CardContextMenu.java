@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 wak
+ * Copyright (C) 2015 wak
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.wakhub.monodict.ui;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.wakhub.monodict.R;
 import com.github.wakhub.monodict.db.Card;
 
@@ -30,9 +33,9 @@ import java.util.List;
 /**
  * Created by wak on 5/29/14.
  */
-public class CardContextDialogBuilder extends MaterialDialog.Builder implements MaterialDialog.ListCallback {
+public class CardContextMenu extends PopupMenu implements PopupMenu.OnMenuItemClickListener {
 
-    private static final String TAG = CardContextDialogBuilder.class.getSimpleName();
+    private static final String TAG = CardContextMenu.class.getSimpleName();
 
     private static final List<Integer> ALL_ITEM_IDS = Arrays.asList(
             R.string.action_speech,
@@ -49,8 +52,8 @@ public class CardContextDialogBuilder extends MaterialDialog.Builder implements 
 
     private final Context context;
 
-    public CardContextDialogBuilder(Context context, Card card, int[] ignoredStringIds) {
-        super(context);
+    public CardContextMenu(Context context, View anchor, Card card, int[] ignoredStringIds) {
+        super(context, anchor);
         this.context = context;
         this.card = card;
         Resources resources = context.getResources();
@@ -65,43 +68,45 @@ public class CardContextDialogBuilder extends MaterialDialog.Builder implements 
                 itemIds.add(id);
             }
         }
-        title(card.getDisplay());
-        iconRes(R.drawable.ic_flashcard_black_36dp);
-        String[] itemLabels = new String[itemIds.size()];
+        Menu menu  = getMenu();
         for (int i = 0; i < itemIds.size(); i++) {
-            itemLabels[i] = resources.getString(itemIds.get(i));
+            menu.add(resources.getString(itemIds.get(i)));
         }
-        items(itemLabels);
-        itemsCallback(this);
+        setOnMenuItemClickListener(this);
     }
 
-    public CardContextDialogBuilder setContextActionListener(CardContextActionListener contextActionListener) {
+    public CardContextMenu setContextActionListener(CardContextActionListener contextActionListener) {
         this.contextActionListener = contextActionListener;
         return this;
     }
 
     @Override
-    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-        int id = itemIds.get(i);
-        Resources resources = context.getResources();
-        String display = card.getDisplay();
-
-        switch (id) {
-            case R.string.action_speech:
-                contextActionListener.onCardContextActionSpeech(card);
-                break;
-            case R.string.action_edit:
-                contextActionListener.onCardContextActionEdit(card);
-                break;
-            case R.string.action_delete:
-                contextActionListener.onCardContextActionDelete(card);
-                break;
-            case R.string.action_move_into_inbox:
-                contextActionListener.onCardContextActionMoveIntoInbox(card);
-                break;
-            case R.string.action_search:
-                contextActionListener.onCardContextActionSearch(card);
-                break;
+    public boolean onMenuItemClick(MenuItem item) {
+        if (contextActionListener == null)  {
+            return false;
         }
+        CharSequence title = item.getTitle();
+        Resources resources = context.getResources();
+        if (title.equals(resources.getString(R.string.action_speech))) {
+            contextActionListener.onCardContextActionSpeech(card);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_edit))) {
+            contextActionListener.onCardContextActionEdit(card);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_delete))) {
+            contextActionListener.onCardContextActionDelete(card);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_move_into_inbox))) {
+            contextActionListener.onCardContextActionMoveIntoInbox(card);
+            return true;
+        }
+        if (title.equals(resources.getString(R.string.action_search))) {
+            contextActionListener.onCardContextActionSearch(card);
+            return true;
+        }
+        return false;
     }
 }

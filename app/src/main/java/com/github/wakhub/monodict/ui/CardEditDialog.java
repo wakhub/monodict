@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -61,7 +62,8 @@ public class CardEditDialog extends Dialog implements Validator.ValidationListen
     private final Card card;
 
     public CardEditDialog(Context context, Card card) {
-        super(context, R.style.AppTheme_Flashcard_CardDialog);
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         this.validator = new com.mobsandgeeks.saripaar.Validator(this);
         this.validator.setValidationListener(this);
