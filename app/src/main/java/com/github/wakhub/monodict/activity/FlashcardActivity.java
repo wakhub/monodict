@@ -156,7 +156,7 @@ public class FlashcardActivity extends ActionBarActivity implements
 
     private Optional<CardEditDialog> cardEditDialog = Optional.absent();
 
-    private AlertDialog autoPlayDialog = null;
+    private MaterialDialog autoPlayDialog = null;
 
     private TextView autoPlayTranslateText = null;
 

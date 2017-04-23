@@ -18,13 +18,13 @@ apt {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.1'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.github.wakhub.monodict"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 310
         versionName '3.2.0'
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -78,6 +78,8 @@ android {
                 .replace("app-", "${variant.mergedFlavor.applicationId}-")
         output.outputFile = new File(apk.parentFile, newName)
     }
+
+    useLibrary 'org.apache.http.legacy'
 }
 
 File signingPropertiesFile = rootProject.file('credentials/release.keystore.properties')
@@ -110,7 +112,7 @@ dependencies {
     compile project(':android-support-v4-preferencefragment')
     apt 'org.androidannotations:androidannotations:3.2'
     compile 'org.androidannotations:androidannotations-api:3.2'
-    compile 'com.afollestad:material-dialogs:0.6.1.5'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.google.code.gson:gson:2.3@jar'
     compile 'com.google.guava:guava:18.0'
