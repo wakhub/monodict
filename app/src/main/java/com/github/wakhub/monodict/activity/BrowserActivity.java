@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -323,14 +324,23 @@ public class BrowserActivity extends ActionBarActivity implements
         FileSelectorActivity_.intent(this).startForResult(REQUEST_CODE_OPEN_LOCAL_FILE);
     }
 
-    private void startGettingSelectionInBrowser(String callback) {
+    private void startGettingSelectionInBrowser(final String callback) {
         Log.d(TAG, "startGettingSelectionInBrowser: " + callback);
-        String script = String.format(
-                "%s.%s(\"%s\", document.getSelection().toString());",
-                BrowserActivityJavaScriptInterface.NAME,
-                BrowserActivityJavaScriptInterface.ON_GET_SELECTION_METHOD,
-                callback);
-        webView.loadUrl("javascript:" + script);
+        String script = "(function(){return window.getSelection().toString()})()";
+        webView.evaluateJavascript(script, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                String replacedValue = value.replaceAll("^\"|\"$", "");
+                if (callback.equals(JAVASCRIPT_CALLBACK_SEARCH)) {
+                    search(replacedValue);
+                    return;
+                }
+                if (callback.equals(JAVASCRIPT_CALLBACK_SPEECH)) {
+                    speechHelper.speech(replacedValue);
+                }
+            }
+        });
+
     }
 
     @Background
@@ -503,13 +513,10 @@ public class BrowserActivity extends ActionBarActivity implements
      */
     @Override
     public ActionMode onWebViewStartActionMode(ActionMode actionMode) {
-        Menu menu = actionMode.getMenu();
-
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        if (actionMode == null) {
+            return actionMode;
         }
-
+        Menu menu = actionMode.getMenu();
         MenuInflater inflater = actionMode.getMenuInflater();
         inflater.inflate(R.menu.browser_action_mode, menu);
         translatePanelFragment.hide();

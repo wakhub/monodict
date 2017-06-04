@@ -16,8 +16,12 @@
 package com.github.wakhub.monodict.activity;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 
 public class BrowserActivityWebView extends WebView {
@@ -28,10 +32,50 @@ public class BrowserActivityWebView extends WebView {
         ActionMode onWebViewStartActionMode(ActionMode actionMode);
     }
 
+    @Nullable
+    private ActionMode actionMode;
     private ActionModeListener actionModeListener;
+    private ActionMode.Callback callback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+        }
+    };
 
     public BrowserActivityWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (actionMode != null) {
+                    return false;
+                }
+
+                actionMode = startActionMode(callback);
+                v.setSelected(true);
+                return false;
+            }
+        });
     }
 
     public void setActionModeListener(ActionModeListener actionModeListener) {
