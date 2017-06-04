@@ -17,6 +17,7 @@
 package com.github.wakhub.monodict.activity;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,7 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
     @AfterViews
     protected void afterViewsAbsFileManagerActivity() {
         if (currentFullPath.isEmpty()) {
-            currentFullPath = "/";
+            currentFullPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         }
 
         backButton.attachToListView(getListView());
@@ -164,6 +165,14 @@ public abstract class AbsFileManagerActivity extends AbsListActivity {
             }
         });
         return files;
+    }
+
+    protected boolean isCurrentPathAccessible() {
+        File[] files = getFilesAt(currentFullPath);
+        if (files == null || files.length == 0) {
+            return false;
+        }
+        return true;
     }
 
     protected void loadContents() {

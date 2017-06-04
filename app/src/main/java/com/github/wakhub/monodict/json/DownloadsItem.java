@@ -21,7 +21,6 @@ package com.github.wakhub.monodict.json;
 public class DownloadsItem {
     private String name;
     private String url;
-    private String urlMirror;
     private boolean english;
     private String size;
     private String description;
@@ -32,10 +31,6 @@ public class DownloadsItem {
 
     public String getUrl() {
         return url;
-    }
-
-    public String getUrlMirror() {
-        return urlMirror;
     }
 
     public boolean isEnglish() {

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,10 @@ package com.github.wakhub.monodict.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,8 +38,13 @@ import com.github.wakhub.monodict.activity.bean.CommonActivityTrait;
 import com.github.wakhub.monodict.json.Downloads;
 import com.github.wakhub.monodict.json.DownloadsItem;
 import com.github.wakhub.monodict.preferences.Preferences_;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.io.CharStreams;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -104,9 +111,13 @@ public class DownloadsActivity extends AbsListActivity {
 
     private ProgressDialog progressDialog;
 
+    private StorageReference storageReference;
+
     @AfterViews
     void afterViews() {
         commonActivityTrait.initActivity(preferences);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         sdCard = Environment.getExternalStorageDirectory();
 
@@ -136,7 +147,7 @@ public class DownloadsActivity extends AbsListActivity {
             downloads = (new Gson()).fromJson(
                     CharStreams.toString(new InputStreamReader(inputStream)),
                     Downloads.class);
-        } catch (IOException e) {
+        } catch (IOException | JsonSyntaxException e) {
             activityHelper.showError(e);
             return;
         }
@@ -195,7 +206,25 @@ public class DownloadsActivity extends AbsListActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCancelable(false);
 
-        dlTask.execute(downloadsItem.getUrl(), downloadsItem.getUrlMirror());
+        storageReference.child(downloadsItem.getUrl())
+                .getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        dlTask.execute(uri.toString(), null);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(DownloadsActivity.this, R.string.message_network_error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
     }
 
     @Override

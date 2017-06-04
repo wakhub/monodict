@@ -15,6 +15,7 @@
  */
 package com.github.wakhub.monodict.activity;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
@@ -22,11 +23,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -105,6 +109,8 @@ public class MainActivity extends ActionBarActivity implements
     private static final int REQUEST_CODE_DOWNLOAD_DICTIONARY = 10000;
 
     private static final int REQUEST_CODE_SELECT_LOCAL_DICTIONARY = 10001;
+
+    private static final int REQUEST_CODE_PERMISSIONS = 10002;
 
     @App
     MonodictApp app;
@@ -209,6 +215,37 @@ public class MainActivity extends ActionBarActivity implements
         resultAdapter.setDictionaryDataSource(this);
         dicItemListView.setAdapter(resultAdapter);
         resultAdapter.notifyDataSetChanged();
+
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSIONS);
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSIONS);
+            return;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSIONS:
+                if (0 < grantResults.length && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkPermissions();
+                } else {
+                    finish();
+                }
+                break;
+        }
     }
 
     @Subscribe
