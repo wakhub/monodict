@@ -52,6 +52,7 @@
                     android:id="@+id/rename_button"
                     android:layout_width="@dimen/button_size"
                     android:layout_height="@dimen/button_size"
+                    style="@style/AppTheme.ImageButtonStyle"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

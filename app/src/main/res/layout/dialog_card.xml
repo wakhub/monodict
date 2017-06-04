@@ -142,8 +142,8 @@
             android:layout_height="fill_parent">
 
             <ImageButton
-                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/back_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/image_button_size"
                 android:layout_weight="1"
@@ -151,16 +151,16 @@
                 android:src="@drawable/ic_thumb_down_black_24dp"/>
 
             <Button
-                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/keep_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/action_keep"/>
 
             <ImageButton
-                style="@style/AppTheme.Flashcard.ImageButton"
                 android:id="@+id/forward_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/image_button_size"
                 android:layout_weight="1"

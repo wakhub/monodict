@@ -152,14 +152,15 @@ public class DictionaryFontView extends RelativeLayout {
             public void onClick(View v) {
                 new MaterialDialog.Builder(getContext())
                         .items(R.array.font_sizes)
-                        .itemsCallbackSingleChoice(getSelectedSizeIndex(), new MaterialDialog.ListCallback() {
+                        .itemsCallbackSingleChoice(getSelectedSizeIndex(), new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
-                            public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                                font.setSize(Integer.valueOf(charSequence.toString()));
+                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                font.setSize(Integer.valueOf(text.toString()));
                                 refresh();
                                 if (optListener.isPresent()) {
                                     optListener.get().onDictionaryFontViewChangeFont(font);
                                 }
+                                return true;
                             }
                         })
                         .positiveText(android.R.string.ok)

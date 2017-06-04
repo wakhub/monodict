@@ -147,7 +147,7 @@ public class ActivityHelper {
         }
         editText.setId(android.R.id.text1);
         return new MaterialDialog.Builder(activity)
-                .customView(editText)
+                .customView(editText, false)
                 .positiveText(android.R.string.ok)
                 .negativeText(android.R.string.cancel)
                 .callback(callback);
@@ -170,10 +170,8 @@ public class ActivityHelper {
         TextView textView = new TextView(activity);
         textView.setAutoLinkMask(Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
         textView.setText(text);
-        ScrollView scrollView = new ScrollView(activity);
-        scrollView.addView(textView);
         return new MaterialDialog.Builder(activity)
-                .customView(scrollView)
+                .customView(textView, true)
                 .positiveText(android.R.string.ok);
     }
 

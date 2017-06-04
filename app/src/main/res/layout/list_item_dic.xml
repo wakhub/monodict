@@ -122,6 +122,7 @@
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:contentDescription="@string/action_more"
+                style="@style/AppTheme.ImageButtonStyle"
                 android:src="@drawable/ic_more_horiz_grey600_24dp"/>
 
             <ImageButton
@@ -129,6 +130,7 @@
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:contentDescription="@string/action_speech"
+                style="@style/AppTheme.ImageButtonStyle"
                 android:src="@drawable/ic_volume_up_grey600_24dp"/>
 
             <ImageButton
@@ -136,6 +138,7 @@
                 android:layout_width="@dimen/image_button_small_size"
                 android:layout_height="@dimen/image_button_small_size"
                 android:contentDescription="@string/action_add_to_flashcard"
+                style="@style/AppTheme.ImageButtonStyle"
                 android:src="@drawable/ic_add_flashcard_gray600_24dp"/>
 
         </LinearLayout>

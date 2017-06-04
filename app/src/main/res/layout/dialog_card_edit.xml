@@ -14,13 +14,13 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/dialog_content"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
               android:background="@drawable/card_background"
               android:minWidth="300dp"
-              android:id="@+id/dialog_content">
+              android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -28,47 +28,47 @@
         android:padding="@dimen/space_default">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/blank_text"
                 android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/space_well"
-                android:textSize="14dp"
+                android:gravity="center_horizontal"
                 android:scrollbarAlwaysDrawVerticalTrack="false"
-                android:textIsSelectable="false"
-                android:textStyle="bold"
+                android:text="@string/blank_text"
                 android:textColor="@color/dark_gray"
-                android:gravity="center_horizontal"/>
+                android:textIsSelectable="false"
+                android:textSize="14dp"
+                android:textStyle="bold"/>
 
             <EditText
+                android:id="@+id/display_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/display_text"/>
+                android:layout_height="wrap_content"/>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/translate_text"
-                android:lines="5"
-                android:textSize="@dimen/text_size_medium"
-                android:gravity="top"/>
-
-            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/note_text"/>
+                android:gravity="top"
+                android:lines="5"
+                android:textSize="@dimen/text_size_medium"/>
+
+            <EditText
+                android:id="@+id/note_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
-        android:background="@drawable/divider"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="@drawable/divider"/>
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -79,18 +79,18 @@
             android:layout_height="fill_parent">
 
             <Button
-                style="@style/AppTheme.Flashcard.ImageButton"
-                android:text="@android:string/cancel"
                 android:id="@+id/cancel_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
+                android:layout_height="@dimen/button_size"
                 android:layout_weight="1"
-                android:layout_height="@dimen/button_size"/>
+                android:text="@android:string/cancel"/>
 
             <Button
-                style="@style/AppTheme.Flashcard.ImageButton"
-                android:text="@android:string/ok"
                 android:id="@+id/save_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
+                android:layout_height="@dimen/button_size"
                 android:layout_weight="1"
-                android:layout_height="@dimen/button_size"/>
+                android:text="@android:string/ok"/>
         </TableRow>
 
     </TableLayout>
