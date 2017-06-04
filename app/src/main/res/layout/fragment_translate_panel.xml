@@ -63,8 +63,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/space_well"
                         android:text="@string/blank_text"
-                        android:textIsSelectable="false"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textIsSelectable="false"/>
 
 
                     <TextView
@@ -99,6 +99,7 @@
 
             <ImageButton
                 android:id="@+id/close_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_size"
                 android:layout_height="@dimen/image_button_size"
                 android:contentDescription="@string/action_close"
@@ -106,6 +107,7 @@
 
             <ImageButton
                 android:id="@+id/add_to_flashcard_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_size"
                 android:layout_height="@dimen/image_button_size"
                 android:contentDescription="@string/action_add_to_flashcard"
@@ -113,6 +115,7 @@
 
             <ImageButton
                 android:id="@+id/speech_button"
+                style="@style/AppTheme.Flashcard.ImageButton"
                 android:layout_width="@dimen/image_button_size"
                 android:layout_height="@dimen/image_button_size"
                 android:contentDescription="@string/action_speech"

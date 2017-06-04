@@ -52,6 +52,7 @@
                         android:layout_gravity="center_vertical"
                         android:contentDescription="@string/action_more"
                         android:id="@+id/more_button"
+                        style="@style/AppTheme.ImageButtonStyle"
                         android:src="@drawable/ic_more_vert_black_24dp"/>
                 </LinearLayout>
 
