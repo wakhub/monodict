@@ -26,8 +26,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         //          | | | |
-        versionCode 3020100
-        versionName '3.2.1b'
+        versionCode 3030000
+        versionName '3.3'
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
